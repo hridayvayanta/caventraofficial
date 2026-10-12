@@ -1,0 +1,484 @@
+
+const RM=false;
+// ---- Editable defaults (owner edits live content in #/admin) ----
+const D={
+ services:[["Web Development","Modern websites and web experiences."],["Software Development","Custom software and digital products built around real business needs."],["AI Solutions","AI-powered applications, automation, intelligent workflows, and custom AI solutions."],["UI/UX & Digital Experiences","Modern, intuitive, and user-focused digital experiences."],["Business Automation","Technology solutions that reduce repetitive work and improve workflows."],["Custom Technology Solutions","Solutions designed around specific business requirements."]],
+ process:[["Discover","Understand the problem, idea, and goals."],["Strategize","Plan the right product and technology approach."],["Design","Create the experience and product structure."],["Build","Develop the actual digital solution."],["Refine","Test, improve, and optimize."],["Launch","Deploy and deliver the final product."]],
+ about:{
+  who:"Caventra is an engineering-focused digital solutions studio. We partner with ambitious companies, growing startups, and founders to architect, design, and engineer powerful digital products that solve concrete commercial challenges.",
+  believe:"We believe custom software must be a strategic asset that accelerates business growth and operational velocity, not technical overhead. In an era saturated with fragile templates and surface-level tools, bespoke engineering provides the only defensible competitive advantage. Every product we build is designed for measurable performance, rapid load times, and effortless scalability.",
+  approach:"We practice product-first engineering across six disciplined stages: Discovery, Technical Architecture, High-Fidelity UI/UX Design, Scalable Full-Stack Engineering, Rigorous Quality Verification, and Seamless Deployment. By integrating AI automation pipelines with clean architectural standards, we eliminate bloated dependencies and deliver streamlined, resilient systems that scale as your business expands.",
+  philosophy:"Precision over complexity. Form follows purpose, elevated by refined aesthetics. We craft interfaces with intentional typography, intuitive user psychology, and hardware-accelerated micro-interactions. A digital product should feel effortless to the end user while remaining secure, rock-solid, and resilient under high traffic.",
+  different:"Unlike traditional marketing agencies that outsource technical engineering, or template-reliant shops that lack coding depth, Caventra is an authentic technology partner. You collaborate directly with our founding engineers and architects. We bridge the gap between design sensibility, full-stack software development, and applied artificial intelligence."
+},
+ desc:"A software and digital solutions studio. We turn ideas into powerful digital products.",
+ projects:[
+    {
+    "name": "The Wheel Master",
+    "slug": "the-wheel-master",
+    "category": "Custom Business Software · ERP / CRM",
+    "short": "A web-based workshop management application designed to streamline daily operations at The Wheel Master — managing customer records, alloy wheel repair jobs, invoices, inventory, insurance work, and courier tracking.",
+    "tech": "HTML5, CSS3, JavaScript, Chart.js, jsPDF, SheetJS, QRCode.js, LocalStorage",
+    "client": "The Wheel Master · Automotive Refurbishment (Sanathal Circle, Ahmedabad, Gujarat)",
+    "overview": "Managing an alloy wheel repair workshop involves handling customer details, repair orders, job statuses, inventory, billing, insurance-related work, and deliveries. Maintaining these records manually or across separate systems makes information difficult to organize, retrieve, and update efficiently.\\n\\nWe developed a web-based workshop management application tailored to The Wheel Master's operational needs. The application brings essential business records and workflows into a centralized interface, helping staff organize customer information, track repair jobs, manage invoices and inventory, and monitor related business activities.",
+    "challenge": "Scattered paper-based job cards, disjointed repair status tracking, manual billing reconciliation, and lack of real-time inventory visibility across technicians and front-desk staff.",
+    "solution": "Caventra engineered a unified digital workshop management application featuring centralized customer records, job card workflows, inventory stock monitoring, PDF invoice generation, insurance tracking, and visual analytics dashboards.",
+    "features": "Dashboard — Centralized overview of active workshop operations and job metrics\\nCustomer Management — Organize and maintain comprehensive customer profiles and histories\\nRepair Job Management — Record repair orders, monitor wheel refurbishment stages, and track job progress\\nInventory Management — Maintain real-time workshop consumable and spare parts stock records\\nInvoice Management — Prepare and manage billing records with instant PDF export via jsPDF\\nInsurance Management — Organize insurance-related repair claims and documentation\\nCourier Tracking — Maintain shipment, dispatch, and delivery tracking information\\nReports & Analytics — Visual business analytics powered by Chart.js and Excel export via SheetJS",
+    "results": "Created a centralized digital interface for workshop management, structured customer and billing records, eliminated reliance on manual paper records, and established the foundation for future server-backed database expansions. Location: Sanathal Circle, Ahmedabad, Gujarat.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/the-wheel-master.svg",
+    "published": true,
+    "featured": true
+},
+  {
+    "name": "PLINTH",
+    "slug": "plinth",
+    "category": "AI Solutions · ConTech",
+    "short": "An integrated AI-powered platform connecting architecture, engineering, interior design, and construction workflows — bringing the entire building lifecycle into one unified ecosystem.",
+    "tech": "React.js, Python, Django, DRF, PostgreSQL, GSAP, WebSockets, Celery, Redis",
+    "client": "Architecture, Engineering & Construction (AEC) · Artificial Intelligence",
+    "overview": "Building projects involve multiple stakeholders, complex workflows, and information spread across disconnected tools. PLINTH is designed to bring these moving parts together through a centralized platform that simplifies collaboration, improves project visibility, and supports informed decision-making throughout the building lifecycle.\\n\\nBy combining AI-assisted design capabilities with project management, cost estimation, document management, and construction tracking, PLINTH creates a connected environment for everyone involved in bringing a building from concept to completion.",
+    "challenge": "Traditional construction projects suffer from fragmented stakeholder silos, disconnected spreadsheets, slow manual quantity estimation, and lack of real-time site synchronization between architects, engineers, contractors, and vendors.",
+    "solution": "Caventra engineered a unified digital ecosystem integrating AI plot analysis, preliminary floor-plan generation, automated BOQ calculations, WebSocket-powered real-time task updates, and centralized role-based document approvals.",
+    "features": "AI-Assisted Design — Plot analysis, preliminary floor-plan generation, and design alternatives\\n3D Visualization & Interior Design — Visual exploration of architectural concepts, materials, and layouts\\nEngineering Assistance — Preliminary structural assistance and compliance-related checks\\nCost Estimation & BOQ — Structured quantity takeoffs, cost estimates, and budget visibility\\nProject & Construction Management — Tasks, milestones, progress tracking, and site reporting\\nDocument & Approval Management — Centralized project files, revisions, reviews, and approvals\\nStakeholder Collaboration — Role-based workflows for clients, architects, engineers, contractors, and vendors",
+    "results": "Connected every stage of the building lifecycle through intelligent tools, coordinated workflows, and a unified digital experience. Status: In Development.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/plinth.svg",
+    "published": true,
+    "featured": true
+  },
+  {
+    "name": "GenResume",
+    "slug": "genresume",
+    "category": "Web Development · Career Tech",
+    "short": "A smart web-based resume-building and career development platform designed to help users create, organize, and present professional resumes through a streamlined digital experience.",
+    "tech": "Python, Django, Django REST Framework, React, PostgreSQL",
+    "client": "Human Resources Technology · Career Development · Productivity",
+    "overview": "Creating an effective resume can be challenging when users lack professional templates, structured guidance, or an organized way to present their qualifications. GenResume aims to simplify this process by providing a centralized platform for building and managing resumes.\\n\\nThe platform focuses on making resume creation more accessible while helping users structure their personal information, education, skills, and professional experience into a clear format suitable for career opportunities.",
+    "challenge": "Job seekers frequently struggle with inconsistent formatting, unstructured qualification sections, and lack of browser-based version control when tailoring applications for diverse roles.",
+    "solution": "A modular, step-by-step resume editor with live layout previews, structured data schema, automated section alignment, and instant PDF export capabilities.",
+    "features": "Resume Creation — Organize personal information, education, skills, and experience\\nStructured Resume Sections — Present career information in a consistent, readable format\\nDigital Resume Management — Manage multiple resume versions in a centralized web app\\nProfessional Presentation — Structure content to improve clarity, visual hierarchy, and ATS readability\\nWeb-Based Accessibility — Access resume-building functionality across desktop and mobile browsers",
+    "results": "Empowered individuals to present their career achievements with clarity, structure, and confidence.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/genresume.svg",
+    "published": true,
+    "featured": true
+  },
+  {
+    "name": "IRONFORGE Fitness Store",
+    "slug": "ironforge-fitness-store",
+    "category": "E-Commerce · Retail Technology",
+    "short": "A fitness-focused online shopping platform designed to showcase gym equipment and provide customers with a structured digital shopping experience.",
+    "tech": "React, Node.js, Express, PostgreSQL, E-Commerce Catalog, Stripe",
+    "client": "Fitness & Wellness · Sports Equipment · E-Commerce",
+    "overview": "Customers looking for fitness equipment need a convenient way to discover products, review available options, and make informed purchasing decisions. IRONFORGE Fitness Store is designed around this requirement, providing a dedicated online storefront for fitness and gym equipment.\\n\\nThe platform establishes a digital retail presence for fitness products, creating a foundation for product discovery, online shopping, and customer engagement.",
+    "challenge": "Heavy equipment e-commerce demands clear product specs, dimension comparisons, shipping tier calculators, and robust inventory categorization.",
+    "solution": "Engineered a high-performance, dark-themed storefront featuring fluid product filtering, instant specifications comparison, cart management, and seamless checkout flows.",
+    "features": "Product Showcase — Present fitness equipment through an organized visual catalogue\\nProduct Information — Structured specifications for easier browsing and technical comparison\\nE-Commerce Experience — High-speed digital shopping cart and responsive checkout\\nBrand Presentation — Cohesive, athletic brand identity and high-contrast typography\\nCustomer-Focused Browsing — Group equipment by training focus (Strength, Cardio, Recovery)",
+    "results": "Built a focused digital shopping destination for fitness enthusiasts seeking reliable and accessible gym equipment.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/ironforge.svg",
+    "published": true,
+    "featured": true
+  },
+  {
+    "name": "Divine Bridal Accessories",
+    "slug": "divine-bridal-accessories",
+    "category": "E-Commerce · Digital Retail",
+    "short": "An elegant bridal accessories website designed to showcase hair accessories, brooches, and occasion-focused products through a visually focused digital storefront.",
+    "tech": "Modern Web Stack, Responsive CSS3, Product Catalog, Image Optimization",
+    "client": "Bridal Fashion · Wedding Accessories · E-Commerce",
+    "overview": "Bridal accessories are often selected based on their appearance, design, and suitability for a particular occasion. Divine Bridal Accessories is designed to give these products a dedicated online presence through a visually focused shopping experience.\\n\\nThe website brings bridal hair accessories, brooches, and related products into a single digital storefront, helping visitors explore available designs while presenting the brand in a consistent and polished manner.",
+    "challenge": "Occasion-wear and bridal shoppers demand high-resolution imagery, subtle luxury aesthetics, and curated occasion categorization without performance degradation.",
+    "solution": "Crafted an airy, elegant shopping storefront with optimized imagery, delicate typographic hierarchy, detailed product zooms, and intuitive category browsing.",
+    "features": "Bridal Product Showcase — Present hair accessories, brooches, and bridal collections\\nVisual Product Presentation — High-resolution imagery emphasizing artisan detail and materials\\nOrganized Product Browsing — Group products by ceremony, hairstyle, and collection\\nRefined Brand Identity — Establish a sophisticated digital presence for luxury occasion retail\\nOnline Storefront — Seamless foundation for digital product discovery, inquiries, and orders",
+    "results": "Established an elegant digital destination combining luxury presentation, brand consistency, and convenient shopping.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/divine-bridal.svg",
+    "published": true,
+    "featured": true
+  },
+  {
+    "name": "Personal Portfolio Website",
+    "slug": "personal-portfolio-website",
+    "category": "Web Development · Front-End",
+    "short": "A responsive personal portfolio website showcasing technical projects, development skills, and professional experience through a structured and interactive digital experience.",
+    "tech": "HTML5, CSS3, JavaScript, Responsive Grid, GSAP",
+    "client": "Software Development · Technology · Professional Showcase",
+    "overview": "A developer's portfolio serves as a central destination for presenting projects, technical capabilities, and professional achievements. This portfolio website is designed to establish a clear digital identity while making project information accessible to recruiters, collaborators, and potential clients.\\n\\nBuilt with core web technologies, the website combines responsive layouts, structured navigation, and interactive elements to present information across desktop and mobile devices.",
+    "challenge": "Standing out in a crowded market requires showcasing both aesthetic polish and foundational coding mastery across all device form factors.",
+    "solution": "Engineered a clean, semantic web portfolio with custom dark styling, subtle interactive hover states, responsive layouts, and dedicated project breakdowns.",
+    "features": "Project Showcase — Display development projects, tech stacks, and live links\\nResponsive Design — Flawless multi-device layout adaptation from mobile to 4K\\nInteractive Elements — Dynamic DOM interactions, smooth scroll, and subtle micro-motion\\nStructured Navigation — Dedicated sections for About, Work, Experience, and Contact\\nCustom Styling — Bespoke CSS3 architecture with zero bloated UI dependencies\\nError Handling — Dedicated custom 404 page for unavailable routes",
+    "results": "Built a professional digital presence communicating technical ability, architectural hygiene, and software development excellence.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/personal-portfolio.svg",
+    "published": true,
+    "featured": true
+  },
+  {
+    "name": "CRM Platform",
+    "slug": "crm-platform",
+    "category": "Business Software · Workflow Management",
+    "short": "A web-based customer relationship management platform intended to centralize customer information and support more organized business workflows.",
+    "tech": "Full-Stack Web Architecture, Relational Database, REST APIs, Analytics",
+    "client": "Customer Relationship Management · Business Operations · Enterprise",
+    "overview": "Businesses often manage customer information, follow-ups, and operational activities across disconnected tools. A centralized CRM platform provides a structured approach to organizing customer records and managing client interactions.\\n\\nThis project focuses on bringing customer-related information into a unified digital environment, supporting consistent recordkeeping and improved visibility into business activities.",
+    "challenge": "Fragmented customer data spread across email threads and spreadsheets creates missed follow-ups, slow response times, and poor pipeline visibility.",
+    "solution": "Architected a unified customer management dashboard with contact histories, stage-based lead tracking, automated reminder alerts, and consolidated team activity feeds.",
+    "features": "Customer Information Management — Organize client records and metadata in a central hub\\nInteraction Tracking — Structured logs of communications, meetings, notes, and follow-ups\\nWorkflow Organization — Stage-based pipelines to track deals from initial lead to close\\nCentralized Records — Instant full-text search across accounts, contacts, and activity history\\nOperational Visibility — High-level dashboard metrics for monitoring business performance",
+    "results": "Simplified customer relationship management through centralized information, organized workflows, and connected business operations.",
+    "live": "",
+    "github": "",
+    "cover": "/assets/projects/crm-platform.svg",
+    "published": true,
+    "featured": true
+  }
+],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbark: 8849186747, Sauran Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
+let S=JSON.parse(JSON.stringify(D)),owner=false,edit=null,INQ=[];const H={'Content-Type':'application/json','X-Requested-With':'caventra'};
+const $=s=>document.querySelector(s),app=$('#app');const ORIG='/assets/logo.png';$('#sp').src=ORIG;$('#fl').src=ORIG;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safe=u=>/^(https?:\/\/|\/_blob\/|\/assets\/|\/uploads\/|mailto:|data:image)/.test(u||'')?esc(u):'#';
+const pub=()=>S.projects.filter(p=>p.published);
+const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'project';
+const empty=(t,m)=>`<div class="empty"><h3>${t}</h3><p>${m}</p></div>`;
+const sp=t=>t.split(' ').map((w,i)=>`<span class="w"><span style="--i:${i}">${w}</span></span>`).join(' ');
+const cta=`<a class="btn solid" href="#/contact">Start a Project ↗</a>`;
+const head=(h,p)=>`<section style="border:0;padding-bottom:40px"><div class="wrap"><h1 style="font-size:clamp(38px,6vw,76px)">${sp(h)}</h1>${p?`<p style="margin-top:24px;font-size:18px">${p}</p>`:''}</div></section>`;
+const SP=[4,2,2,2,2,6];const svc=()=>`<div class="bento">${S.services.map((s,i)=>`<div class="bc" style="grid-column:span ${SP[i]||2}"><b>${String(i+1).padStart(2,'0')}</b><i>↗</i><div><h3>${esc(s[0])}</h3><p>${esc(s[1])}</p></div></div>`).join('')}</div>`;
+const spc=(t,m)=>t.split(' ').map((w,i)=>`<span class="w"><span class="${m[i]||''}" style="--i:${i}">${w}</span></span>`).join(' ');
+const bigp=t=>`<p class="big">${t.split(' ').map(w=>`<span>${esc(w)}</span>`).join(' ')}</p>`;
+function lit(){document.querySelectorAll('.big').forEach(el=>{const s=el.querySelectorAll('span'),r=el.getBoundingClientRect(),pr=typeof RM!=='undefined'&&RM?1:Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(innerHeight*.45+r.height*.6)));s.forEach((x,i)=>x.classList.toggle('on',i<pr*s.length+.5))})}
+const prc=()=>`<div class="steps">${S.process.map((s,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><h3>${esc(s[0])}</h3><p>${esc(s[1])}</p></div>`).join('')}</div>`;
+const getCover=p=>((p.cover&&/^(https?:|\/_blob\/|\/assets\/|\/uploads\/|data:image)/.test(p.cover))?p.cover:((D.projects.find(x=>x.slug===p.slug||x.name===p.name)||{}).cover||''));
+const card=p=>{const cv=getCover(p);return `<a class="card" href="#/work/${esc(p.slug)}"><div class="im" style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"><div style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"></div></div><div class="cb"><small>${esc(p.category)}</small><h3>${esc(p.name)}</h3><p>${esc(p.short)}</p><div class="tags">${(p.tech||'').split(',').filter(x=>x.trim()).slice(0,4).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div><span class="btn sm">View Project ↗</span></div></a>`;};
+const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");
+const wrapS=(h,b,x='')=>`<section ${x}><div class="wrap">${h?`<h2 style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
+const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"';
+ if(c.email)r.push(`<span class="nm">${esc(c.email)}</span><a class="btn sm solid" href="mailto:${esc(c.email)}" ${B}>Email</a><button class="btn sm" type="button" data-cp="${esc(c.email)}">Copy</button>`);
+ if(c.phone)c.phone.split(/[,\n]+/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=n.includes(":")?n.split(":"):n.includes("|")?n.split("|"):[n,n];const label=p[0].trim(),num=(p[1]||p[0]).trim();const d=num.replace(/[^\d+]/g,""),w=d[0]==="+"?d.slice(1):"91"+d;r.push(`<span class="nm">${esc(label)}</span><a class="btn sm solid" href="https://wa.me/${w}" ${B}>WhatsApp</a><button class="btn sm" type="button" data-cp="${esc(num)}">Copy</button>`);});
+ if(c.address)r.push(`<span class="nm">${esc(c.address)}</span>`);
+ S.socials.forEach(x=>r.push(`<span class="nm">${esc(x[0])}</span><a class="btn sm solid" href="${safe(x[1])}" ${B}>Open ↗</a>`));
+ return r.length?`<div class="cl">${r.map(x=>`<div class="crow">${x}</div>`).join('')}</div>`:''};
+const sec=(t,v)=>v?`<h3 style="margin:48px 0 12px">${t}</h3><p>${esc(v).replace(/\n/g,'<br>')}</p>`:'';
+
+const getB = () => (typeof window !== 'undefined' && window.BLOGS && window.BLOGS.length) ? window.BLOGS : [];
+let blogPage = 1, blogFilter = 'All', blogQuery = '', blogShowAll = false;
+
+const V={
+home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${spc("Technology, designed to move businesses forward.",{1:'o',5:'g'})}</h1><div class="hrow"><div><p class="fi" style="margin:0 0 14px">We turn ideas into powerful digital products through technology, design, and intelligent solutions.</p><p class="fi" style="margin:0 0 36px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p><div class="row fi">${cta}<a class="btn" href="#/work">Explore Our Work</a></div></div><div class="hlw"><div class="hlf"><img class="hl" src="${ORIG}" alt="Caventra — Ideas to Impact"><div class="shine"></div></div></div></div></div></div>
+<div class="tape" aria-hidden="true"><div class="t1"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div><div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div></div>`
+ +wrapS("",bigp(S.about.who)+`<p>Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
+ +wrapS("What we build",svc()+`<p style="margin-top:32px"><a class="btn" href="#/services">All services ↗</a> <a class="btn" href="#/process">How we work ↗</a></p>`)
+ +wrapS("Built by Caventra",workGrid(pub().filter(p=>p.featured)))
+ +wrapS("Latest Insights &amp; Engineering",`
+    <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
+    <div class="blog-grid" style="margin:0">
+      ${getB().slice(0,3).map(b=>`
+        <a class="b-card" href="#/blog/${esc(b.slug)}" style="grid-column:span 4">
+          <div>
+            <div class="meta"><span>${esc(b.category)}</span><span class="dot-sep"></span><span>${esc(b.readTime)}</span></div>
+            <h3 style="font-size:20px">${esc(b.title)}</h3>
+            <p style="font-size:14.5px">${esc(b.summary)}</p>
+          </div>
+          <div class="ftr"><span class="tag">${esc(b.author)}</span><span class="read-link">Read ↗</span></div>
+        </a>
+      `).join('')}
+    </div>
+    <p style="margin-top:36px"><a class="btn" href="#/blog">Explore All 105+ Articles ↗</a></p>
+  `)
+ +`<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2>${cta}</div></section>`
+ +(contactInfo()?wrapS("Contact",contactInfo()):''),
+services:()=>head("Services","Technology solutions built around real business needs.")+wrapS("",svc(),'style="padding-top:20px"'),
+work:()=>head("Selected Work")+wrapS("",workGrid(pub()),'style="padding-top:20px"'),
+about:()=>{
+  const a=S.about;
+  return head("About Caventra","Engineering ideas into high-impact digital reality.")+wrapS("",`
+    <div style="max-width:840px;margin-bottom:60px">
+      <p style="font-size:clamp(20px,2.5vw,28px);line-height:1.45;color:var(--tx);font-weight:300">${esc(a.who)}</p>
+    </div>
+    <div class="split" style="margin-bottom:64px">
+      <div>
+        <h2 style="font-size:clamp(28px,3.8vw,44px);color:var(--gold2);line-height:1.15">Our Core Pillars</h2>
+        <p style="margin-top:16px;color:var(--mut)">How we think, engineer, and deliver software that makes a commercial difference.</p>
+      </div>
+      <div>
+        ${sec("What We Believe",a.believe)}
+        ${sec("Our Engineering Approach",a.approach)}
+        ${sec("Our Product & Design Philosophy",a.philosophy)}
+        ${sec("What Makes Caventra Different",a.different)}
+      </div>
+    </div>
+    <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:64px">
+      <h2 style="margin-bottom:14px">Capabilities &amp; Services Spectrum</h2>
+      <p style="margin-bottom:40px;font-size:17px">Every capability is engineered in-house to solve real commercial objectives.</p>
+      <div class="bento">
+        <div class="bc" style="grid-column:span 3">
+          <b>01</b><i>↗</i>
+          <div><h3>Web Engineering</h3><p>Fast, responsive web applications engineered with clean code, zero bloat, and resilient architectures.</p></div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>02</b><i>↗</i>
+          <div><h3>Bespoke Software</h3><p>Custom software systems, business portals, and secure cloud platforms built around real workflows.</p></div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>03</b><i>↗</i>
+          <div><h3>Applied AI Solutions</h3><p>Automated intelligence pipelines, LLM-powered applications, and custom AI tooling that eliminate manual friction.</p></div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>04</b><i>↗</i>
+          <div><h3>UI/UX Architecture</h3><p>Intuitive digital product experiences designed with conversion psychology, accessibility, and modern design systems.</p></div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>05</b><i>↗</i>
+          <div><h3>Business Automation</h3><p>API integrations, webhooks, and automated background data pipelines that reduce operational overhead.</p></div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>06</b><i>↗</i>
+          <div><h3>Cloud &amp; Security</h3><p>Scalable databases, high-availability deployments, and robust security protocols protecting your data.</p></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:72px;padding:52px 32px;border:1px solid var(--gold);border-radius:var(--r);background:radial-gradient(ellipse at 50% 0%,rgba(201,184,160,.12),transparent 75%) var(--bg2);text-align:center">
+      <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Have an idea worth building?</h2>
+      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline.</p>
+      ${cta}
+    </div>
+  `,'style="padding-top:20px"')
+},
+blog:()=>{
+  const list = getB();
+  const cats = [
+    { name: 'All', count: list.length },
+    { name: 'Canva & Design', count: list.filter(x=>x.category==='Canva & Design').length },
+    { name: 'Applied AI', count: list.filter(x=>x.category==='Applied AI').length },
+    { name: 'Web Engineering', count: list.filter(x=>x.category==='Web Engineering').length },
+    { name: 'Global Tech Hubs', count: list.filter(x=>x.category==='Global Tech Hubs').length },
+    { name: 'UI/UX & Growth', count: list.filter(x=>x.category==='UI/UX & Growth').length }
+  ];
+  
+  const filtered = list.filter(b => {
+    const matchCat = (blogFilter === 'All') || (b.category === blogFilter);
+    const q = blogQuery.toLowerCase().trim();
+    const matchQ = !q || b.title.toLowerCase().includes(q) || b.summary.toLowerCase().includes(q) || (b.location && b.location.toLowerCase().includes(q));
+    return matchCat && matchQ;
+  });
+
+  const pageSize = 24;
+  const visible = blogShowAll ? filtered : filtered.slice(0, blogPage * pageSize);
+  const hasMore = !blogShowAll && visible.length < filtered.length;
+
+  return head("Knowledge &amp; Engineering","100+ technical perspectives, design systems, applied AI, and global software engineering.") + wrapS("",`
+    <div style="margin-bottom:36px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px">
+      <div class="blog-filter" style="margin:0">
+        ${cats.map(c=>`<button class="${blogFilter===c.name?'active':''}" data-bcat="${esc(c.name)}">${esc(c.name)} (${c.count})</button>`).join('')}
+      </div>
+      <div>
+        <input id="b-search" placeholder="Search by topic, keyword, or city..." value="${esc(blogQuery)}" style="border-radius:999px;padding:10px 22px;font-size:14px;background:var(--bg2);border:1px solid var(--line);color:var(--tx);min-width:280px">
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+      <p style="color:var(--mut);font-size:14px;margin:0">Showing ${visible.length} of ${filtered.length} articles</p>
+      ${!blogShowAll && filtered.length > pageSize ? `<button class="btn sm" id="b-showall">Show All (${filtered.length})</button>` : ''}
+    </div>
+    <div class="blog-grid" id="bg-grid">
+      ${visible.map((b,i)=>`
+        <a class="b-card" href="#/blog/${esc(b.slug)}">
+          <div>
+            <div class="meta">
+              <span>${esc(b.category)}</span>
+              <span class="dot-sep"></span>
+              <span>${esc(b.readTime)}</span>
+              ${b.location && b.location !== 'Global' ? `<span class="dot-sep"></span><span style="color:var(--gold2)">📍 ${esc(b.location)}</span>` : ''}
+            </div>
+            <h3>${esc(b.title)}</h3>
+            <p>${esc(b.summary)}</p>
+          </div>
+          <div class="ftr">
+            <span class="tag">${esc(b.author)}</span>
+            <span class="read-link">Read Article ↗</span>
+          </div>
+        </a>
+      `).join('')}
+    </div>
+    ${hasMore ? `
+      <div class="row" style="justify-content:center;margin-top:48px;gap:14px">
+        <button class="btn solid" id="b-more">Load 24 More</button>
+        <button class="btn" id="b-showall">Show All ${filtered.length} Articles</button>
+      </div>
+    ` : ''}
+  `,'style="padding-top:20px"');
+},
+article:s=>{
+  const list = getB();
+  const b = list.find(x=>x.slug===s);
+  if(!b)return V.notFound("The requested insight article could not be found.");
+  
+  // Suggest 2 related articles
+  const related = list.filter(x=>x.slug !== b.slug && (x.category === b.category || x.author === b.author)).slice(0, 2);
+
+  return `<section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
+    <a class="btn sm" href="#/blog" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All 100+ Articles</a>
+    <div class="article-meta">
+      <span>${esc(b.category)}</span>
+      <span>·</span>
+      <span>${esc(b.date)}</span>
+      <span>·</span>
+      <span>${esc(b.readTime)}</span>
+      ${b.location && b.location !== 'Global' ? `<span>·</span><span style="color:var(--gold2)">📍 ${esc(b.location)}</span>` : ''}
+    </div>
+    <h1 style="font-size:clamp(32px,5.2vw,64px);line-height:1.08;margin-bottom:24px">${sp(b.title)}</h1>
+    <p style="font-size:20px;color:var(--gold2);line-height:1.55;margin-bottom:48px">${esc(b.summary)}</p>
+    <div class="article-author">
+      <div class="av">${esc(b.author.charAt(0))}</div>
+      <div>
+        <b>${esc(b.author)}</b>
+        <p>${esc(b.authorRole)} at Caventra</p>
+      </div>
+    </div>
+    <div class="article-body">
+      ${b.content}
+    </div>
+    ${related.length ? `
+      <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:48px">
+        <h3 style="font-size:22px;margin-bottom:24px;color:var(--gold2)">Related Articles</h3>
+        <div class="blog-grid" style="margin:0">
+          ${related.map(r=>`
+            <a class="b-card" href="#/blog/${esc(r.slug)}" style="grid-column:span 6">
+              <div>
+                <div class="meta"><span>${esc(r.category)}</span></div>
+                <h3 style="font-size:20px">${esc(r.title)}</h3>
+                <p style="font-size:14px">${esc(r.summary)}</p>
+              </div>
+              <div class="ftr"><span class="read-link">Read ↗</span></div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
+    <div class="article-cta">
+      <h3>Have an idea worth building?</h3>
+      <p>Caventra turns digital concepts into scalable software products. Let's discuss your project.</p>
+      <div class="row" style="justify-content:center">${cta}<a class="btn" href="#/blog">Explore 100+ Articles</a></div>
+    </div>
+  </div></div></section>`;
+},
+process:()=>head("Process","From first conversation to launch.")+wrapS("",prc(),'style="padding-top:20px"'),
+technology:()=>head("Technology")+wrapS("",S.techs.length?`<div class="list">${S.techs.map(t=>`<div><h3>${esc(t[0])}</h3><div class="tags">${t[1].split(',').filter(x=>x.trim()).map(x=>`<span>${esc(x.trim())}</span>`).join('')}</div></div>`).join('')}</div>`:empty("Stack details coming soon.","Technologies will be listed here once confirmed."),'style="padding-top:20px"'),
+contact:()=>{const m=S.contact.email;return head("Let's Build Something","Tell us about your project.")+wrapS("",`<form id="cf"><input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px"><div class="two"><label>Name<input name="name" required autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label></div><div class="two"><label>Company<input name="company" autocomplete="organization"></label><label>Request type<select name="type"><option>Web Development</option><option>Software Development</option><option>AI Solutions</option><option>UI/UX</option><option>Business Automation</option><option>Data Deletion Request</option><option>Other</option></select></label></div><div class="two"><label>Budget<input name="budget"></label><label>Timeline<input name="timeline"></label></div><label>Message<textarea name="message" required placeholder="Describe your project goals or data deletion request..."></textarea></label><label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-top:4px"><input type="checkbox" name="consent" required style="width:18px;height:18px;accent-color:var(--gold);margin-top:2px;cursor:pointer"><span>I confirm that I am at least 18 years of age and consent to Caventra processing my inquiry in accordance with the <a href="#/privacy" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.</span></label><div style="margin-top:8px"><button class="btn solid">Send Message</button></div></form>${contactInfo()?`<div style="margin-top:48px">${contactInfo()}</div>`:''}`,'style="padding-top:20px"')},
+privacy:()=>head("Privacy Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>Caventra ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy details how we handle, collect, protect, and process data when you interact with our website and digital studio services.</p><h3>1. Data Controller</h3><p>Caventra is the data controller for information processed through this website. For any inquiries regarding your data, contact us at <a href="mailto:caventraofficial@gmail.com">caventraofficial@gmail.com</a>.</p><h3>2. Information We Collect &amp; Purpose</h3><p>We adhere to strict data minimization. We only collect information that you knowingly submit via our contact form:</p><ul><li><strong>Contact Details:</strong> Your name, email, company, request type, budget, and project brief.</li><li><strong>Purpose:</strong> To review project proposals, provide estimates, and deliver custom digital solutions.</li><li><strong>Zero Tracking SDKs:</strong> We do not track your activity across websites, and we do not use third-party behavioral analytics or advertising trackers.</li></ul><h3>3. Legal Basis for Processing</h3><p>We process personal data based on your explicit consent, pre-contractual discussions, and our legitimate business interest in responding to client inquiries.</p><h3>4. Age Restriction &amp; Protection of Minors</h3><p>Our website and software services are intended strictly for individuals aged 18 and older. We do not knowingly solicit or collect personal information from minors. If personal data of a minor is submitted, we will permanently delete it upon notice.</p><h3>5. Security &amp; Third-Party Audit</h3><p>Our infrastructure undergoes strict security controls, including parameterized database operations, cryptographic session tokens, secure HTTPS transport, and strict Content Security Policies (CSP). We do not embed untrusted third-party SDKs.</p><h3>6. Data Retention &amp; Deletion Option</h3><p>We retain inquiry information only as long as necessary to address your project or satisfy legal requirements.</p><h3>7. Your Rights &amp; Data Deletion Request</h3><p>You have the right to access, correct, or permanently delete your personal information from our systems at any time.</p><p>To request data deletion, select <strong>"Data Deletion Request"</strong> in our <a href="#/contact">Contact Form</a> or email <a href="mailto:caventraofficial@gmail.com?subject=Data%20Deletion%20Request">caventraofficial@gmail.com</a>. We will confirm deletion within 30 days.</p></div>`,'style="padding-top:20px"'),
+terms:()=>head("Terms of Service","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>These Terms of Service govern your access to and use of the website and services provided by Caventra. By browsing our website or initiating a project inquiry, you agree to these Terms.</p><h3>1. Studio Services</h3><p>Caventra provides digital software engineering, AI integrations, UI/UX design, and business automation. Specific project milestones, warranties, and deliverables are governed by individual written client agreements.</p><h3>2. Intellectual Property &amp; Licensing</h3><ul><li><strong>Client Deliverables:</strong> Ownership, licensing, and intellectual property rights for custom code and design deliverables transfer to the client upon full payment as defined in individual service contracts.</li><li><strong>Studio Assets:</strong> The Caventra brand, logo, typography, website design, and proprietary code patterns remain the exclusive intellectual property of Caventra.</li></ul><h3>3. Acceptable Use</h3><p>You agree not to misuse this website, probe vulnerabilities, perform unauthorized scraping, or transmit malicious code.</p><h3>4. Authentic Work &amp; No Unsupported Claims</h3><p>We build genuine, high-standard digital products. Caventra makes no exaggerated or unsupported claims regarding specific commercial turnover or search rankings unless explicitly warranted in a formal contract.</p><h3>5. Limitation of Liability</h3><p>Caventra is provided on an "as is" basis without warranties of uninterrupted uptime. We shall not be liable for indirect or consequential damages arising from site access.</p><h3>6. Governing Law</h3><p>These Terms are governed by and construed under the laws of India.</p></div>`,'style="padding-top:20px"'),
+cookies:()=>head("Cookie Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>This Cookie Policy explains how Caventra uses cookies and local storage.</p><h3>1. Strictly Necessary Cookies Only</h3><p>Caventra follows a privacy-by-design architecture. <strong>We do not use advertising, marketing, or behavioral tracking cookies.</strong></p><ul><li><strong>Admin Authentication:</strong> An encrypted <code>cv_sess</code> cookie is used solely when authorized administrators log into <code>/#/admin</code> to verify credentials. It expires after 7 days.</li><li><strong>Local Storage Preference:</strong> A single entry (<code>cv_cookie_consent</code>) is stored in your browser to remember your cookie banner choice.</li></ul><h3>2. Third-Party Auditing</h3><p>No third-party trackers, pixels, or profiling SDKs are present. Fonts are securely loaded from Google Fonts.</p><h3>3. Managing Cookies</h3><p>You may clear or block cookies in your browser settings at any time without impacting public browsing of this site.</p></div>`,'style="padding-top:20px"'),
+project:s=>{const p=S.projects.find(x=>x.slug===s&&x.published);if(!p)return V.notFound("The project you are looking for could not be found or has not been published yet.");
+ const f=(p.features||'').split('\n').filter(x=>x.trim());
+ const cv=getCover(p);
+ return head(esc(p.name),esc(p.short))+wrapS("",(cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block">`:'')+`<div class="tags" style="margin-top:24px">${(p.tech||'').split(',').filter(x=>x.trim()).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div>`+sec("Client",p.client)+sec("Overview",p.overview)+sec("Challenge",p.challenge)+sec("Solution",p.solution)+(f.length?`<h3 style="margin:48px 0 12px">Features</h3><p>${f.map(esc).join('<br>')}</p>`:'')+sec("Results",p.results)+(p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)">`).join('')+`<div class="row" style="margin-top:48px">${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website</a>`:''}${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub</a>`:''}${p.case?`<a class="btn" href="${safe(p.case)}" target="_blank" rel="noopener">Case Study</a>`:''}</div>`,'style="padding-top:20px"')},
+notFound:(msg)=>`<section style="min-height:72vh;display:flex;align-items:center;border:0;padding:80px 0"><div class="wrap" style="text-align:center;max-width:700px;margin:0 auto"><p style="font:800 clamp(80px,13vw,150px) var(--hd);line-height:.88;margin:0 0 20px;background:linear-gradient(100deg,#c9b8a0,#f8ecd8 50%,#b79f80);-webkit-background-clip:text;background-clip:text;color:transparent">404</p><h1 style="font-size:clamp(28px,4vw,44px);margin-bottom:16px">Page Not Found</h1><p style="font-size:17px;color:var(--mut);line-height:1.6;margin:0 auto 36px;max-width:48ch">${msg||"The link you followed may be broken, or the page may have been removed or relocated."}</p><div class="row" style="justify-content:center;gap:14px"><a class="btn solid" href="#/">Return to Homepage</a><a class="btn" href="#/work">Explore Our Work</a><a class="btn" href="#/blog">Read Insights &amp; Blog</a><a class="btn" href="#/contact">Contact Studio</a></div></div></section>`,
+admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+wrapS("",`<form id="lf" style="max-width:420px"><label>Admin password<input type="password" id="lp" autocomplete="current-password" required></label><div><button class="btn solid">Sign in</button></div><p id="lm"></p></form>`,'style="padding-top:20px"');
+ const e=edit,P=S.projects,I=(k,l,t='input')=>`<label>${l}<${t} data-k="${k}">${t==='textarea'?esc(e[k]||''):''}</${t}></label>`.replace('<input data-k','<input data-k').replace(`</input>`,'').replace(`data-k="${k}">`,t==='input'?`data-k="${k}" value="${esc(e[k]||'')}">`:`data-k="${k}">`);
+ return head("Admin")+wrapS("",`<div class="adm"><div class="ro" style="border:0;padding:0"><h3>Inquiries (${INQ.length})</h3><button class="btn sm" data-a="logout">Sign out</button></div>${INQ.map(q=>`<div class="ro" style="align-items:flex-start"><span><b>${esc(q.name)}</b> · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.company?' · '+esc(q.company):''}<br><small>${esc(q.type)} ${q.budget?'· '+esc(q.budget):''} ${q.timeline?'· '+esc(q.timeline):''} · ${new Date(q.created_at).toLocaleString()}</small><br>${esc(q.message)}</span><button class="btn sm" data-a="delq" data-i="${q.id}">Delete</button></div>`).join('')||'<p>No inquiries yet.</p>'}</div><div class="adm"><h3>Projects</h3><p>Nothing is published until you add it here.</p>${P.map((p,i)=>`<div class="ro"><span>${esc(p.name)} ${p.published?'':'(draft)'} ${p.featured?'★':''}</span><span class="row"><button class="btn sm" data-a="pub" data-i="${i}">${p.published?'Unpublish':'Publish'}</button><button class="btn sm" data-a="feat" data-i="${i}">${p.featured?'Unfeature':'Feature'}</button><button class="btn sm" data-a="up" data-i="${i}">Up</button><button class="btn sm" data-a="dn" data-i="${i}">Down</button><button class="btn sm" data-a="ed" data-i="${i}">Edit</button><button class="btn sm" data-a="del" data-i="${i}">Delete</button></span></div>`).join('')}<p style="margin-top:20px"><button class="btn solid sm" data-a="new">Add project</button></p></div>`
+ +(e?`<div class="adm"><h3>${e.name?'Edit':'New'} project</h3><form id="pf" style="max-width:none">${I('name','Name')}${I('category','Category')}${I('short','Short description')}${I('tech','Technologies (comma separated)')}${I('client','Client')}${I('overview','Overview','textarea')}${I('challenge','Challenge','textarea')}${I('solution','Solution','textarea')}${I('features','Features (one per line)','textarea')}${I('results','Results','textarea')}${I('live','Live URL')}${I('github','GitHub URL')}${I('case','Case study URL')}<label>Cover image<input type="file" id="pcv" accept="image/*"></label><label>Gallery images<input type="file" id="gl" accept="image/*" multiple></label><p>${e.cover?'Cover set. ':''}${(e.gallery||[]).length} gallery image(s).</p><div class="row"><button class="btn solid" data-a="savep" type="button">Save project</button><button class="btn" data-a="cancel" type="button">Cancel</button></div></form></div>`:'')
+ +`<div class="adm"><h3>Site content</h3><form id="sf" style="max-width:none"><label>Footer description<textarea data-s="desc">${esc(S.desc)}</textarea></label><label>Who we are<textarea data-s="about.who">${esc(S.about.who)}</textarea></label><label>What we believe<textarea data-s="about.believe">${esc(S.about.believe)}</textarea></label><label>Our approach<textarea data-s="about.approach">${esc(S.about.approach)}</textarea></label><label>Our philosophy<textarea data-s="about.philosophy">${esc(S.about.philosophy)}</textarea></label><label>What makes Caventra different<textarea data-s="about.different">${esc(S.about.different)}</textarea></label><label>Contact email<input data-s="contact.email" value="${esc(S.contact.email)}"></label><label>Phone numbers (separate with commas)<input data-s="contact.phone" value="${esc(S.contact.phone)}"></label><label>Address<input data-s="contact.address" value="${esc(S.contact.address)}"></label><label>Social links (one per line: Name | URL)<textarea data-s="socials">${esc(S.socials.map(x=>x[0]+' | '+x[1]).join('\n'))}</textarea></label><label>Technologies (one per line: Category | A, B, C)<textarea data-s="techs">${esc(S.techs.map(x=>x[0]+' | '+x[1]).join('\n'))}</textarea></label><div><button class="btn solid" data-a="saves" type="button">Save site content</button></div></form></div>`)}
+};
+const kv=t=>t.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]&&a[1]);
+async function save(){try{const r=await fetch('/api/admin/site',{method:'PUT',headers:H,body:JSON.stringify(S)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||r.status);if(j.site){const keep=S;S=Object.assign(JSON.parse(JSON.stringify(D)),j.site)}return true}catch(x){alert('Could not save: '+x.message);return false}}
+function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.split('/');
+ let v=r===''?V.home():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
+ app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
+ document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r));
+ $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
+ const lf=$('#lf');if(lf)lf.onsubmit=doLogin;const cf=$('#cf');if(cf)cf.onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(cf));const bt=cf.querySelector('button');bt.disabled=true;bt.textContent='Sending…';try{const r=await fetch('/api/contact',{method:'POST',headers:H,body:JSON.stringify(f)});if(!r.ok)throw 0;cf.innerHTML='<h3>Thank you. Your message is on its way.</h3><p>We will get back to you at '+esc(f.email)+'.</p>';return}catch(x){}const to=S.contact.email,sub='Project inquiry from '+f.name,b=Object.entries(f).map(([k,v])=>k+': '+v).join('\n'),q='&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(sub)+'&body='+encodeURIComponent(b);
+ cf.innerHTML=`<h3>Almost there. Send it to us</h3><p>This website can't send email by itself, so choose how to send your message to ${esc(to)}:</p><div class="row"><a class="btn solid" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&fs=1${q}">Open in Gmail ↗</a><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(b)}">Open email app</a><button class="btn" type="button" id="cp">Copy message</button></div><p id="cpm"></p>`;
+ $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText('To: '+to+'\nSubject: '+sub+'\n\n'+b);$('#cpm').textContent='Copied. Paste it into any email and send it to '+to+'.'}catch(x){$('#cpm').textContent='Copy failed. Please email '+to+' directly.'}}}}
+document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=+t.dataset.i,P=S.projects;if(t.dataset.bcat){blogFilter=t.dataset.bcat;blogPage=1;render();return}
+ if(t.id==='b-more'){blogPage++;render();return}
+ if(t.id==='b-showall'){blogShowAll=true;render();return}
+ if(a==='logout'){await fetch('/api/admin/logout',{method:'POST',headers:H});owner=false;render();return}if(a==='delq'){if(!confirm('Delete this inquiry?'))return;await fetch('/api/admin/inquiries/'+t.dataset.i,{method:'DELETE',headers:H});INQ=INQ.filter(q=>q.id!=t.dataset.i);render();return}
+ if(a==='new'){edit={published:false,gallery:[]};}
+ else if(a==='ed'){edit=JSON.parse(JSON.stringify(P[i]));edit._i=i}
+ else if(a==='cancel')edit=null;
+ else if(a==='pub')P[i].published=!P[i].published;
+ else if(a==='feat')P[i].featured=!P[i].featured;
+ else if(a==='up'&&i>0)[P[i-1],P[i]]=[P[i],P[i-1]];
+ else if(a==='dn'&&i<P.length-1)[P[i+1],P[i]]=[P[i],P[i+1]];
+ else if(a==='del'){if(!confirm('Delete this project?'))return;P.splice(i,1)}
+ else if(a==='savep'){document.querySelectorAll('#pf [data-k]').forEach(x=>edit[x.dataset.k]=x.value);
+  if(!edit.name){alert('Add a project name first.');return}
+  try{const up=async f=>{const r=await fetch('/api/admin/upload?name='+encodeURIComponent(f.name),{method:'POST',headers:{'Content-Type':f.type,'X-Requested-With':'caventra'},body:f});const j=await r.json();if(!r.ok)throw new Error(j.error);return j.url};const c=$('#pcv').files[0];if(c)edit.cover=await up(c);for(const f of $('#gl').files)edit.gallery.push(await up(f))}catch(x){alert('Image upload failed: '+(x.message||x.code));return}
+  edit.slug=slug(edit.name);const j=edit._i;delete edit._i;if(j!=null)P[j]=edit;else P.push(edit);edit=null}
+ else if(a==='saves'){document.querySelectorAll('#sf [data-s]').forEach(x=>{const k=x.dataset.s;if(k==='socials')S.socials=kv(x.value);else if(k==='techs')S.techs=kv(x.value);else if(k.includes('.')){const[a1,b1]=k.split('.');S[a1][b1]=x.value}else S[k]=x.value})}
+ else return;
+ if(!['new','ed','cancel'].includes(a))await save();render()});
+const bg=$('#bg'),lk=$('#lk');if(bg&&lk){bg.onclick=()=>{const o=lk.classList.toggle('open');bg.setAttribute('aria-expanded',o?'true':'false');};lk.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}));document.addEventListener('click',e=>{if(lk.classList.contains('open')&&!lk.contains(e.target)&&e.target!==bg){lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}});window.addEventListener('keydown',e=>{if(e.key==='Escape'&&lk.classList.contains('open')){lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}});}
+$('#yr').textContent=new Date().getFullYear();
+const ckb=$('#ckb'),ckAcc=$('#ck-acc'),ckDec=$('#ck-dec');
+if(ckb&&!localStorage.getItem('cv_cookie_consent')){ckb.classList.remove('hide');setTimeout(()=>ckb.classList.add('show'),700);if(ckAcc)ckAcc.onclick=()=>{localStorage.setItem('cv_cookie_consent','accepted');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};if(ckDec)ckDec.onclick=()=>{localStorage.setItem('cv_cookie_consent','essential');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};}
+let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+ORIG+'" alt="" aria-hidden="true">';
+function scr(el){const t=el.textContent,G='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+<>/',n=t.length;let f=0;const id=setInterval(()=>{f++;el.textContent=t.split('').map((c,i)=>c===' '||i<f*n/18?c:G[Math.random()*G.length|0]).join('');if(f>=18){clearInterval(id);el.textContent=t}},38)}
+function nav(){if(first||RM){first=false;render();return}if(busy)return;busy=true;cur.className='cin';setTimeout(()=>{render();cur.className='cout';setTimeout(()=>{cur.className='';busy=false},540)},520)}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);if(e.target.tagName==='H2'&&!e.target.children.length)scr(e.target)}}),{threshold:.12});
+let raf;function fx(){[['section:not(.band) h2','dn'],['.list>div','lf'],['.steps>div','rt'],['.card,.bc','zm'],['.split>*','x'],['.empty,.adm,form,section .wrap>p','']].forEach(([s,c])=>app.querySelectorAll(s).forEach((e,i)=>{e.classList.add('rv');if(c==='x')e.classList.add(i%2?'rt':'lf');else if(c)e.classList.add(c);e.style.setProperty('--d',(i%4)*.08+'s');RM?e.classList.add('in'):io.observe(e)}));
+ document.querySelectorAll('.shine').forEach(s=>{s.style.webkitMaskImage=s.style.maskImage='url('+ORIG+')'});lit();app.querySelectorAll('section').forEach(e=>RM?e.classList.add('in'):io.observe(e));
+ clearTimeout(tt);const rw=$('#rw');if(rw&&!RM){let i=0,j=0,d=1;const tick=()=>{const t=S.services[i][0];j+=d;rw.textContent=t.slice(0,j);let ms=75;if(d==1&&j==t.length){d=-1;ms=1500}else if(d==-1&&j==0){d=1;i=(i+1)%S.services.length;ms=350}else if(d==-1)ms=35;tt=setTimeout(tick,ms)};tick()}
+ 
+ cancelAnimationFrame(raf);const c=$('#cv');if(!c||RM)return;const x=c.getContext('2d');let w,hh,P=[];const rs=()=>{w=c.width=c.offsetWidth;hh=c.height=c.offsetHeight;P=Array.from({length:Math.min(64,w/18|0)},()=>({x:Math.random()*w,y:Math.random()*hh,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}))};rs();onresize=rs;
+ const f=()=>{x.clearRect(0,0,w,hh);for(const p of P){p.x=(p.x+p.vx+w)%w;p.y=(p.y+p.vy+hh)%hh;x.fillStyle='rgba(201,184,160,.7)';x.fillRect(p.x,p.y,1.6,1.6)}
+  for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<130){x.strokeStyle='rgba(201,184,160,'+.2*(1-d/130)+')';x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}raf=requestAnimationFrame(f)};f()}
+document.body.style.setProperty('--h','1.9s');setTimeout(()=>document.body.style.setProperty('--h','0s'),3200);
+addEventListener('scroll',()=>{$('#pb').style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100||0)+'%'},{passive:true});
+if(matchMedia('(pointer:fine)').matches&&!RM)addEventListener('mousemove',e=>{const g=$('#cg');g.style.opacity=1;g.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+addEventListener('scroll',()=>{lit();const l=document.querySelector('.hlw');if(l&&!RM)l.style.translate='0 '+Math.min(scrollY*.12,120)+'px'},{passive:true});
+if(matchMedia('(pointer:fine)').matches&&!RM)addEventListener('mousemove',e=>{const c=e.target.closest&&e.target.closest('.card');document.querySelectorAll('.card .im').forEach(x=>{if(!c||!c.contains(x)){x.style.setProperty('--rx','0deg');x.style.setProperty('--ry','0deg')}});if(c){const im=c.querySelector('.im'),r=im.getBoundingClientRect();im.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*10+'deg');im.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*10+'deg')}
+ const b=e.target.closest&&e.target.closest('.btn');document.querySelectorAll('.btn').forEach(x=>{if(x!==b)x.style.transform=''});if(b){const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.28}px)`}});
+if(matchMedia('(pointer:fine)').matches&&!RM){const d=document.createElement('div');d.id='cd';document.body.appendChild(d);addEventListener('mousemove',e=>{d.style.opacity=1;d.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;d.classList.toggle('h',!!(e.target.closest&&e.target.closest('a,button,.card,.bc')))})}
+addEventListener('pointerdown',e=>{const r=document.createElement('span');r.className='rp';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';document.body.appendChild(r);setTimeout(()=>r.remove(),800)});
+let lY=scrollY,sk=0,tg=0;addEventListener('scroll',()=>{tg=Math.max(-14,Math.min(14,(scrollY-lY)*.6));lY=scrollY},{passive:true});
+(function loop(){sk+=(tg-sk)*.12;tg*=.9;document.querySelectorAll('.tape>div').forEach(e=>e.style.setProperty('--sk',sk+'deg'));requestAnimationFrame(loop)})();
+if(matchMedia('(pointer:fine)').matches)addEventListener('mousemove',e=>{const w=document.querySelector('.hlw');if(w){w.style.setProperty('--ty',(e.clientX/innerWidth-.5)*16+'deg');w.style.setProperty('--tx',-(e.clientY/innerHeight-.5)*12+'deg')}const b=e.target.closest&&e.target.closest('.bc');if(b){const r=b.getBoundingClientRect();b.style.setProperty('--mx',e.clientX-r.left+'px');b.style.setProperty('--my',e.clientY-r.top+'px')}});
+addEventListener('click',async e=>{const t=e.target.closest('[data-cp]');if(!t)return;const v=t.dataset.cp;let ok=false;try{await navigator.clipboard.writeText(v);ok=true}catch(x){try{const a=document.createElement('textarea');a.value=v;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();ok=document.execCommand('copy');a.remove()}catch(y){}}const o=t.textContent;t.textContent=ok?'Copied ✓':'Copy failed';setTimeout(()=>t.textContent=o,1500)});
+document.addEventListener('input', e => {
+  if (e.target && e.target.id === 'b-search') {
+    blogQuery = e.target.value;
+    blogPage = 1;
+    const list = getB();
+    const filtered = list.filter(b => {
+      const matchCat = (blogFilter === 'All') || (b.category === blogFilter);
+      const q = blogQuery.toLowerCase().trim();
+      return matchCat && (!q || b.title.toLowerCase().includes(q) || b.summary.toLowerCase().includes(q) || (b.location && b.location.toLowerCase().includes(q)));
+    });
+    const pageSize = 12;
+    const visible = filtered.slice(0, blogPage * pageSize);
+    const grid = document.getElementById('bg-grid');
+    if (grid) {
+      grid.innerHTML = visible.map(b => `
+        <a class="b-card" href="#/blog/${esc(b.slug)}">
+          <div>
+            <div class="meta">
+              <span>${esc(b.category)}</span>
+              <span class="dot-sep"></span>
+              <span>${esc(b.readTime)}</span>
+              ${b.location && b.location !== 'Global' ? `<span class="dot-sep"></span><span style="color:var(--gold2)">📍 ${esc(b.location)}</span>` : ''}
+            </div>
+            <h3>${esc(b.title)}</h3>
+            <p>${esc(b.summary)}</p>
+          </div>
+          <div class="ftr">
+            <span class="tag">${esc(b.author)}</span>
+            <span class="read-link">Read Article ↗</span>
+          </div>
+        </a>
+      `).join('');
+    }
+  }
+});
+
+addEventListener('hashchange',nav);render();
+const norm=()=>{if(!S.socials||!S.socials.length)S.socials=D.socials.slice();S.contact=Object.assign({},D.contact,Object.fromEntries(Object.entries(S.contact||{}).filter(([k,v])=>v)));if(Array.isArray(S.projects)){S.projects.forEach(p=>{if(!p.cover||!p.cover.trim()){const m=D.projects.find(x=>x.slug===p.slug||x.name===p.name);if(m&&m.cover)p.cover=m.cover;}});}};
+async function loadAdmin(){const r=await fetch('/api/admin/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const q=await fetch('/api/admin/inquiries');if(q.ok)INQ=await q.json()}
+async function doLogin(e){e.preventDefault();const m=$('#lm');try{const r=await fetch('/api/admin/login',{method:'POST',headers:H,body:JSON.stringify({password:$('#lp').value})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Login failed');owner=true;await loadAdmin();render()}catch(x){m.textContent=x.message}}
+(async()=>{try{const r=await fetch('/api/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const m=await (await fetch('/api/admin/me')).json();if(m.admin){owner=true;await loadAdmin()}}catch(x){}render()})();
