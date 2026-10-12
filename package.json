@@ -1,0 +1,15 @@
+{
+  "name": "caventra",
+  "version": "1.0.0",
+  "description": "Caventra website: full-stack Node.js app with admin dashboard, SQLite storage and contact inquiries",
+  "private": true,
+  "main": "server.js",
+  "engines": { "node": ">=18.0" },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0"
+  },
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "test": "node --no-warnings test/smoke.js"
+  }
+}

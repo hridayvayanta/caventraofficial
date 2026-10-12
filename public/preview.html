@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caventra — Live Mobile Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0e11;
+      --card-bg: #14181c;
+      --border: #23282f;
+      --gold: #c9b8a0;
+      --gold-light: #f3e6d1;
+      --text: #e6e3dd;
+      --text-muted: #8b929a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+    /* Header Toolbar */
+    header {
+      width: 100%;
+      background: rgba(15, 19, 22, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--gold-light);
+    }
+    .brand .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .brand .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+    }
+    /* Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-group {
+      display: inline-flex;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .btn-group button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-group button.active {
+      background: var(--gold);
+      color: #14181b;
+      font-weight: 600;
+    }
+    .action-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 16px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    /* Page Quick Links Bar */
+    .quick-nav {
+      margin: 20px 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+      padding: 0 16px;
+    }
+    .quick-nav span {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-right: 4px;
+      font-weight: 500;
+    }
+    .quick-nav button {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 15px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-nav button:hover, .quick-nav button.active {
+      background: rgba(201, 184, 160, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    /* Device Container */
+    .device-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    /* Realistic iPhone Titanium Bezel */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: #0f1316;
+      border-radius: 54px;
+      box-shadow: 
+        0 30px 90px rgba(0, 0, 0, 0.85),
+        0 0 0 10px #22262c,
+        0 0 0 13px #343840,
+        0 0 50px rgba(201, 184, 160, 0.14);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.35s cubic-bezier(0.2,0.8,0.2,1), height 0.35s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    /* Dynamic Island & Status Bar */
+    .phone-top-bar {
+      height: 44px;
+      background: #0f1316;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 50;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      user-select: none;
+    }
+    .time {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .dynamic-island {
+      width: 104px;
+      height: 26px;
+      background: #000;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 9px;
+    }
+    .camera-lens {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #14171d;
+      border: 1px solid #232730;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #fff;
+      font-size: 11px;
+    }
+    /* Iframe running actual website */
+    .phone-screen {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 44px);
+      border: none;
+      background: #0f1316;
+    }
+    /* Home Indicator bar at bottom */
+    .home-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 50;
+    }
+    /* Footer info */
+    .info-footer {
+      margin-top: 30px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+    .info-footer b {
+      color: var(--gold-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Toolbar -->
+  <header>
+    <div class="brand">
+      <h1>CAVENTRA</h1>
+      <span class="badge">LIVE ENGINE</span>
+    </div>
+
+    <!-- Device Preset Switcher -->
+    <div class="controls">
+      <div class="btn-group">
+        <button id="dev-iphone" class="active" onclick="setDevice(390, 844, this)">iPhone 15 (390px)</button>
+        <button id="dev-android" onclick="setDevice(360, 800, this)">Android (360px)</button>
+        <button id="dev-max" onclick="setDevice(430, 932, this)">Pro Max (430px)</button>
+        <button id="dev-ipad" onclick="setDevice(768, 980, this)">Tablet (768px)</button>
+      </div>
+
+      <button class="action-btn" onclick="reloadFrame()">
+        <span>↻</span> Refresh
+      </button>
+
+      <a class="action-btn" href="/#/" target="_blank">
+        <span>↗</span> Full Screen
+      </a>
+    </div>
+  </header>
+
+  <!-- Page Navigation Switcher -->
+  <div class="quick-nav">
+    <span>Jump to page:</span>
+    <button class="active" onclick="go('/')">🏠 Home</button>
+    <button onclick="go('/work')">💼 Selected Work</button>
+    <button onclick="go('/work/the-wheel-master')">🔍 Case Study: Wheel Master</button>
+    <button onclick="go('/services')">⚡ Services Bento</button>
+    <button onclick="go('/about')">🏢 About Us</button>
+    <button onclick="go('/process')">🛠️ Process</button>
+    <button onclick="go('/contact')">✉️ Contact Form</button>
+    <button onclick="go('/blog')">📰 Blog</button>
+  </div>
+
+  <!-- Interactive Phone Frame with Live Iframe -->
+  <div class="device-container">
+    <div class="phone-frame" id="phoneFrame">
+      
+      <!-- iOS Status Bar & Dynamic Island -->
+      <div class="phone-top-bar">
+        <span class="time" id="clock">9:41</span>
+        <div class="dynamic-island">
+          <div class="camera-lens"></div>
+        </div>
+        <div class="status-icons">
+          <span>5G</span>
+          <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.2.2-.2.51 0 .71.2.2.51.2.71 0l1.83-1.83C8.42 19.38 10.13 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+          <div style="width:18px;height:9px;border:1px solid rgba(255,255,255,0.8);border-radius:3px;padding:1px;display:flex">
+            <div style="width:75%;height:100%;background:#fff;border-radius:1px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Live Iframe -->
+      <iframe id="liveFrame" class="phone-screen" src="/#/"></iframe>
+
+      <!-- iOS Home Bar -->
+      <div class="home-bar"></div>
+    </div>
+
+    <!-- Instructions Below Frame -->
+    <div class="info-footer">
+      <p>This is the <b>actual, live interactive website</b> running on your server.</p>
+      <p>You can <b>click all buttons</b>, <b>open the mobile menu</b>, <b>scroll through cards</b>, and <b>fill in the forms</b>.</p>
+    </div>
+  </div>
+
+  <script>
+    const frame = document.getElementById('liveFrame');
+    const phone = document.getElementById('phoneFrame');
+
+    // Live clock update
+    function updateClock() {
+      const d = new Date();
+      let h = d.getHours(), m = d.getMinutes();
+      document.getElementById('clock').textContent = `${h}:${m < 10 ? '0' + m : m}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    // Device size switcher
+    function setDevice(w, h, btn) {
+      phone.style.width = w + 'px';
+      phone.style.height = h + 'px';
+      document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Route navigation inside live iframe
+    function go(route) {
+      frame.src = '/#' + route;
+      document.querySelectorAll('.quick-nav button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Refresh live frame
+    function reloadFrame() {
+      frame.contentWindow.location.reload();
+    }
+  </script>
+</body>
+</html>
