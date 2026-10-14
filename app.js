@@ -150,6 +150,68 @@ function isPlaceholderEndpoint(url) {
   return !url || url.includes('YOUR_DEPLOYMENT_ID_HERE') || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec/i.test(url);
 }
 
+// ---- CAVENTRA Interactive Website Project Cost Estimator State ----
+let estimatorState = {
+  step: 1,
+  currency: 'INR',
+  websiteTypeId: 'small-business',
+  pageCount: 5,
+  selectedFeatureIds: [],
+  selectedServiceIds: [],
+  complexityId: 'standard'
+};
+
+let estimatorPrefillData = null;
+
+function formatMoney(amount, currency) {
+  const cfg = (typeof window !== 'undefined' && window.CAVENTRA_ESTIMATOR_CONFIG) || {};
+  const sym = (cfg.currencySymbols && cfg.currencySymbols[currency]) || (currency === 'USD' ? '$' : '₹');
+  const num = Math.round(Number(amount) || 0);
+  const numStr = currency === 'INR' ? num.toLocaleString('en-IN') : num.toLocaleString('en-US');
+  return `${sym}${numStr}`;
+}
+
+function getEstimatorConfig() {
+  if (typeof window !== 'undefined' && window.CAVENTRA_ESTIMATOR_CONFIG) {
+    return window.CAVENTRA_ESTIMATOR_CONFIG;
+  }
+  if (typeof CAVENTRA_ESTIMATOR_CONFIG !== 'undefined') {
+    return CAVENTRA_ESTIMATOR_CONFIG;
+  }
+  return null;
+}
+
+function getCurrentEstimate() {
+  const cfg = getEstimatorConfig();
+  if (typeof window !== 'undefined' && typeof window.calculateEstimate === 'function') {
+    return window.calculateEstimate(estimatorState, cfg);
+  }
+  if (typeof calculateEstimate === 'function') {
+    return calculateEstimate(estimatorState, cfg);
+  }
+  return null;
+}
+
+function buildEstimatorScopeSummary(estimate) {
+  const featTitles = (estimate.selectedFeatures || []).map(f => f.title + (f.included ? ' (Included in base)' : ''));
+  const srvTitles = (estimate.selectedServices || []).map(s => s.title + (s.type === 'recurring' ? ' [Recurring monthly]' : ''));
+  const baseRange = `${formatMoney(estimate.oneTimeDevMin, estimate.currency)} – ${formatMoney(estimate.oneTimeDevMax, estimate.currency)}`;
+  const recurringStr = estimate.recurringMax > 0
+    ? ` + ${formatMoney(estimate.recurringMin, estimate.currency)} – ${formatMoney(estimate.recurringMax, estimate.currency)} / month`
+    : '';
+
+  return {
+    websiteType: estimate.websiteType.title,
+    pageCount: estimate.totalPages,
+    features: featTitles.length ? featTitles.join(', ') : 'None selected',
+    services: srvTitles.length ? srvTitles.join(', ') : 'None selected',
+    complexity: estimate.complexity.label,
+    budgetSummary: `${baseRange}${recurringStr}`,
+    currency: estimate.currency,
+    disclaimer: estimate.disclaimer
+  };
+}
+
 async function submitProjectEnquiry(formData) {
   const endpoint = (typeof window !== 'undefined' && window.CAVENTRA_CONFIG && window.CAVENTRA_CONFIG.APPS_SCRIPT_URL)
     || GOOGLE_APPS_SCRIPT_URL;
@@ -163,7 +225,7 @@ async function submitProjectEnquiry(formData) {
     timeline: (formData.timeline || '').trim(),
     message: (formData.message || '').trim(),
     website: (formData.website || '').trim(),
-    leadSource: 'Website Contact Form (caventraofficial.in)',
+    leadSource: (estimatorPrefillData ? 'Website Cost Estimator' : 'Website Contact Form (caventraofficial.in)'),
     timestamp: new Date().toISOString()
   };
 
@@ -277,9 +339,11 @@ function renderContactSuccess(container, f, result) {
     </div>
   `;
 
+  estimatorPrefillData = null;
   const anotherBtn = container.querySelector('#btn-submit-another');
   if (anotherBtn) {
     anotherBtn.onclick = () => {
+      estimatorPrefillData = null;
       render();
     };
   }
@@ -344,7 +408,333 @@ home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${
   `)
  +`<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2>${cta}</div></section>`
  +(contactInfo()?wrapS("Contact",contactInfo()):''),
-services:()=>head("Services","Technology solutions built around real business needs.")+wrapS("",svc(),'style="padding-top:20px"'),
+services:()=>head("Services","Technology solutions built around real business needs.")+wrapS("",svc() + `
+  <div class="service-estimator-callout">
+    <div>
+      <h3>Estimate Your Website Project Cost</h3>
+      <p>Use our interactive estimator to configure your website requirements, select features, and calculate an indicative budget.</p>
+    </div>
+    <a class="btn solid" href="#/estimator">Launch Cost Estimator ↗</a>
+  </div>
+`,'style="padding-top:20px"'),
+estimator: () => {
+  const cfg = getEstimatorConfig();
+  if (!cfg) {
+    return head("Website Cost Estimator") + wrapS("", empty("Configuration Loading", "The estimator configuration is initializing. Please refresh if this persists."), 'style="padding-top:20px"');
+  }
+
+  const est = getCurrentEstimate();
+  const cur = estimatorState.currency;
+  const currentStep = estimatorState.step;
+
+  const stepMeta = [
+    { num: 1, name: "Type", title: "Select Website Architecture", desc: "Choose the foundational category that best aligns with your product goals." },
+    { num: 2, name: "Pages", title: "Determine Scope & Page Count", desc: "Select an estimated number of distinct page layouts or screens for your website." },
+    { num: 3, name: "Features", title: "Select Technical Capabilities", desc: "Choose functionality and integrations required for your platform." },
+    { num: 4, name: "Services", title: "Additional Services & Polish", desc: "Add design, copywriting, cloud setup, maintenance, and interaction depth." },
+    { num: 5, name: "Review", title: "Estimate Summary & Formal Quote", desc: "Review your indicative investment range and request confirmed project scoping." }
+  ];
+
+  const currentMeta = stepMeta[currentStep - 1] || stepMeta[0];
+
+  let stepHtml = '';
+
+  if (currentStep === 1) {
+    stepHtml = `
+      <div class="type-grid">
+        ${cfg.websiteTypes.map(t => {
+          const isSel = estimatorState.websiteTypeId === t.id;
+          const p = t.pricing[cur] || t.pricing.INR;
+          return `
+            <div class="type-card ${isSel ? 'selected' : ''}" data-est-type="${esc(t.id)}" tabindex="0" role="button" aria-pressed="${isSel}">
+              <div>
+                <span class="type-badge">${esc(t.badge)}</span>
+                <h3>${esc(t.title)}</h3>
+                <p>${esc(t.description)}</p>
+              </div>
+              <div class="type-price-hint">
+                <span>Base (${t.defaultPages} ${t.defaultPages === 1 ? 'page' : 'pages'})</span>
+                <strong>from ${formatMoney(p.baseMin, cur)}</strong>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else if (currentStep === 2) {
+    const type = est.websiteType;
+    const typePricing = type.pricing[cur] || type.pricing.INR;
+    stepHtml = `
+      <div class="page-controls-wrap">
+        <div>
+          <label style="font-size:13px;color:var(--mut);margin-bottom:10px;display:block">Common Page Presets</label>
+          <div class="presets-group">
+            ${cfg.pageRules.presets.map(pr => `
+              <div class="preset-chip ${estimatorState.pageCount === pr.value ? 'active' : ''}" data-est-preset="${pr.value}" tabindex="0" role="button">
+                <b>${esc(pr.label)}</b>
+                <span>${esc(pr.desc)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="custom-stepper-box">
+          <label style="font-size:13px;color:var(--mut);display:block;margin-bottom:8px">Fine-Tune Exact Page Count</label>
+          <div class="stepper-ui">
+            <button class="stepper-btn" data-est-stepper="-1" type="button" aria-label="Decrease page count" ${estimatorState.pageCount <= 1 ? 'disabled' : ''}>−</button>
+            <span class="stepper-count">${estimatorState.pageCount}</span>
+            <button class="stepper-btn" data-est-stepper="1" type="button" aria-label="Increase page count" ${estimatorState.pageCount >= cfg.pageRules.maxStandardPages ? 'disabled' : ''}>+</button>
+          </div>
+          <p class="stepper-explanation">
+            <b>${esc(type.title)}</b> includes <b>${est.includedPages}</b> page${est.includedPages > 1 ? 's' : ''} in its base package.<br>
+            ${est.extraPages > 0 
+              ? `<span style="color:var(--gold2)">+${est.extraPages} extra page${est.extraPages > 1 ? 's' : ''} × ${formatMoney(typePricing.extraPageRate, cur)} = ${formatMoney(est.extraPagesCost, cur)}</span>` 
+              : `All ${estimatorState.pageCount} page${estimatorState.pageCount > 1 ? 's are' : ' is'} covered under the base package rate.`}
+          </p>
+        </div>
+      </div>
+    `;
+  } else if (currentStep === 3) {
+    stepHtml = `
+      <div class="feature-list-group">
+        ${cfg.features.map(feat => {
+          const isIncluded = (feat.includedByDefaultIn || []).includes(estimatorState.websiteTypeId);
+          const isChecked = isIncluded || estimatorState.selectedFeatureIds.includes(feat.id);
+          const fPrice = feat.pricing[cur] || { min: 0, max: 0 };
+          return `
+            <div class="feature-check-card ${isChecked ? 'checked' : ''} ${isIncluded ? 'included-locked' : ''}" 
+                 data-est-feat="${esc(feat.id)}" 
+                 tabindex="${isIncluded ? '-1' : '0'}" 
+                 role="checkbox" 
+                 aria-checked="${isChecked}" 
+                 aria-disabled="${isIncluded}">
+              <div class="custom-checkbox" aria-hidden="true">${isChecked ? '✓' : ''}</div>
+              <div class="feature-card-content">
+                <div class="feature-card-header">
+                  <h4>${esc(feat.title)}</h4>
+                  <span class="feature-rate-tag">
+                    ${isIncluded ? 'Included in Base' : `+${formatMoney(fPrice.min, cur)} – ${formatMoney(fPrice.max, cur)}`}
+                  </span>
+                </div>
+                <p>${esc(feat.description)}</p>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else if (currentStep === 4) {
+    stepHtml = `
+      <div class="feature-list-group">
+        ${cfg.additionalServices.map(srv => {
+          const isChecked = estimatorState.selectedServiceIds.includes(srv.id);
+          const sPrice = srv.pricing[cur] || { min: 0, max: 0 };
+          const isRec = srv.type === 'recurring';
+          return `
+            <div class="feature-check-card ${isChecked ? 'checked' : ''}" 
+                 data-est-srv="${esc(srv.id)}" 
+                 tabindex="0" 
+                 role="checkbox" 
+                 aria-checked="${isChecked}">
+              <div class="custom-checkbox" aria-hidden="true">${isChecked ? '✓' : ''}</div>
+              <div class="feature-card-content">
+                <div class="feature-card-header">
+                  <h4>${esc(srv.title)} ${isRec ? '<span style="font-size:11px;font-weight:400;color:var(--gold2);text-transform:uppercase;letter-spacing:.05em;margin-left:6px;border:1px solid var(--gold2);padding:1px 6px;border-radius:4px">Monthly</span>' : ''}</h4>
+                  <span class="feature-rate-tag">
+                    +${formatMoney(sPrice.min, cur)} – ${formatMoney(sPrice.max, cur)}${isRec ? ' / mo' : ''}
+                  </span>
+                </div>
+                <p>${esc(srv.description)}</p>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="complexity-box">
+        <label style="font-size:14px;color:var(--tx);font-weight:600;display:block">Execution &amp; Interaction Polish</label>
+        <p style="font-size:13px;color:var(--mut);margin:4px 0 0">Choose the depth of micro-interactions and motion fidelity for your build.</p>
+        <div class="complexity-radios">
+          ${cfg.complexityLevels.map(c => {
+            const isSel = estimatorState.complexityId === c.id;
+            return `
+              <div class="complexity-option ${isSel ? 'selected' : ''}" data-est-complexity="${esc(c.id)}" tabindex="0" role="radio" aria-checked="${isSel}">
+                <b>${esc(c.label)} ${c.multiplier > 1 ? `(${c.multiplier}x)` : ''}</b>
+                <span>${esc(c.desc)}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  } else if (currentStep === 5) {
+    const type = est.websiteType;
+    const typePricing = type.pricing[cur] || type.pricing.INR;
+    const summary = buildEstimatorScopeSummary(est);
+
+    const waText = encodeURIComponent(
+      `Hi CAVENTRA team, I generated an indicative website estimate on your website:\n` +
+      `• Website Type: ${summary.websiteType}\n` +
+      `• Estimated Pages: ${summary.pageCount}\n` +
+      `• Features: ${summary.features}\n` +
+      `• Additional Services: ${summary.services}\n` +
+      `• Execution Polish: ${summary.complexity}\n` +
+      `• Indicative Budget: ${summary.budgetSummary}\n\n` +
+      `I would like to discuss this and request a formal quote.`
+    );
+
+    const mailSubject = encodeURIComponent(`Formal Quote Request — ${summary.websiteType}`);
+    const mailBody = encodeURIComponent(
+      `Hello CAVENTRA Engineering Team,\n\n` +
+      `I have configured an indicative project scope via the CAVENTRA Website Cost Estimator:\n\n` +
+      `• Website Type: ${summary.websiteType}\n` +
+      `• Page Count: ${summary.pageCount}\n` +
+      `• Technical Features: ${summary.features}\n` +
+      `• Additional Services: ${summary.services}\n` +
+      `• Execution Polish: ${summary.complexity}\n` +
+      `• Indicative Budget: ${summary.budgetSummary}\n\n` +
+      `Please review this scope and let me know the next steps for a confirmed formal quote.\n\n` +
+      `Best regards,\n[Your Name]\n[Your Phone/Company]`
+    );
+
+    stepHtml = `
+      <div class="review-summary-sheet">
+        <h3 style="font-size:20px;margin-bottom:20px;letter-spacing:-.01em">Configured Project Scope</h3>
+        
+        <div class="review-row">
+          <div>
+            <span class="review-label">Architecture</span>
+            <span class="review-sublabel">${esc(type.title)} (${est.includedPages} pages included in base)</span>
+          </div>
+          <span class="review-cost">${formatMoney(typePricing.baseMin, cur)} – ${formatMoney(typePricing.baseMax, cur)}</span>
+        </div>
+
+        <div class="review-row">
+          <div>
+            <span class="review-label">Total Pages</span>
+            <span class="review-sublabel">${est.totalPages} page${est.totalPages > 1 ? 's' : ''} ${est.extraPages > 0 ? `(${est.extraPages} extra pages @ ${formatMoney(typePricing.extraPageRate, cur)}/ea)` : '(within base package)'}</span>
+          </div>
+          <span class="review-cost">${est.extraPagesCost > 0 ? `+${formatMoney(est.extraPagesCost, cur)}` : 'Included'}</span>
+        </div>
+
+        <div class="review-row">
+          <div>
+            <span class="review-label">Selected Features</span>
+            <span class="review-sublabel">
+              ${est.selectedFeatures.length 
+                ? est.selectedFeatures.map(f => `${esc(f.title)}${f.included ? ' (Included in base)' : ''}`).join('<br>')
+                : 'No optional features selected'}
+            </span>
+          </div>
+          <span class="review-cost">
+            ${est.selectedFeatures.some(f => !f.included) ? 'Included in Total' : 'Included'}
+          </span>
+        </div>
+
+        <div class="review-row">
+          <div>
+            <span class="review-label">Additional Services</span>
+            <span class="review-sublabel">
+              ${est.selectedServices.length 
+                ? est.selectedServices.map(s => `${esc(s.title)}${s.type === 'recurring' ? ' [Recurring monthly]' : ''}`).join('<br>')
+                : 'No add-on services selected'}
+            </span>
+          </div>
+          <span class="review-cost">
+            ${est.selectedServices.length ? 'Included in Total' : 'None'}
+          </span>
+        </div>
+
+        <div class="review-row">
+          <div>
+            <span class="review-label">Execution &amp; Polish</span>
+            <span class="review-sublabel">${esc(est.complexity.label)} (${est.complexity.multiplier}x multiplier)</span>
+          </div>
+          <span class="review-cost">${est.complexity.multiplier > 1.0 ? `${est.complexity.multiplier}x applied` : 'Standard (1.0x)'}</span>
+        </div>
+      </div>
+
+      <div class="review-total-banner">
+        <div class="total-title">Indicative One-Time Development Investment</div>
+        <div class="total-amount">${formatMoney(est.oneTimeDevMin, cur)} – ${formatMoney(est.oneTimeDevMax, cur)}</div>
+        ${est.recurringMax > 0 ? `
+          <div class="recurring-note">
+            + ${formatMoney(est.recurringMin, cur)} – ${formatMoney(est.recurringMax, cur)} / month for ongoing technical maintenance
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="review-disclaimer-box">
+        <p><strong>Note:</strong> ${esc(est.disclaimer)}</p>
+      </div>
+
+      <div class="row" style="justify-content:center;gap:14px;margin-top:28px;flex-wrap:wrap">
+        <button class="btn solid" id="btn-request-formal-quote" type="button" style="font-size:15px;padding:15px 32px">Request a Formal Quote ↗</button>
+        <button class="btn" id="btn-edit-selections" type="button">Edit Selections</button>
+        <button class="btn sm" id="btn-reset-estimator" type="button" style="opacity:0.7">Reset</button>
+      </div>
+
+      <div class="direct-channels-row">
+        <span style="font-size:13px;color:var(--mut)">Or connect directly:</span>
+        <a class="direct-channel-btn" href="https://wa.me/918866790989?text=${waText}" target="_blank" rel="noopener">
+          WhatsApp Quote Request ↗
+        </a>
+        <a class="direct-channel-btn" href="mailto:caventraofficial@gmail.com?subject=${mailSubject}&body=${mailBody}">
+          Email Scope Details ↗
+        </a>
+      </div>
+    `;
+  }
+
+  return head("Website Cost Estimator", "Configure your project scope and calculate a transparent, indicative investment range.") + wrapS("", `
+    <div class="estimator-wrap">
+      <div class="estimator-header-row">
+        <div class="estimator-title-group">
+          <div class="estimator-status-pill">${esc(est.statusNote || 'Indicative Planning Rates')}</div>
+        </div>
+        <div class="estimator-currency-selector" role="group" aria-label="Select Currency">
+          <button class="cur-btn ${cur === 'INR' ? 'active' : ''}" data-est-cur="INR" type="button">INR (₹)</button>
+          <button class="cur-btn ${cur === 'USD' ? 'active' : ''}" data-est-cur="USD" type="button">USD ($)</button>
+        </div>
+      </div>
+
+      <ol class="estimator-progress" aria-label="Estimator Progress">
+        ${stepMeta.map(s => {
+          const isActive = s.num === currentStep;
+          const isDone = s.num < currentStep;
+          return `
+            <li>
+              <button class="step-btn ${isActive ? 'active' : ''} ${isDone ? 'completed' : ''}" data-est-goto="${s.num}" type="button">
+                <span class="step-num">Step 0${s.num}</span>
+                <span class="step-name">${esc(s.name)}</span>
+              </button>
+            </li>
+          `;
+        }).join('')}
+      </ol>
+
+      <div class="estimator-card-panel">
+        <div class="panel-header-desc">
+          <h2>${esc(currentMeta.title)}</h2>
+          <p>${esc(currentMeta.desc)}</p>
+        </div>
+
+        ${stepHtml}
+
+        ${currentStep < 5 ? `
+          <div class="estimator-actions">
+            ${currentStep > 1 ? `
+              <button class="btn" data-est-nav="back" type="button">← Previous Step</button>
+            ` : `<span></span>`}
+            <div class="right-actions">
+              <button class="btn solid" data-est-nav="next" type="button">Continue to Step 0${currentStep + 1} →</button>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `, 'style="padding-top:20px"');
+},
 work:()=>head("Selected Work")+wrapS("",workGrid(pub()),'style="padding-top:20px"'),
 about:()=>{
   const a=S.about;
@@ -520,7 +910,59 @@ article:s=>{
 },
 process:()=>head("Process","From first conversation to launch.")+wrapS("",prc(),'style="padding-top:20px"'),
 technology:()=>head("Technology")+wrapS("",S.techs.length?`<div class="list">${S.techs.map(t=>`<div><h3>${esc(t[0])}</h3><div class="tags">${t[1].split(',').filter(x=>x.trim()).map(x=>`<span>${esc(x.trim())}</span>`).join('')}</div></div>`).join('')}</div>`:empty("Stack details coming soon.","Technologies will be listed here once confirmed."),'style="padding-top:20px"'),
-contact:()=>{const m=S.contact.email;return head("Let's Build Something","Tell us about your project.")+wrapS("",`<form id="cf"><input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px"><div class="two"><label>Name<input name="name" required autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label></div><div class="two"><label>Company<input name="company" autocomplete="organization"></label><label>Request type<select name="type"><option>Web Development</option><option>Software Development</option><option>AI Solutions</option><option>UI/UX</option><option>Business Automation</option><option>Data Deletion Request</option><option>Other</option></select></label></div><div class="two"><label>Budget<input name="budget"></label><label>Timeline<input name="timeline"></label></div><label>Message<textarea name="message" required placeholder="Describe your project goals or data deletion request..."></textarea></label><label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-top:4px"><input type="checkbox" name="consent" required style="width:18px;height:18px;accent-color:var(--gold);margin-top:2px;cursor:pointer"><span>I confirm that I am at least 18 years of age and consent to Caventra processing my inquiry in accordance with the <a href="#/privacy" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.</span></label><div style="margin-top:8px"><button class="btn solid">Send Message</button></div></form>${contactInfo()?`<div style="margin-top:48px">${contactInfo()}</div>`:''}`,'style="padding-top:20px"')},
+contact:()=>{
+  const m=S.contact.email;
+  const p=estimatorPrefillData;
+  const banner = p ? `
+    <div class="contact-estimator-banner">
+      <span>✦</span>
+      <div style="flex-grow:1">
+        <p><strong>Configured via Website Cost Estimator:</strong> Your project scope (<b>${esc(p.websiteType)}</b>), estimated budget (<b>${esc(p.budgetSummary)}</b>), and feature requirements have been pre-filled below.</p>
+        <button type="button" id="btn-clear-estimator-prefill" style="background:none;border:none;color:var(--gold2);padding:0;font-size:12px;text-decoration:underline;cursor:pointer;margin-top:4px">Clear estimator details and use blank form</button>
+      </div>
+    </div>
+  ` : '';
+
+  return head("Let's Build Something","Tell us about your project.")+wrapS("",`
+    ${banner}
+    <form id="cf">
+      <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px">
+      <div class="two">
+        <label>Name<input name="name" required autocomplete="name"></label>
+        <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      </div>
+      <div class="two">
+        <label>Company<input name="company" autocomplete="organization"></label>
+        <label>Request type
+          <select name="type">
+            <option ${p ? 'selected' : ''}>Web Development</option>
+            <option>Software Development</option>
+            <option>AI Solutions</option>
+            <option>UI/UX</option>
+            <option>Business Automation</option>
+            <option>Data Deletion Request</option>
+            <option>Other</option>
+          </select>
+        </label>
+      </div>
+      <div class="two">
+        <label>Budget<input name="budget" value="${esc(p ? p.budgetSummary : '')}" placeholder="e.g. ₹50,000 - ₹1,00,000"></label>
+        <label>Timeline<input name="timeline" placeholder="e.g. 4-6 weeks"></label>
+      </div>
+      <label>Message
+        <textarea name="message" required placeholder="Describe your project goals or data deletion request...">${esc(p ? p.messageBody : '')}</textarea>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-top:4px">
+        <input type="checkbox" name="consent" required style="width:18px;height:18px;accent-color:var(--gold);margin-top:2px;cursor:pointer">
+        <span>I confirm that I am at least 18 years of age and consent to Caventra processing my inquiry in accordance with the <a href="#/privacy" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.</span>
+      </label>
+      <div style="margin-top:8px">
+        <button class="btn solid">${p ? 'Submit Formal Quote Request ↗' : 'Send Message'}</button>
+      </div>
+    </form>
+    ${contactInfo()?`<div style="margin-top:48px">${contactInfo()}</div>`:''}
+  `,'style="padding-top:20px"');
+},
 privacy:()=>head("Privacy Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>Caventra ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy details how we handle, collect, protect, and process data when you interact with our website and digital studio services.</p><h3>1. Data Controller</h3><p>Caventra is the data controller for information processed through this website. For any inquiries regarding your data, contact us at <a href="mailto:caventraofficial@gmail.com">caventraofficial@gmail.com</a>.</p><h3>2. Information We Collect &amp; Purpose</h3><p>We adhere to strict data minimization. We only collect information that you knowingly submit via our contact form:</p><ul><li><strong>Contact Details:</strong> Your name, email, company, request type, budget, and project brief.</li><li><strong>Purpose:</strong> To review project proposals, provide estimates, and deliver custom digital solutions.</li><li><strong>Zero Tracking SDKs:</strong> We do not track your activity across websites, and we do not use third-party behavioral analytics or advertising trackers.</li></ul><h3>3. Legal Basis for Processing</h3><p>We process personal data based on your explicit consent, pre-contractual discussions, and our legitimate business interest in responding to client inquiries.</p><h3>4. Age Restriction &amp; Protection of Minors</h3><p>Our website and software services are intended strictly for individuals aged 18 and older. We do not knowingly solicit or collect personal information from minors. If personal data of a minor is submitted, we will permanently delete it upon notice.</p><h3>5. Security &amp; Third-Party Audit</h3><p>Our infrastructure undergoes strict security controls, including parameterized database operations, cryptographic session tokens, secure HTTPS transport, and strict Content Security Policies (CSP). We do not embed untrusted third-party SDKs.</p><h3>6. Data Retention &amp; Deletion Option</h3><p>We retain inquiry information only as long as necessary to address your project or satisfy legal requirements.</p><h3>7. Your Rights &amp; Data Deletion Request</h3><p>You have the right to access, correct, or permanently delete your personal information from our systems at any time.</p><p>To request data deletion, select <strong>"Data Deletion Request"</strong> in our <a href="#/contact">Contact Form</a> or email <a href="mailto:caventraofficial@gmail.com?subject=Data%20Deletion%20Request">caventraofficial@gmail.com</a>. We will confirm deletion within 30 days.</p></div>`,'style="padding-top:20px"'),
 terms:()=>head("Terms of Service","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>These Terms of Service govern your access to and use of the website and services provided by Caventra. By browsing our website or initiating a project inquiry, you agree to these Terms.</p><h3>1. Studio Services</h3><p>Caventra provides digital software engineering, AI integrations, UI/UX design, and business automation. Specific project milestones, warranties, and deliverables are governed by individual written client agreements.</p><h3>2. Intellectual Property &amp; Licensing</h3><ul><li><strong>Client Deliverables:</strong> Ownership, licensing, and intellectual property rights for custom code and design deliverables transfer to the client upon full payment as defined in individual service contracts.</li><li><strong>Studio Assets:</strong> The Caventra brand, logo, typography, website design, and proprietary code patterns remain the exclusive intellectual property of Caventra.</li></ul><h3>3. Acceptable Use</h3><p>You agree not to misuse this website, probe vulnerabilities, perform unauthorized scraping, or transmit malicious code.</p><h3>4. Authentic Work &amp; No Unsupported Claims</h3><p>We build genuine, high-standard digital products. Caventra makes no exaggerated or unsupported claims regarding specific commercial turnover or search rankings unless explicitly warranted in a formal contract.</p><h3>5. Limitation of Liability</h3><p>Caventra is provided on an "as is" basis without warranties of uninterrupted uptime. We shall not be liable for indirect or consequential damages arising from site access.</p><h3>6. Governing Law</h3><p>These Terms are governed by and construed under the laws of India.</p></div>`,'style="padding-top:20px"'),
 cookies:()=>head("Cookie Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>This Cookie Policy explains how Caventra uses cookies and local storage.</p><h3>1. Strictly Necessary Cookies Only</h3><p>Caventra follows a privacy-by-design architecture. <strong>We do not use advertising, marketing, or behavioral tracking cookies.</strong></p><ul><li><strong>Admin Authentication:</strong> An encrypted <code>cv_sess</code> cookie is used solely when authorized administrators log into <code>/#/admin</code> to verify credentials. It expires after 7 days.</li><li><strong>Local Storage Preference:</strong> A single entry (<code>cv_cookie_consent</code>) is stored in your browser to remember your cookie banner choice.</li></ul><h3>2. Third-Party Auditing</h3><p>No third-party trackers, pixels, or profiling SDKs are present. Fonts are securely loaded from Google Fonts.</p><h3>3. Managing Cookies</h3><p>You may clear or block cookies in your browser settings at any time without impacting public browsing of this site.</p></div>`,'style="padding-top:20px"'),
@@ -538,7 +980,7 @@ admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+
 const kv=t=>t.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]&&a[1]);
 async function save(){try{const r=await fetch('/api/admin/site',{method:'PUT',headers:H,body:JSON.stringify(S)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||r.status);if(j.site){const keep=S;S=Object.assign(JSON.parse(JSON.stringify(D)),j.site)}return true}catch(x){alert('Could not save: '+x.message);return false}}
 function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.split('/');
- let v=r===''?V.home():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
+ let v=r===''?V.home():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
  app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
  document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r));
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
@@ -622,6 +1064,185 @@ document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-a]
  else if(a==='saves'){document.querySelectorAll('#sf [data-s]').forEach(x=>{const k=x.dataset.s;if(k==='socials')S.socials=kv(x.value);else if(k==='techs')S.techs=kv(x.value);else if(k.includes('.')){const[a1,b1]=k.split('.');S[a1][b1]=x.value}else S[k]=x.value})}
  else return;
  if(!['new','ed','cancel'].includes(a))await save();render()});
+
+// Interactive Website Project Cost Estimator event delegation
+document.addEventListener('click', ev => {
+  // Clear prefill button
+  if (ev.target && ev.target.id === 'btn-clear-estimator-prefill') {
+    estimatorPrefillData = null;
+    render();
+    return;
+  }
+
+  // Request Formal Quote from Estimator Review
+  const quoteBtn = ev.target.closest('#btn-request-formal-quote');
+  if (quoteBtn) {
+    const est = getCurrentEstimate();
+    if (est) {
+      const summary = buildEstimatorScopeSummary(est);
+      const msg = `[Website Project Cost Estimator Scope]
+• Architecture: ${summary.websiteType}
+• Total Pages: ${summary.pageCount}
+• Technical Features: ${summary.features}
+• Additional Services: ${summary.services}
+• Polish & Execution: ${summary.complexity}
+• Indicative Budget: ${summary.budgetSummary}
+
+Project Notes & Goals:
+(Please describe any specific preferences, reference links, or target deadlines)`;
+
+      estimatorPrefillData = {
+        websiteType: summary.websiteType,
+        budgetSummary: summary.budgetSummary,
+        messageBody: msg
+      };
+      location.hash = '#/contact';
+    }
+    return;
+  }
+
+  // Edit selections (back to Step 1)
+  const editBtn = ev.target.closest('#btn-edit-selections');
+  if (editBtn) {
+    estimatorState.step = 1;
+    render();
+    return;
+  }
+
+  // Reset estimator
+  const resetBtn = ev.target.closest('#btn-reset-estimator');
+  if (resetBtn) {
+    estimatorState = {
+      step: 1,
+      currency: 'INR',
+      websiteTypeId: 'small-business',
+      pageCount: 5,
+      selectedFeatureIds: [],
+      selectedServiceIds: [],
+      complexityId: 'standard'
+    };
+    render();
+    return;
+  }
+
+  // Stepper nav (Next / Previous)
+  const navBtn = ev.target.closest('[data-est-nav]');
+  if (navBtn) {
+    const dir = navBtn.dataset.estNav;
+    if (dir === 'next') {
+      estimatorState.step = Math.min(5, estimatorState.step + 1);
+    } else if (dir === 'back') {
+      estimatorState.step = Math.max(1, estimatorState.step - 1);
+    }
+    render();
+    return;
+  }
+
+  // Step goto (Progress bar buttons)
+  const gotoBtn = ev.target.closest('[data-est-goto]');
+  if (gotoBtn) {
+    estimatorState.step = parseInt(gotoBtn.dataset.estGoto, 10);
+    render();
+    return;
+  }
+
+  // Currency switcher
+  const curBtn = ev.target.closest('[data-est-cur]');
+  if (curBtn) {
+    estimatorState.currency = curBtn.dataset.estCur;
+    render();
+    return;
+  }
+
+  // Step 1: Website type card
+  const typeCard = ev.target.closest('[data-est-type]');
+  if (typeCard) {
+    const typeId = typeCard.dataset.estType;
+    estimatorState.websiteTypeId = typeId;
+    const cfg = getEstimatorConfig();
+    const t = cfg && cfg.websiteTypes.find(x => x.id === typeId);
+    if (t) {
+      estimatorState.pageCount = t.defaultPages;
+    }
+    render();
+    return;
+  }
+
+  // Step 2: Page count preset chip
+  const presetChip = ev.target.closest('[data-est-preset]');
+  if (presetChip) {
+    estimatorState.pageCount = parseInt(presetChip.dataset.estPreset, 10);
+    render();
+    return;
+  }
+
+  // Step 2: Custom stepper button
+  const stepperBtn = ev.target.closest('[data-est-stepper]');
+  if (stepperBtn) {
+    const delta = parseInt(stepperBtn.dataset.estStepper, 10);
+    const nextVal = estimatorState.pageCount + delta;
+    const cfg = getEstimatorConfig();
+    const maxPages = (cfg && cfg.pageRules && cfg.pageRules.maxStandardPages) || 40;
+    if (nextVal >= 1 && nextVal <= maxPages) {
+      estimatorState.pageCount = nextVal;
+      render();
+    }
+    return;
+  }
+
+  // Step 3: Feature check card
+  const featCard = ev.target.closest('[data-est-feat]');
+  if (featCard) {
+    const featId = featCard.dataset.estFeat;
+    const cfg = getEstimatorConfig();
+    const feat = cfg && cfg.features.find(x => x.id === featId);
+    const isIncluded = feat && (feat.includedByDefaultIn || []).includes(estimatorState.websiteTypeId);
+    if (!isIncluded) {
+      const idx = estimatorState.selectedFeatureIds.indexOf(featId);
+      if (idx !== -1) {
+        estimatorState.selectedFeatureIds.splice(idx, 1);
+      } else {
+        estimatorState.selectedFeatureIds.push(featId);
+      }
+      render();
+    }
+    return;
+  }
+
+  // Step 4: Service check card
+  const srvCard = ev.target.closest('[data-est-srv]');
+  if (srvCard) {
+    const srvId = srvCard.dataset.estSrv;
+    const idx = estimatorState.selectedServiceIds.indexOf(srvId);
+    if (idx !== -1) {
+      estimatorState.selectedServiceIds.splice(idx, 1);
+    } else {
+      estimatorState.selectedServiceIds.push(srvId);
+    }
+    render();
+    return;
+  }
+
+  // Step 4: Complexity option
+  const compOpt = ev.target.closest('[data-est-complexity]');
+  if (compOpt) {
+    estimatorState.complexityId = compOpt.dataset.estComplexity;
+    render();
+    return;
+  }
+});
+
+// Keyboard accessibility for cards & chips
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const t = e.target;
+    if (t && t.matches && t.matches('[data-est-type], [data-est-preset], [data-est-feat]:not(.included-locked), [data-est-srv], [data-est-complexity]')) {
+      e.preventDefault();
+      t.click();
+    }
+  }
+});
+
 const bg=$('#bg'),lk=$('#lk');if(bg&&lk){bg.onclick=()=>{const o=lk.classList.toggle('open');bg.setAttribute('aria-expanded',o?'true':'false');};lk.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}));document.addEventListener('click',e=>{if(lk.classList.contains('open')&&!lk.contains(e.target)&&e.target!==bg){lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}});window.addEventListener('keydown',e=>{if(e.key==='Escape'&&lk.classList.contains('open')){lk.classList.remove('open');bg.setAttribute('aria-expanded','false');}});}
 $('#yr').textContent=new Date().getFullYear();
 const ckb=$('#ckb'),ckAcc=$('#ck-acc'),ckDec=$('#ck-dec');
