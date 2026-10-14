@@ -141,6 +141,152 @@ const D={
   }
 ],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbark: 8849186747, Sauran Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
 let S=JSON.parse(JSON.stringify(D)),owner=false,edit=null,INQ=[];const H={'Content-Type':'application/json','X-Requested-With':'caventra'};
+
+// Google Apps Script Web App Endpoint for Project Enquiries (Connected to private sheet owned by caventraofficial@gmail.com)
+const GOOGLE_APPS_SCRIPT_URL = (typeof window !== 'undefined' && window.CAVENTRA_CONFIG && window.CAVENTRA_CONFIG.APPS_SCRIPT_URL)
+  || 'https://script.google.com/macros/s/AKfycbyVljM0fD4e6Gqc2F_ugBnjGK0ODWnC88WKn2wFyqn2QOT4_GPZuS6Bwu9ltzwPaL19/exec';
+
+function isPlaceholderEndpoint(url) {
+  return !url || url.includes('YOUR_DEPLOYMENT_ID_HERE') || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec/i.test(url);
+}
+
+async function submitProjectEnquiry(formData) {
+  const endpoint = (typeof window !== 'undefined' && window.CAVENTRA_CONFIG && window.CAVENTRA_CONFIG.APPS_SCRIPT_URL)
+    || GOOGLE_APPS_SCRIPT_URL;
+
+  const payload = {
+    name: (formData.name || '').trim(),
+    email: (formData.email || '').trim(),
+    company: (formData.company || '').trim(),
+    type: (formData.type || '').trim(),
+    budget: (formData.budget || '').trim(),
+    timeline: (formData.timeline || '').trim(),
+    message: (formData.message || '').trim(),
+    website: (formData.website || '').trim(),
+    leadSource: 'Website Contact Form (caventraofficial.in)',
+    timestamp: new Date().toISOString()
+  };
+
+  // Testable integration layer if endpoint is a placeholder
+  if (isPlaceholderEndpoint(endpoint)) {
+    console.info('[CAVENTRA Enquiry] Test mock integration layer active (Placeholder endpoint detected).');
+    await new Promise(r => setTimeout(r, 650));
+
+    // Support testing error/failure scenarios (email === "fail@test.com" or window.__SIMULATE_SUBMIT_ERROR = true)
+    if ((typeof window !== 'undefined' && window.__SIMULATE_SUBMIT_ERROR) || payload.email === 'fail@test.com') {
+      return {
+        ok: false,
+        error: 'Unable to connect to Google Sheets backend (Simulated test failure).',
+        isMock: true
+      };
+    }
+
+    const testId = 'CV-TEST-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    return {
+      ok: true,
+      id: testId,
+      message: 'Project enquiry simulated in test mode.',
+      isMock: true
+    };
+  }
+
+  // Real production submission to Google Apps Script Web App
+  // Note: Using text/plain;charset=utf-8 avoids CORS OPTIONS preflight failures on Google Apps Script 302 redirects
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload),
+      signal: timer.signal
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      throw new Error('Server returned HTTP ' + res.status);
+    }
+
+    const data = await res.json().catch(() => null);
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid response structure received from endpoint');
+    }
+
+    if (data.ok) {
+      return {
+        ok: true,
+        id: data.id || ('CV-' + Date.now().toString(36).toUpperCase()),
+        message: data.message || 'Saved successfully',
+        isMock: false
+      };
+    } else {
+      return {
+        ok: false,
+        error: data.error || 'The server could not save the enquiry. Please try again.',
+        isMock: false
+      };
+    }
+  } catch (err) {
+    clearTimeout(timer);
+    let msg = 'Could not connect to the enquiry service. Please check your internet connection.';
+    if (err.name === 'AbortError') {
+      msg = 'Submission timed out. Please check your connection and retry.';
+    } else if (err.message) {
+      msg = err.message;
+    }
+    return {
+      ok: false,
+      error: msg,
+      isMock: false
+    };
+  }
+}
+
+function renderContactSuccess(container, f, result) {
+  const isMock = !!result.isMock;
+  const refId = result.id || ('CV-' + Date.now().toString(36).toUpperCase());
+
+  container.innerHTML = `
+    <div class="project-success">
+      <div class="success-icon-wrap" aria-hidden="true">
+        <svg class="success-checkmark" viewBox="0 0 52 52">
+          <circle class="success-circle" cx="26" cy="26" r="24" fill="none"/>
+          <path class="success-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      <h3 class="success-heading">Your project has been submitted. One of our representatives will call you soon!</h3>
+      <p class="success-sub">Thank you, <b>${esc(f.name)}</b>. We have received your project details and our engineering team is reviewing your requirements.</p>
+      <div class="success-meta">
+        <div class="meta-item"><span class="meta-label">Enquiry Ref</span><span class="meta-val ref-id">${esc(refId)}</span></div>
+        <div class="meta-item"><span class="meta-label">Client Name</span><span class="meta-val">${esc(f.name)}</span></div>
+        <div class="meta-item"><span class="meta-label">Contact Email</span><span class="meta-val">${esc(f.email)}</span></div>
+        ${f.company ? `<div class="meta-item"><span class="meta-label">Company</span><span class="meta-val">${esc(f.company)}</span></div>` : ''}
+        ${f.type ? `<div class="meta-item"><span class="meta-label">Service</span><span class="meta-val">${esc(f.type)}</span></div>` : ''}
+        ${f.budget ? `<div class="meta-item"><span class="meta-label">Budget</span><span class="meta-val">${esc(f.budget)}</span></div>` : ''}
+        ${f.timeline ? `<div class="meta-item"><span class="meta-label">Timeline</span><span class="meta-val">${esc(f.timeline)}</span></div>` : ''}
+        ${isMock ? `<div class="meta-item mock-tag"><span class="meta-label">Integration</span><span class="meta-val" style="color:var(--gold2);font-size:12px">Test Mode (Local Mock Verification)</span></div>` : ''}
+      </div>
+      <div class="success-actions row" style="justify-content:center;margin-top:28px;gap:12px">
+        <a class="btn solid" href="#/">Back to Home</a>
+        <button class="btn" type="button" id="btn-submit-another">Submit Another Project</button>
+      </div>
+    </div>
+  `;
+
+  const anotherBtn = container.querySelector('#btn-submit-another');
+  if (anotherBtn) {
+    anotherBtn.onclick = () => {
+      render();
+    };
+  }
+
+  container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 const $=s=>document.querySelector(s),app=$('#app');
 const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
 const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.png':'/assets/logo.png');
@@ -164,7 +310,7 @@ const card=p=>{const cv=getCover(p);return `<a class="card" href="#/work/${esc(p
 const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");
 const wrapS=(h,b,x='')=>`<section ${x}><div class="wrap">${h?`<h2 style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
 const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"';
- if(c.email)r.push(`<span class="nm">${esc(c.email)}</span><a class="btn sm solid" href="mailto:${esc(c.email)}" ${B}>Email</a><button class="btn sm" type="button" data-cp="${esc(c.email)}">Copy</button>`);
+ if(c.email)r.push(`<span class="nm">${esc(c.email)}</span><a class="btn sm solid" href="mailto:${esc(c.email)}">Email</a><a class="btn sm" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(c.email)}" ${B}>Gmail ↗</a><button class="btn sm" type="button" data-cp="${esc(c.email)}">Copy</button>`);
  if(c.phone)c.phone.split(/[,\n]+/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=n.includes(":")?n.split(":"):n.includes("|")?n.split("|"):[n,n];const label=p[0].trim(),num=(p[1]||p[0]).trim();const d=num.replace(/[^\d+]/g,""),w=d[0]==="+"?d.slice(1):"91"+d;r.push(`<span class="nm">${esc(label)}</span><a class="btn sm solid" href="https://wa.me/${w}" ${B}>WhatsApp</a><button class="btn sm" type="button" data-cp="${esc(num)}">Copy</button>`);});
  if(c.address)r.push(`<span class="nm">${esc(c.address)}</span>`);
  S.socials.forEach(x=>r.push(`<span class="nm">${esc(x[0])}</span><a class="btn sm solid" href="${safe(x[1])}" ${B}>Open ↗</a>`));
@@ -396,9 +542,67 @@ function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.sp
  app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
  document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r));
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
- const lf=$('#lf');if(lf)lf.onsubmit=doLogin;const cf=$('#cf');if(cf)cf.onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(cf));const bt=cf.querySelector('button');bt.disabled=true;bt.textContent='Sending…';try{const r=await fetch('/api/contact',{method:'POST',headers:H,body:JSON.stringify(f)});if(!r.ok)throw 0;cf.innerHTML='<h3>Thank you. Your message is on its way.</h3><p>We will get back to you at '+esc(f.email)+'.</p>';return}catch(x){}const to=S.contact.email,sub='Project inquiry from '+f.name,b=Object.entries(f).map(([k,v])=>k+': '+v).join('\n'),q='&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(sub)+'&body='+encodeURIComponent(b);
- cf.innerHTML=`<h3>Almost there. Send it to us</h3><p>This website can't send email by itself, so choose how to send your message to ${esc(to)}:</p><div class="row"><a class="btn solid" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&fs=1${q}">Open in Gmail ↗</a><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(b)}">Open email app</a><button class="btn" type="button" id="cp">Copy message</button></div><p id="cpm"></p>`;
- $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText('To: '+to+'\nSubject: '+sub+'\n\n'+b);$('#cpm').textContent='Copied. Paste it into any email and send it to '+to+'.'}catch(x){$('#cpm').textContent='Copy failed. Please email '+to+' directly.'}}}}
+ const lf=$('#lf');if(lf)lf.onsubmit=doLogin;
+ const cf=$('#cf');
+ if(cf){
+  let isSubmitting = false;
+  cf.onsubmit = async e => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    const existingAlert = cf.querySelector('#cf-alert');
+    if (existingAlert) existingAlert.remove();
+
+    if (!cf.checkValidity()) {
+      cf.reportValidity();
+      return;
+    }
+
+    const f = Object.fromEntries(new FormData(cf));
+    const bt = cf.querySelector('button');
+
+    isSubmitting = true;
+    if (bt) {
+      bt.disabled = true;
+      bt.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span> Submitting your project...';
+    }
+
+    try {
+      const result = await submitProjectEnquiry(f);
+      if (result && result.ok) {
+        isSubmitting = false;
+        renderContactSuccess(cf, f, result);
+        return;
+      }
+      throw new Error(result && result.error ? result.error : 'Submission could not be confirmed.');
+    } catch (err) {
+      isSubmitting = false;
+      if (bt) {
+        bt.disabled = false;
+        bt.innerHTML = 'Retry Submission';
+      }
+      const alertDiv = document.createElement('div');
+      alertDiv.id = 'cf-alert';
+      alertDiv.className = 'form-alert error';
+      alertDiv.setAttribute('role', 'alert');
+      alertDiv.innerHTML = `
+        <span class="form-alert-icon" aria-hidden="true">⚠️</span>
+        <div class="form-alert-content">
+          <b>Submission could not be confirmed</b>
+          <p>${esc(err.message || 'We could not save your project enquiry right now.')} Your information has been preserved below. Please click Retry Submission or check your connection.</p>
+        </div>
+      `;
+      const btnContainer = bt ? bt.closest('div') : cf.lastElementChild;
+      if (btnContainer) {
+        cf.insertBefore(alertDiv, btnContainer);
+      } else {
+        cf.appendChild(alertDiv);
+      }
+      alertDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+ }
+}
 document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=+t.dataset.i,P=S.projects;if(t.dataset.bcat){blogFilter=t.dataset.bcat;blogPage=1;render();return}
  if(t.id==='b-more'){blogPage++;render();return}
  if(t.id==='b-showall'){blogShowAll=true;render();return}

@@ -549,7 +549,7 @@
     if (action === 'email') {
       const sub = decodeURIComponent(target.dataset.emailSub || 'Inquiry — Caventra');
       const body = decodeURIComponent(target.dataset.emailBody || 'Hello Caventra Team,\n\n');
-      window.location.href = `mailto:${VENTRA_CONFIG.email}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+      showEmailDispatchOptions(sub, body);
     } else if (action === 'whatsapp') {
       const msg = decodeURIComponent(target.dataset.waMsg || 'Hello Caventra, I would like to get in touch.');
       if (VENTRA_CONFIG.whatsappNumber && VENTRA_CONFIG.whatsappNumber.trim()) {
@@ -560,6 +560,42 @@
         showWhatsAppPendingNotice(msg);
       }
     }
+  }
+
+  function showEmailDispatchOptions(sub, bodyText) {
+    const body = document.getElementById('ventra-body');
+    if (!body) return;
+
+    const email = VENTRA_CONFIG.email;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(bodyText)}`;
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(bodyText)}`;
+
+    body.innerHTML = `
+      <div class="chat-message bot-msg">
+        <h4 class="node-title">Connect via Email</h4>
+        <p class="node-intro">Choose how you would like to send your message to <b>${email}</b>:</p>
+      </div>
+      <div class="chat-options-group">
+        <a href="${gmailUrl}" target="_blank" rel="noopener noreferrer" class="opt-btn solid-accent" style="text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center">🌐 Open in Gmail Web ↗</a>
+        <a href="${mailtoUrl}" class="opt-btn" style="text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center">✉️ Open in Email App</a>
+        <button type="button" class="opt-btn" id="v-btn-copy-email">📋 Copy Email Address</button>
+        <button type="button" class="opt-btn nav-back-btn" id="v-btn-email-back">← Back</button>
+      </div>
+      <p id="v-email-copy-feedback" style="font-size:12px;color:var(--gold2);text-align:center;margin:8px 0 0;min-height:16px"></p>
+    `;
+
+    document.getElementById('v-btn-copy-email')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+        const fb = document.getElementById('v-email-copy-feedback');
+        if (fb) fb.textContent = 'Copied caventraofficial@gmail.com to clipboard ✓';
+      } catch (err) {
+        const fb = document.getElementById('v-email-copy-feedback');
+        if (fb) fb.textContent = 'Email address: caventraofficial@gmail.com';
+      }
+    });
+
+    document.getElementById('v-btn-email-back')?.addEventListener('click', goBack);
   }
 
   function showWhatsAppPendingNotice(originalMsg) {
@@ -578,7 +614,7 @@
     `;
 
     document.getElementById('v-wa-fallback-email')?.addEventListener('click', () => {
-      window.location.href = `mailto:${VENTRA_CONFIG.email}?subject=${encodeURIComponent('Inquiry from Caventra Website')}&body=${encodeURIComponent(originalMsg)}`;
+      showEmailDispatchOptions('Inquiry from Caventra Website', originalMsg);
     });
 
     document.getElementById('v-btn-back')?.addEventListener('click', goBack);
