@@ -19,11 +19,18 @@
 <link rel="icon" href="/assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Manrope:wght@300;400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=12"></head><body>
+<link rel="stylesheet" href="/styles.css?v=14">
+<script src="/theme.js?v=2"></script></head><body>
 <div id="splash" aria-hidden="true"><img id="sp" alt="Caventra — Ideas to Impact"></div>
 <nav><div class="wrap"><a href="#/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.png" alt="Caventra — Ideas to Impact"></a>
-<button class="burger" id="bg" aria-label="Toggle navigation menu" aria-expanded="false">Menu</button>
-<div class="links" id="lk"><a href="#/work">Work</a><a href="#/services">Services</a><a href="#/about">About</a><a href="#/process">Process</a><a href="#/contact">Contact</a><a class="btn sm" href="#/contact">Start a Project</a></div></div></nav>
+<div class="links" id="lk"><a href="#/work">Work</a><a href="#/services">Services</a><a href="#/about">About</a><a href="#/process">Process</a><a href="#/contact">Contact</a><a class="btn sm" href="#/contact">Start a Project</a></div>
+<div class="nav-actions">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false" title="Switch to light theme">
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+  </button>
+  <button class="burger" id="bg" aria-label="Toggle navigation menu" aria-expanded="false">Menu</button>
+</div></div></nav>
 <div id="cur" aria-hidden="true"></div><div id="pb" aria-hidden="true"></div><div id="cg" aria-hidden="true"></div>
 <main id="app"></main>
 <footer><div class="wrap">
@@ -80,4 +87,5 @@
   </div>
 </div>
 <script src="/blogs.js?v=10" defer></script>
-<script src="/app.js?v=10" defer></script></body></html>
+<script src="/app.js?v=11" defer></script>
+<script src="/ventrabot.js?v=2" defer></script></body></html>

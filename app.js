@@ -141,7 +141,11 @@ const D={
   }
 ],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbark: 8849186747, Sauran Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
 let S=JSON.parse(JSON.stringify(D)),owner=false,edit=null,INQ=[];const H={'Content-Type':'application/json','X-Requested-With':'caventra'};
-const $=s=>document.querySelector(s),app=$('#app');const ORIG='/assets/logo.png';$('#sp').src=ORIG;$('#fl').src=ORIG;
+const $=s=>document.querySelector(s),app=$('#app');
+const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
+const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.png':'/assets/logo.png');
+const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.png':'/assets/logo-nav.png');
+const ORIG=getLogo();$('#sp').src=getLogo();$('#fl').src=getLogo();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe=u=>/^(https?:\/\/|\/_blob\/|\/assets\/|\/uploads\/|mailto:|data:image)/.test(u||'')?esc(u):'#';
 const pub=()=>S.projects.filter(p=>p.published);
@@ -171,7 +175,7 @@ const getB = () => (typeof window !== 'undefined' && window.BLOGS && window.BLOG
 let blogPage = 1, blogFilter = 'All', blogQuery = '', blogShowAll = false;
 
 const V={
-home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${spc("Technology, designed to move businesses forward.",{1:'o',5:'g'})}</h1><div class="hrow"><div><p class="fi" style="margin:0 0 14px">We turn ideas into powerful digital products through technology, design, and intelligent solutions.</p><p class="fi" style="margin:0 0 36px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p><div class="row fi">${cta}<a class="btn" href="#/work">Explore Our Work</a></div></div><div class="hlw"><div class="hlf"><img class="hl" src="${ORIG}" alt="Caventra — Ideas to Impact"><div class="shine"></div></div></div></div></div></div>
+home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${spc("Technology, designed to move businesses forward.",{1:'o',5:'g'})}</h1><div class="hrow"><div><p class="fi" style="margin:0 0 14px">We turn ideas into powerful digital products through technology, design, and intelligent solutions.</p><p class="fi" style="margin:0 0 36px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p><div class="row fi">${cta}<a class="btn" href="#/work">Explore Our Work</a></div></div><div class="hlw"><div class="hlf"><img class="hl" src="${getLogo()}" alt="Caventra — Ideas to Impact"><div class="shine"></div></div></div></div></div></div>
 <div class="tape" aria-hidden="true"><div class="t1"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div><div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div></div>`
  +wrapS("",bigp(S.about.who)+`<p>Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
  +wrapS("What we build",svc()+`<p style="margin-top:32px"><a class="btn" href="#/services">All services ↗</a> <a class="btn" href="#/process">How we work ↗</a></p>`)
@@ -418,12 +422,13 @@ const bg=$('#bg'),lk=$('#lk');if(bg&&lk){bg.onclick=()=>{const o=lk.classList.to
 $('#yr').textContent=new Date().getFullYear();
 const ckb=$('#ckb'),ckAcc=$('#ck-acc'),ckDec=$('#ck-dec');
 if(ckb&&!localStorage.getItem('cv_cookie_consent')){ckb.classList.remove('hide');setTimeout(()=>ckb.classList.add('show'),700);if(ckAcc)ckAcc.onclick=()=>{localStorage.setItem('cv_cookie_consent','accepted');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};if(ckDec)ckDec.onclick=()=>{localStorage.setItem('cv_cookie_consent','essential');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};}
-let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+ORIG+'" alt="" aria-hidden="true">';
+let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+getLogo()+'" alt="" aria-hidden="true">';
 function scr(el){const t=el.textContent,G='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+<>/',n=t.length;let f=0;const id=setInterval(()=>{f++;el.textContent=t.split('').map((c,i)=>c===' '||i<f*n/18?c:G[Math.random()*G.length|0]).join('');if(f>=18){clearInterval(id);el.textContent=t}},38)}
 function nav(){if(first||RM){first=false;render();return}if(busy)return;busy=true;cur.className='cin';setTimeout(()=>{render();cur.className='cout';setTimeout(()=>{cur.className='';busy=false},540)},520)}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);if(e.target.tagName==='H2'&&!e.target.children.length)scr(e.target)}}),{threshold:.12});
 let raf;function fx(){[['section:not(.band) h2','dn'],['.list>div','lf'],['.steps>div','rt'],['.card,.bc','zm'],['.split>*','x'],['.empty,.adm,form,section .wrap>p','']].forEach(([s,c])=>app.querySelectorAll(s).forEach((e,i)=>{e.classList.add('rv');if(c==='x')e.classList.add(i%2?'rt':'lf');else if(c)e.classList.add(c);e.style.setProperty('--d',(i%4)*.08+'s');RM?e.classList.add('in'):io.observe(e)}));
- document.querySelectorAll('.shine').forEach(s=>{s.style.webkitMaskImage=s.style.maskImage='url('+ORIG+')'});lit();app.querySelectorAll('section').forEach(e=>RM?e.classList.add('in'):io.observe(e));
+ document.querySelectorAll('.shine').forEach(s=>{s.style.webkitMaskImage=s.style.maskImage='url('+getLogo()+')'});lit();app.querySelectorAll('section').forEach(e=>RM?e.classList.add('in'):io.observe(e));
+ window.addEventListener('cv-theme-changed',()=>{const ci=$('#cur img');if(ci)ci.src=getLogo();});
  clearTimeout(tt);const rw=$('#rw');if(rw&&!RM){let i=0,j=0,d=1;const tick=()=>{const t=S.services[i][0];j+=d;rw.textContent=t.slice(0,j);let ms=75;if(d==1&&j==t.length){d=-1;ms=1500}else if(d==-1&&j==0){d=1;i=(i+1)%S.services.length;ms=350}else if(d==-1)ms=35;tt=setTimeout(tick,ms)};tick()}
  
  cancelAnimationFrame(raf);const c=$('#cv');if(!c||RM)return;const x=c.getContext('2d');let w,hh,P=[];const rs=()=>{w=c.width=c.offsetWidth;hh=c.height=c.offsetHeight;P=Array.from({length:Math.min(64,w/18|0)},()=>({x:Math.random()*w,y:Math.random()*hh,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}))};rs();onresize=rs;
