@@ -248,6 +248,38 @@ test('DOM Simulation: V.serviceDetail renders complete HTML for all 5 services w
   assert.ok(notFoundHtml.includes('404'), 'Unknown service slug triggers notFound');
 });
 
+// 7. FAVICON INTEGRITY & GOOGLE SEARCH COMPLIANCE
+test('Favicon: Square assets exist, meet Google requirements, maintain root/public parity, and link tags are present', () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.ok(indexHtml.includes('<link rel="icon" type="image/x-icon" href="/favicon.ico">'), 'Missing /favicon.ico tag');
+  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">'), 'Missing 96x96 favicon tag');
+  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">'), 'Missing 192x192 favicon tag');
+  assert.ok(indexHtml.includes('<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">'), 'Missing apple-touch-icon tag');
+
+  const faviconAssets = [
+    'favicon.ico',
+    'favicon-96x96.png',
+    'favicon-192x192.png',
+    'apple-touch-icon.png',
+    path.join('assets', 'favicon.png')
+  ];
+
+  for (const f of faviconAssets) {
+    const rootPath = path.join(ROOT, f);
+    const pubPath = path.join(ROOT, 'public', f);
+    assert.ok(fs.existsSync(rootPath), `Missing root asset: ${f}`);
+    assert.ok(fs.existsSync(pubPath), `Missing public asset: ${f}`);
+    const rootBuf = fs.readFileSync(rootPath);
+    const pubBuf = fs.readFileSync(pubPath);
+    assert.ok(rootBuf.equals(pubBuf), `Parity mismatch for binary asset: ${f}`);
+  }
+
+  // Verify robots.txt does not disallow favicons or Googlebot
+  const robots = fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8');
+  assert.ok(!robots.includes('Disallow: /favicon'), 'robots.txt must not disallow favicons');
+  assert.ok(robots.includes('Allow: /'), 'robots.txt must allow root');
+});
+
 console.log('\n========================================');
 console.log(`TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
 console.log('========================================\n');
