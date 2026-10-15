@@ -21,6 +21,7 @@
       title: "What can I help you with?",
       intro: "Welcome to Caventra. Select an option below to explore our services, discuss a project, or connect with our engineering team:",
       options: [
+        { label: "Estimate Your Project", route: "#/estimator" },
         { label: "Explore our services", next: "services" },
         { label: "Website development", next: "web_dev" },
         { label: "Branding & creative design", next: "branding" },
@@ -147,6 +148,7 @@
       title: "Pricing & Packages",
       intro: "Every product we engineer is tailored to specific technical requirements, scale, and business goals rather than rigid one-size-fits-all packages. We provide transparent, itemized quotes after evaluating your brief.",
       options: [
+        { label: "Estimate Your Project", route: "#/estimator" },
         { label: "↗ Request a Tailored Quote", route: "#/contact" },
         {
           label: "💬 Chat on WhatsApp",

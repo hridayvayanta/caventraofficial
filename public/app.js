@@ -370,7 +370,32 @@ const bigp=t=>`<p class="big">${t.split(' ').map(w=>`<span>${esc(w)}</span>`).jo
 function lit(){document.querySelectorAll('.big').forEach(el=>{const s=el.querySelectorAll('span'),r=el.getBoundingClientRect(),pr=typeof RM!=='undefined'&&RM?1:Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(innerHeight*.45+r.height*.6)));s.forEach((x,i)=>x.classList.toggle('on',i<pr*s.length+.5))})}
 const prc=()=>`<div class="steps">${S.process.map((s,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><h3>${esc(s[0])}</h3><p>${esc(s[1])}</p></div>`).join('')}</div>`;
 const getCover=p=>((p.cover&&/^(https?:|\/_blob\/|\/assets\/|\/uploads\/|data:image)/.test(p.cover))?p.cover:((D.projects.find(x=>x.slug===p.slug||x.name===p.name)||{}).cover||''));
-const card=p=>{const cv=getCover(p);return `<a class="card" href="#/work/${esc(p.slug)}"><div class="im" style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"><div style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"></div></div><div class="cb"><small>${esc(p.category)}</small><h3>${esc(p.name)}</h3><p>${esc(p.short)}</p><div class="tags">${(p.tech||'').split(',').filter(x=>x.trim()).slice(0,4).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div><span class="btn sm">View Project ↗</span></div></a>`;};
+const getProjectStatus=(p)=>{
+  if(p.slug==='the-wheel-master')return{label:'Client Production ERP',cls:'production'};
+  if(p.slug==='plinth')return{label:'In Active Development',cls:'active-dev'};
+  if(p.slug==='genresume')return{label:'Production Web App',cls:'production'};
+  if(p.slug==='personal-portfolio-website')return{label:'Developer Showcase',cls:'concept'};
+  return{label:'Concept Prototype',cls:'concept'};
+};
+const card=p=>{
+  const cv=getCover(p);
+  const st=getProjectStatus(p);
+  return `<a class="card" href="#/work/${esc(p.slug)}">
+    <div class="im" style="background-image:url('${esc(cv)}');background-size:cover;background-position:center">
+      <div style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"></div>
+    </div>
+    <div class="cb">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <small>${esc(p.category)}</small>
+        <span class="project-status-badge ${st.cls}">${esc(st.label)}</span>
+      </div>
+      <h3>${esc(p.name)}</h3>
+      <p>${esc(p.short)}</p>
+      <div class="tags">${(p.tech||'').split(',').filter(x=>x.trim()).slice(0,4).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div>
+      <span class="btn sm">View Project ↗</span>
+    </div>
+  </a>`;
+};
 const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");
 const wrapS=(h,b,x='')=>`<section ${x}><div class="wrap">${h?`<h2 style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
 const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"';
@@ -382,15 +407,407 @@ const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"'
 const sec=(t,v)=>v?`<h3 style="margin:48px 0 12px">${t}</h3><p>${esc(v).replace(/\n/g,'<br>')}</p>`:'';
 
 const getB = () => (typeof window !== 'undefined' && window.BLOGS && window.BLOGS.length) ? window.BLOGS : [];
-let blogPage = 1, blogFilter = 'All', blogQuery = '', blogShowAll = false;
+let blogPage = 1, blogFilter = 'All', blogQuery = '', blogShowAll = false, workFilter = 'All';
+
+// ---- CAVENTRA Dedicated Services Catalog ----
+const CAVENTRA_SERVICES_DATA = {
+  "web-development": {
+    slug: "web-development",
+    title: "Website Design & Development",
+    headline: "Fast, Custom Websites Built to Grow Your Business",
+    tagline: "Hand-crafted code, modern responsive design, and sub-second load speeds with zero template bloat.",
+    category: "Core Service · BUILD",
+    problem: "Generic templates and bloated page-builders look unprofessional, load slowly, and break on updates, costing you high-intent clients.",
+    solution: "We build custom, lightweight websites tailored to your business goals — engineered for speed, clear navigation, and higher conversions.",
+    deliverables: [
+      { title: "Custom Frontend Code", desc: "Clean, hand-crafted HTML5, CSS3, and JavaScript with zero plugin clutter." },
+      { title: "Responsive UX & UI", desc: "Intuitive, modern layouts tailored for mobile phones, tablets, and desktops." },
+      { title: "Fast Sub-Second Loading", desc: "Sub-second initial render optimized for Google Core Web Vitals and SEO." },
+      { title: "Interactive Tools & Webhooks", desc: "Custom estimators, contact pipelines, and instant lead capture routing." },
+      { title: "Cross-Device Testing", desc: "Rigorous testing on iOS Safari, Android Chrome, and desktop viewports." },
+      { title: "100% Code & Asset Ownership", desc: "Full intellectual property, source files, and credentials delivered to you." }
+    ],
+    workflow: [
+      { num: "01", title: "Discovery", desc: "We understand your business model, target audience, and feature requirements." },
+      { num: "02", title: "Design", desc: "We craft clean, interactive prototypes for desktop and mobile screens." },
+      { num: "03", title: "Development", desc: "We write clean, lightweight code and connect custom features." },
+      { num: "04", title: "Launch", desc: "We audit speed, verify forms, configure DNS, and deploy live." }
+    ],
+    projectSlugs: ["the-wheel-master", "genresume", "divine-bridal-accessories"],
+    faqs: [
+      { q: "Do you use WordPress, Wix, or page-builders?", a: "No. We hand-craft custom code. This makes your site significantly faster, more secure, and completely free of plugin subscriptions." },
+      { q: "Do I own the website and source code after launch?", a: "Yes, 100%. All source code, design files, and deployment accounts belong entirely to you with zero vendor lock-in." },
+      { q: "How long does a website project take?", a: "A standard business website takes 2 to 3 weeks. Custom web apps and complex platforms take 4 to 6 weeks." },
+      { q: "Can you connect forms to WhatsApp or Google Sheets?", a: "Yes. We build instant notification pipelines so you receive client inquiries directly without friction." }
+    ]
+  },
+  "branding": {
+    slug: "branding",
+    title: "Branding & Creative Design",
+    headline: "Distinctive Visual Identities for Modern Brands",
+    tagline: "Logos, typographic systems, color palettes, and digital guidelines that build authority and trust.",
+    category: "Visual Identity · DESIGN",
+    problem: "Inconsistent fonts, outdated logos, and generic stock styling make companies look amateur and lose customer trust.",
+    solution: "We craft intentional brand identities that project credibility, authority, and modern polish across all touchpoints.",
+    deliverables: [
+      { title: "Logo & Mark Suite", desc: "Primary logo, horizontal/vertical lockups, mobile icons, and favicons." },
+      { title: "Typographic & Color System", desc: "Curated font pairings and accessible palettes for dark and light media." },
+      { title: "Digital UI Guidelines", desc: "Button styles, card components, and visual rules for your web presence." },
+      { title: "Brand Style Guide", desc: "A clear reference manual detailing spacing, clear space, and logo usage." },
+      { title: "Marketing Collateral", desc: "High-resolution vector assets, social banners, and pitch presentation slides." },
+      { title: "Master Vector Files", desc: "Full export suite (SVG, PDF, EPS, PNG) ready for digital and print." }
+    ],
+    workflow: [
+      { num: "01", title: "Research", desc: "We analyze your competitive space, audience, and core values." },
+      { num: "02", title: "Concepts", desc: "We explore distinct logo directions, typography, and visual tones." },
+      { num: "03", title: "Refinement", desc: "We test chosen designs across dark and light formats and lock in colors." },
+      { num: "04", title: "Delivery", desc: "We export production-ready vector assets and your brand style guide." }
+    ],
+    projectSlugs: ["divine-bridal-accessories", "ironforge-fitness-store"],
+    faqs: [
+      { q: "What files and formats do I receive?", a: "You get full vector files (SVG, PDF, EPS) and web-optimized transparent PNGs for both dark and light modes, plus font packages." },
+      { q: "Can you refresh an existing brand?", a: "Yes. We modernize outdated logos and typography while preserving established brand equity." },
+      { q: "How does branding connect with web development?", a: "Our designs map directly into CSS tokens and components, ensuring a cohesive website build with zero handover friction." }
+    ]
+  },
+  "maintenance": {
+    slug: "maintenance",
+    title: "Website Management & Maintenance",
+    headline: "Proactive Website Care So You Can Focus on Business",
+    tagline: "Ongoing maintenance, fast content updates, security patches, and performance oversight under guaranteed SLAs.",
+    category: "Ongoing Support · MANAGE",
+    problem: "Websites left unmanaged slow down, develop broken links, and become vulnerable to security breaches.",
+    solution: "We act as your dedicated web team — updating code, adding new content, monitoring uptime, and fixing issues immediately.",
+    deliverables: [
+      { title: "Scheduled Code Updates", desc: "Regular maintenance of libraries, frameworks, security patches, and APIs." },
+      { title: "Fast Content Publishing", desc: "Quick updates to text, images, case studies, team profiles, and pricing." },
+      { title: "Continuous Speed Checks", desc: "Monthly Core Web Vitals audits to keep your site loading under one second." },
+      { title: "Form & Lead Health Checks", desc: "Regular verification to ensure inquiry forms and webhooks deliver reliably." },
+      { title: "Emergency Bug Fixes", desc: "Priority technical support with rapid turnaround for unexpected defects." },
+      { title: "Monthly Summary Reports", desc: "Clear reports on uptime, resolved requests, and optimization recommendations." }
+    ],
+    workflow: [
+      { num: "01", title: "Audit", desc: "We review existing code, hosting settings, and forms to set a healthy baseline." },
+      { num: "02", title: "SLA Setup", desc: "We define clear response times for standard tasks and priority emergency fixes." },
+      { num: "03", title: "Routine Care", desc: "We apply scheduled updates, run security scans, and monitor uptime." },
+      { num: "04", title: "On-Demand Tasks", desc: "We implement new features, pages, and content updates as your business grows." }
+    ],
+    projectSlugs: ["the-wheel-master", "crm-platform"],
+    faqs: [
+      { q: "Can you maintain a site built by someone else?", a: "Yes. We audit your codebase, resolve urgent issues, and take over ongoing maintenance and updates." },
+      { q: "How fast do you handle content updates?", a: "Standard content updates are completed within 24 to 48 hours. Urgent bug fixes receive immediate priority response." },
+      { q: "Are contracts locked in long-term?", a: "No. We offer flexible month-to-month arrangements with zero lock-in." }
+    ]
+  },
+  "hosting": {
+    slug: "hosting",
+    title: "Hosting & Deployment",
+    headline: "Fast, Reliable Cloud Hosting with 99.9% Uptime",
+    tagline: "Global edge CDNs, automated SSL certificates, and daily backups configured for high availability.",
+    category: "Infrastructure · HOST",
+    problem: "Cheap shared hosts are slow, crash during traffic surges, lack backups, and cause downtime during updates.",
+    solution: "We deploy your website to high-speed cloud networks with global CDN caching, automated SSL, and zero-downtime releases.",
+    deliverables: [
+      { title: "Global CDN Edge Caching", desc: "Delivers assets from edge servers nearest to your visitors worldwide." },
+      { title: "Automated CI/CD Deployment", desc: "Instant, seamless updates pushed directly from version control with zero downtime." },
+      { title: "Automated SSL Certificates", desc: "Enforced HTTPS encryption with auto-renewing certificates." },
+      { title: "DNS & Domain Setup", desc: "Proper configuration of records (A, CNAME, SPF, DKIM) for web and email." },
+      { title: "24/7 Uptime Monitoring", desc: "Automated alerts notify our team instantly if any anomaly occurs." },
+      { title: "Account in Your Name", desc: "All hosting and domains configured in your ownership with zero hostage tactics." }
+    ],
+    workflow: [
+      { num: "01", title: "DNS Setup", desc: "We configure domain routing, nameservers, and edge caching rules." },
+      { num: "02", title: "Deployment", desc: "We push clean code to global edge networks for sub-second delivery." },
+      { num: "03", title: "SSL & Security", desc: "We enforce modern HTTPS encryption and DDoS protection." },
+      { num: "04", title: "Monitoring", desc: "We activate automated health checks to ensure continuous 99.9% uptime." }
+    ],
+    projectSlugs: ["plinth", "the-wheel-master"],
+    faqs: [
+      { q: "Do I own the hosting account?", a: "Yes, 100%. We set up hosting under your company credentials so you maintain full control and ownership." },
+      { q: "What uptime can I expect?", a: "Our configurations target 99.9% uptime backed by multi-region cloud edge networks." },
+      { q: "Can you migrate an existing website to a faster host?", a: "Yes. We migrate your site smoothly with zero downtime and no email disruption." }
+    ]
+  },
+  "security": {
+    slug: "security",
+    title: "Website Security & Protection",
+    headline: "Complete Protection for Your Website and Customer Data",
+    tagline: "Defensive headers, spam-free forms, TLS 1.3 encryption, and automated backups to protect your business.",
+    category: "Protection · SECURE",
+    problem: "Automated bots flood contact forms, insecure servers leak data, and missing backups risk permanent data loss.",
+    solution: "We implement defensive headers, invisible bot traps, encrypted transport, and automated backups to keep your assets safe.",
+    deliverables: [
+      { title: "Hardened Security Headers", desc: "Modern CSP and HSTS headers prevent clickjacking, MIME attacks, and data interception." },
+      { title: "Input Validation & Sanitization", desc: "Protects forms against script injection, SQL risks, and spreadsheet formula attacks." },
+      { title: "TLS 1.3 Encryption", desc: "Industry-standard SSL encryption for all data sent between visitors and your site." },
+      { title: "Automated Offsite Backups", desc: "Regular encrypted backups of code, settings, and inquiry records." },
+      { title: "Bot & Spam Mitigation", desc: "Invisible bot traps stop automated spam without frustrating human clients." },
+      { title: "Vulnerability Assessments", desc: "Audits that identify outdated libraries, open endpoints, and data leakage risks." }
+    ],
+    workflow: [
+      { num: "01", title: "Security Audit", desc: "We scan endpoints, forms, and scripts for potential vulnerabilities." },
+      { num: "02", title: "Header Hardening", desc: "We apply Content Security Policy, HSTS, and modern cipher suites." },
+      { num: "03", title: "Bot Protection", desc: "We install invisible honeypots on contact forms to stop spam cold." },
+      { num: "04", title: "Backup Setup", desc: "We set up automated backup schedules and verify restore procedures." }
+    ],
+    projectSlugs: ["the-wheel-master", "crm-platform"],
+    faqs: [
+      { q: "Do static or simple websites need security?", a: "Yes. Form submissions, customer inquiries, and domain reputation require protection from automated spam and hijacking." },
+      { q: "Do you use annoying CAPTCHAs?", a: "No. We use invisible bot traps that block spam without asking visitors to solve image puzzles." },
+      { q: "Will security features slow down my site?", a: "No. Clean headers and modern TLS 1.3 actually make page loads faster and more efficient." }
+    ]
+  }
+};
+
+function signatureModelSection() {
+  const pillars = [
+    {
+      num: "01",
+      badge: "BUILD",
+      title: "Design & Development",
+      desc: "Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times.",
+      deliverables: ["Custom Websites & Web Apps", "Sub-Second Fast Loading", "100% Code & Asset Ownership", "Zero Page-Builder Bloat"],
+      route: "#/services/web-development",
+      linkText: "Explore Web Development ↗"
+    },
+    {
+      num: "02",
+      badge: "MANAGE",
+      title: "Management & Care",
+      desc: "Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free.",
+      deliverables: ["Routine Updates & Backups", "Fast Turnaround for Updates", "Core Web Vitals Audits", "Direct Engineer Support"],
+      route: "#/services/maintenance",
+      linkText: "Explore Management ↗"
+    },
+    {
+      num: "03",
+      badge: "SECURE",
+      title: "Security & Protection",
+      desc: "Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected.",
+      deliverables: ["Strict Security Headers", "Invisible Bot & Spam Traps", "TLS 1.3 SSL Encryption", "Automated Daily Backups"],
+      route: "#/services/security",
+      linkText: "Explore Security ↗"
+    },
+    {
+      num: "04",
+      badge: "HOST",
+      title: "Hosting & Deployment",
+      desc: "Managed cloud hosting with global edge CDN delivery, automatic SSL, and guaranteed 99.9% uptime.",
+      deliverables: ["Global Edge CDN Delivery", "Zero-Downtime Releases", "Automated HTTPS / SSL", "24/7 Uptime Monitoring"],
+      route: "#/services/hosting",
+      linkText: "Explore Hosting ↗"
+    }
+  ];
+
+  return `
+    <section class="signature-model-section">
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">Core Service Model</span>
+          <h2 class="section-title">BUILD. MANAGE. SECURE. HOST.</h2>
+          <p class="section-subtitle">Everything your digital presence needs — from custom code to reliable cloud hosting.</p>
+        </div>
+        <div class="pillar-grid">
+          ${pillars.map(p => `
+            <a class="pillar-card" href="${p.route}">
+              <div class="pillar-card-header">
+                <span class="pillar-badge">${p.badge}</span>
+                <span class="pillar-num">${p.num}</span>
+              </div>
+              <h3>${esc(p.title)}</h3>
+              <p>${esc(p.desc)}</p>
+              <ul class="pillar-deliverables">
+                ${p.deliverables.map(d => `<li>${esc(d)}</li>`).join('')}
+              </ul>
+              <span class="pillar-card-link">${esc(p.linkText)}</span>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function deliveryProcessSection() {
+  const steps = [
+    { num: "01", title: "Discovery & Requirements", desc: "We discuss your vision, goals, target audience, and project scope." },
+    { num: "02", title: "Planning & Architecture", desc: "We plan site structure, wireframe flows, tech stack, and clear milestones." },
+    { num: "03", title: "Design & Prototyping", desc: "We craft intentional layouts and responsive prototypes for your review." },
+    { num: "04", title: "Full-Stack Engineering", desc: "We write clean, lightweight code without fragile page-builders." },
+    { num: "05", title: "Testing & Verification", desc: "We test across phones, tablets, and desktops for speed, forms, and accessibility." },
+    { num: "06", title: "Launch & Deployment", desc: "We handle domain configuration, SSL, and zero-downtime global deployment." },
+    { num: "07", title: "Ongoing Support & Scaling", desc: "We provide ongoing maintenance, security updates, and performance tuning." }
+  ];
+
+  return `
+    <section>
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">Disciplined Delivery</span>
+          <h2 class="section-title">From First Conversation to Scaled Reality</h2>
+          <p class="section-subtitle">A clear, simple process from our first call to your live launch.</p>
+        </div>
+        <div class="process-timeline">
+          ${steps.map(s => `
+            <div class="process-step-item">
+              <span class="process-step-num">${s.num}</span>
+              <h4 class="process-step-title">${esc(s.title)}</h4>
+              <p class="process-step-desc">${esc(s.desc)}</p>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn solid" href="#/contact">Discuss Your Project Scope ↗</a>
+          <a class="btn" href="#/estimator">Calculate Indicative Budget</a>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function trustStandardsSection() {
+  const standards = [
+    {
+      icon: "⚖",
+      title: "100% Client Code & IP Ownership",
+      desc: "You own every single line of code, design asset, and account upon completion. No vendor lock-in, ever."
+    },
+    {
+      icon: "⚡",
+      title: "No Fragile Page-Builders",
+      desc: "Clean, hand-crafted code with zero bloated plugins. Your site loads fast and won't break on updates."
+    },
+    {
+      icon: "🏷",
+      title: "Upfront Transparent Quotes",
+      desc: "Itemized milestone pricing with clear deliverables. You know exactly what it costs before we start."
+    },
+    {
+      icon: "🛠",
+      title: "Direct Engineer Collaboration",
+      desc: "Work directly with the developers designing and coding your site, not account middlemen."
+    }
+  ];
+
+  return `
+    <section>
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">Accountability &amp; Standards</span>
+          <h2 class="section-title">Engineered on Trust &amp; Transparency</h2>
+          <p class="section-subtitle">Clear standards we stand by on every project.</p>
+        </div>
+        <div class="trust-standards-grid">
+          ${standards.map(s => `
+            <div class="trust-card">
+              <span class="trust-icon">${s.icon}</span>
+              <h4>${esc(s.title)}</h4>
+              <p>${esc(s.desc)}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function homepageFAQSection() {
+  const faqs = [
+    {
+      q: "Do I own my code and website after launch?",
+      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you."
+    },
+    {
+      q: "How does Caventra differ from traditional agencies?",
+      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break."
+    },
+    {
+      q: "How long does a typical project take to complete?",
+      a: "Standard business websites take 2 to 3 weeks. Custom web apps and complex platforms take 4 to 6 weeks."
+    },
+    {
+      q: "Can you maintain and support a website you didn't build?",
+      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, and provide regular maintenance and hosting."
+    }
+  ];
+
+  return `
+    <section>
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">Client Questions</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Clear answers to help you evaluate partnering with Caventra.</p>
+        </div>
+        <div class="faq-wrap">
+          ${faqs.map(f => `
+            <div class="faq-item">
+              <div class="faq-q">${esc(f.q)}</div>
+              <p class="faq-a">${esc(f.a)}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
 
 const V={
-home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${spc("Technology, designed to move businesses forward.",{1:'o',5:'g'})}</h1><div class="hrow"><div><p class="fi" style="margin:0 0 14px">We turn ideas into powerful digital products through technology, design, and intelligent solutions.</p><p class="fi" style="margin:0 0 36px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p><div class="row fi">${cta}<a class="btn" href="#/work">Explore Our Work</a></div></div><div class="hlw"><div class="hlf"><img class="hl" src="${getLogo()}" alt="Caventra — Ideas to Impact"><div class="shine"></div></div></div></div></div></div>
-<div class="tape" aria-hidden="true"><div class="t1"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div><div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div></div>`
- +wrapS("",bigp(S.about.who)+`<p>Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
- +wrapS("What we build",svc()+`<p style="margin-top:32px"><a class="btn" href="#/services">All services ↗</a> <a class="btn" href="#/process">How we work ↗</a></p>`)
- +wrapS("Built by Caventra",workGrid(pub().filter(p=>p.featured)))
- +wrapS("Latest Insights &amp; Engineering",`
+home:()=>{
+  const heroHighlights = `
+    <div class="hero-highlights">
+      <div class="hero-highlight-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Bespoke Code (Zero Page-Builders)</span>
+      </div>
+      <div class="hero-highlight-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>100% Client Code &amp; IP Ownership</span>
+      </div>
+      <div class="hero-highlight-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Sub-Second Fast Loading</span>
+      </div>
+      <div class="hero-highlight-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Upfront Transparent Quotes</span>
+      </div>
+    </div>
+  `;
+
+  return `<div class="hero"><canvas id="cv"></canvas><div class="wrap hg">
+    <div class="hero-model-pill"><span class="dot"></span> BUILD · MANAGE · SECURE · HOST</div>
+    <h1>${spc("Websites & Digital Solutions, Engineered for Growing Businesses.",{4:'o',7:'g'})}</h1>
+    <div class="hrow">
+      <div>
+        <p class="fi" style="margin:0 0 14px">We partner with businesses to engineer custom websites, business software, and scalable digital solutions. Clean code, intentional design, and dedicated post-launch support.</p>
+        <p class="fi" style="margin:0 0 28px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p>
+        <div class="row fi" style="gap:12px;flex-wrap:wrap">
+          <a class="btn solid" href="#/contact">Start a Project ↗</a>
+          <a class="btn" href="#/services">Explore Services</a>
+          <a class="btn" href="#/estimator" style="border-style:dashed">Cost Estimator ↗</a>
+        </div>
+        ${heroHighlights}
+      </div>
+      <div class="hlw">
+        <div class="hlf">
+          <img class="hl" src="${getLogo()}" alt="Caventra — Ideas to Impact">
+          <div class="shine"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="tape" aria-hidden="true">
+    <div class="t1"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div>
+    <div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div>
+  </div>`
+  + signatureModelSection()
+  + wrapS("", bigp(S.about.who) + `<p style="font-size:18px;max-width:58ch;line-height:1.6;margin-top:16px">Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
+  + deliveryProcessSection()
+  + trustStandardsSection()
+  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="#/work">Explore All Selected Work ↗</a> <a class="btn" href="#/contact">Discuss a Project ↗</a></p>`)
+  + homepageFAQSection()
+  + wrapS("Latest Insights &amp; Engineering", `
     <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
     <div class="blog-grid" style="margin:0">
       ${getB().slice(0,3).map(b=>`
@@ -398,7 +815,7 @@ home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${
           <div>
             <div class="meta"><span>${esc(b.category)}</span><span class="dot-sep"></span><span>${esc(b.readTime)}</span></div>
             <h3 style="font-size:20px">${esc(b.title)}</h3>
-            <p style="font-size:14.5px">${esc(b.summary)}</p>
+            <p style="font-size:15px;line-height:1.55">${esc(b.summary)}</p>
           </div>
           <div class="ftr"><span class="tag">${esc(b.author)}</span><span class="read-link">Read ↗</span></div>
         </a>
@@ -406,17 +823,184 @@ home:()=>`<div class="hero"><canvas id="cv"></canvas><div class="wrap hg"><h1>${
     </div>
     <p style="margin-top:36px"><a class="btn" href="#/blog">Explore All 105+ Articles ↗</a></p>
   `)
- +`<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2>${cta}</div></section>`
- +(contactInfo()?wrapS("Contact",contactInfo()):''),
-services:()=>head("Services","Technology solutions built around real business needs.")+wrapS("",svc() + `
-  <div class="service-estimator-callout">
-    <div>
-      <h3>Estimate Your Website Project Cost</h3>
-      <p>Use our interactive estimator to configure your website requirements, select features, and calculate an indicative budget.</p>
+  + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="#/contact">Start a Project ↗</a><a class="btn" href="#/estimator">Launch Cost Estimator</a></div></div></section>`
+  + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
+},
+services: () => {
+  const serviceCards = [
+    {
+      slug: "web-development",
+      route: "#/services/web-development",
+      num: "01",
+      pillar: "BUILD",
+      title: "Website Design & Development",
+      desc: "Custom, hand-crafted websites and web applications built with semantic HTML, CSS, and modern JavaScript. Sub-second loading, fluid responsiveness, and zero page-builder bloat.",
+      deliverables: ["Custom Frontend Architecture", "Conversion-Optimized UX/UI", "Interactive Estimators & Tools", "Full IP & Code Ownership"]
+    },
+    {
+      slug: "branding",
+      route: "#/services/branding",
+      num: "02",
+      pillar: "DESIGN",
+      title: "Branding & Creative Design",
+      desc: "Distinctive brand identities, logos, color palettes, and typographic design systems that convey credibility and position your business as an industry authority.",
+      deliverables: ["Brand Mark & Logo Suite", "Typographic Design Systems", "Digital UI Design Tokens", "Complete Vector Master Assets"]
+    },
+    {
+      slug: "maintenance",
+      route: "#/services/maintenance",
+      num: "03",
+      pillar: "MANAGE",
+      title: "Website Management & Maintenance",
+      desc: "Dedicated ongoing technical support, routine software updates, content publishing, and Core Web Vitals performance tuning so your platform never degrades.",
+      deliverables: ["Scheduled Dependency Updates", "SLA Content Publishing", "Core Web Vitals Audits", "Priority Bug Troubleshooting"]
+    },
+    {
+      slug: "hosting",
+      route: "#/services/hosting",
+      num: "04",
+      pillar: "HOST",
+      title: "Hosting & Deployment",
+      desc: "High-uptime cloud infrastructure, global Content Delivery Networks, automated CI/CD deployment pipelines, and zero-downtime releases configured in your name.",
+      deliverables: ["Global CDN Edge Caching", "Git-Backed CI/CD Releases", "Automated HTTPS / SSL", "24/7 Uptime Monitoring"]
+    },
+    {
+      slug: "security",
+      route: "#/services/security",
+      num: "05",
+      pillar: "SECURE",
+      title: "Website Security & Protection",
+      desc: "Hardened server configurations, modern Content Security Policies, input sanitization against injection attacks, and encrypted backup protocols.",
+      deliverables: ["Strict HTTP Security Headers", "Bot & Spam Mitigation", "SSL/TLS 1.3 Hardening", "Automated Offsite Backups"]
+    }
+  ];
+
+  return head("Services & Capabilities", "End-to-end digital engineering: from initial architecture and bespoke design to ongoing management, cloud hosting, and security.") +
+    wrapS("", `
+      <div class="pillar-grid" style="grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;margin-bottom:48px">
+        ${serviceCards.map(s => `
+          <a class="pillar-card" href="${s.route}">
+            <div class="pillar-card-header">
+              <span class="pillar-badge">${s.pillar}</span>
+              <span class="pillar-num">${s.num}</span>
+            </div>
+            <h3>${esc(s.title)}</h3>
+            <p>${esc(s.desc)}</p>
+            <ul class="pillar-deliverables">
+              ${s.deliverables.map(d => `<li>${esc(d)}</li>`).join('')}
+            </ul>
+            <span class="pillar-card-link">Explore Detailed Service Scope ↗</span>
+          </a>
+        `).join('')}
+      </div>
+
+      <div class="service-estimator-callout">
+        <div>
+          <h3>Estimate Your Website Project Cost</h3>
+          <p>Use our interactive estimator to configure your website requirements, select features, and calculate an indicative budget.</p>
+        </div>
+        <a class="btn solid" href="#/estimator">Launch Cost Estimator ↗</a>
+      </div>
+    `, 'style="padding-top:20px"');
+},
+serviceDetail: (slug) => {
+  const srv = CAVENTRA_SERVICES_DATA[slug];
+  if (!srv) return V.notFound("The requested service page does not exist.");
+
+  const relatedProjects = S.projects.filter(p => p.published && srv.projectSlugs.includes(p.slug));
+
+  return `<div class="service-detail-wrap">
+    <div class="service-breadcrumb">
+      <a href="#/">Home</a> / <a href="#/services">Services</a> / <span>${esc(srv.title)}</span>
     </div>
-    <a class="btn solid" href="#/estimator">Launch Cost Estimator ↗</a>
-  </div>
-`,'style="padding-top:20px"'),
+    <div class="service-hero-header">
+      <span class="service-badge">${esc(srv.category)}</span>
+      <h1 class="service-hero-title">${sp(srv.title)}</h1>
+      <p class="service-hero-lead">${esc(srv.tagline)}</p>
+      <div class="service-actions-row">
+        <a class="btn solid" href="#/contact">Request a Tailored Quote ↗</a>
+        <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+        <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="service-block-section">
+      <div class="split" style="gap:32px">
+        <div>
+          <span class="section-kicker">The Problem</span>
+          <h3 class="service-block-heading">Common Industry Challenges</h3>
+          <p class="service-block-desc">${esc(srv.problem)}</p>
+        </div>
+        <div>
+          <span class="section-kicker">Our Approach</span>
+          <h3 class="service-block-heading">How Caventra Solves It</h3>
+          <p class="service-block-desc">${esc(srv.solution)}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-block-section">
+      <span class="section-kicker">Scope &amp; Deliverables</span>
+      <h3 class="service-block-heading">What We Deliver</h3>
+      <p class="service-block-desc">Every deliverable is engineered to concrete technical specifications with zero filler or hidden scope.</p>
+      <div class="deliverables-grid">
+        ${srv.deliverables.map(d => `
+          <div class="deliverable-card">
+            <h4><span>✦</span> ${esc(d.title)}</h4>
+            <p>${esc(d.desc)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="service-block-section">
+      <span class="section-kicker">Workflow &amp; Stages</span>
+      <h3 class="service-block-heading">How We Deliver This Service</h3>
+      <p class="service-block-desc">Structured, transparent sprints from initial consultation to final delivery.</p>
+      <div class="service-workflow-grid">
+        ${srv.workflow.map(w => `
+          <div class="service-wf-step">
+            <span class="service-wf-num">${w.num}</span>
+            <h5>${esc(w.title)}</h5>
+            <p>${esc(w.desc)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    ${relatedProjects.length ? `
+      <div class="service-block-section">
+        <span class="section-kicker">Proven Work</span>
+        <h3 class="service-block-heading">Related Projects &amp; Implementations</h3>
+        <p class="service-block-desc">See how we engineer similar solutions in practice.</p>
+        ${workGrid(relatedProjects)}
+      </div>
+    ` : ''}
+
+    <div class="service-block-section">
+      <span class="section-kicker">Frequently Asked Questions</span>
+      <h3 class="service-block-heading">Got Questions About ${esc(srv.title)}?</h3>
+      <div class="faq-wrap">
+        ${srv.faqs.map(f => `
+          <div class="faq-item">
+            <div class="faq-q">${esc(f.q)}</div>
+            <p class="faq-a">${esc(f.a)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="margin-top:64px;padding:52px 32px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);text-align:center">
+      <h3 style="font-size:clamp(26px,4vw,38px);margin-bottom:12px">Ready to discuss your project?</h3>
+      <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">Get a transparent, itemized proposal for ${esc(srv.title.toLowerCase())} tailored directly to your commercial goals.</p>
+      <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
+        <a class="btn solid" href="#/contact">Request Formal Quote ↗</a>
+        <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+        <a class="btn" href="#/services">All Services</a>
+      </div>
+    </div>
+  </div>`;
+},
 estimator: () => {
   const cfg = getEstimatorConfig();
   if (!cfg) {
@@ -735,7 +1319,33 @@ estimator: () => {
     </div>
   `, 'style="padding-top:20px"');
 },
-work:()=>head("Selected Work")+wrapS("",workGrid(pub()),'style="padding-top:20px"'),
+work:()=>{
+  const allProjects = pub();
+  const cats = ['All', 'Web Development', 'Custom Software & ERP', 'AI Solutions', 'E-Commerce'];
+  const filtered = workFilter === 'All' ? allProjects : allProjects.filter(p => {
+    if (workFilter === 'Web Development') return p.category.includes('Web Development') || p.category.includes('Front-End');
+    if (workFilter === 'Custom Software & ERP') return p.category.includes('ERP') || p.category.includes('CRM') || p.category.includes('Business Software');
+    if (workFilter === 'AI Solutions') return p.category.includes('AI') || p.category.includes('ConTech');
+    if (workFilter === 'E-Commerce') return p.category.includes('E-Commerce') || p.category.includes('Retail');
+    return true;
+  });
+
+  return head("Selected Work & Case Studies", "Authentic digital products, enterprise business applications, and web platforms engineered by Caventra.") +
+    wrapS("", `
+      <div class="work-filter-wrap">
+        ${cats.map(c => `<button class="work-filter-btn ${workFilter === c ? 'active' : ''}" data-wcat="${esc(c)}">${esc(c)}</button>`).join('')}
+      </div>
+      ${workGrid(filtered)}
+      <div style="margin-top:64px;padding:48px 32px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);text-align:center">
+        <h3 style="font-size:26px;margin-bottom:12px">Need a bespoke solution engineered for your business?</h3>
+        <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">We architect, design, and deliver custom web platforms with clean code and transparent pricing.</p>
+        <div class="row" style="justify-content:center;gap:12px">
+          <a class="btn solid" href="#/contact">Start a Project ↗</a>
+          <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+        </div>
+      </div>
+    `, 'style="padding-top:20px"');
+},
 about:()=>{
   const a=S.about;
   return head("About Caventra","Engineering ideas into high-impact digital reality.")+wrapS("",`
@@ -908,7 +1518,57 @@ article:s=>{
     </div>
   </div></div></section>`;
 },
-process:()=>head("Process","From first conversation to launch.")+wrapS("",prc(),'style="padding-top:20px"'),
+process:()=>head("Our 7-Stage Process","A disciplined engineering methodology from initial discovery to continuous post-launch support.")+wrapS("",`
+  <div style="max-width:840px;margin-bottom:48px">
+    <p style="font-size:clamp(18px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:300">
+      Every project at Caventra is engineered through seven transparent stages. We eliminate ambiguity through upfront milestone scoping, clean architecture, and direct collaboration with our engineering team.
+    </p>
+  </div>
+  <div class="process-timeline">
+    ${[
+      { num: "01", title: "Discovery & Requirements", desc: "We analyze your business model, target audience, core commercial objectives, and technical constraints to establish a focused project brief." },
+      { num: "02", title: "Planning & Architecture", desc: "We design data models, URL structures, tech stack choices, milestone deliverables, and upfront transparent pricing." },
+      { num: "03", title: "UI/UX Design & Prototyping", desc: "We craft purposeful typography, responsive grid layouts, and interactive wireframes in both dark and light modes for client review." },
+      { num: "04", title: "Full-Stack Web Engineering", desc: "We write clean, modular, hand-crafted code with zero fragile page-builders, sub-second load times, and responsive fluid design." },
+      { num: "05", title: "Quality Testing & Verification", desc: "Cross-device browser testing, accessibility audits, form submission checks, Core Web Vitals optimization, and client sign-off." },
+      { num: "06", title: "Launch & Production Deployment", desc: "Zero-downtime release to global CDN networks, domain/DNS configuration, SSL provisioning, and sitemap registration." },
+      { num: "07", title: "Ongoing Support & Scaling", desc: "Post-launch monitoring, proactive software updates, security patches, and continuous iterative improvements as your business expands." }
+    ].map(s => `
+      <div class="process-step-item">
+        <span class="process-step-num">${s.num}</span>
+        <h4 class="process-step-title">${esc(s.title)}</h4>
+        <p class="process-step-desc">${esc(s.desc)}</p>
+      </div>
+    `).join('')}
+  </div>
+
+  <div style="margin-top:64px">
+    <h3 style="font-size:26px;margin-bottom:16px">Our Commitments to You</h3>
+    <div class="trust-standards-grid">
+      ${[
+        { icon: "⚖", title: "100% Client Ownership", desc: "You own all code, designs, and credentials upon project completion. No lock-in or proprietary traps." },
+        { icon: "⚡", title: "No Fragile Page-Builders", desc: "We engineer semantic, modern code that won't break on plugin updates or become obsolete." },
+        { icon: "🏷", title: "Transparent Fixed Milestones", desc: "Detailed, itemized quotes with fixed milestones. You know exactly what you get and what it costs." },
+        { icon: "🛠", title: "Direct Engineer Access", desc: "Collaborate directly with the engineers building your platform. Fast communication, zero bureaucracy." }
+      ].map(s => `
+        <div class="trust-card">
+          <span class="trust-icon">${s.icon}</span>
+          <h4>${esc(s.title)}</h4>
+          <p>${esc(s.desc)}</p>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <div style="margin-top:64px;padding:52px 32px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);text-align:center">
+    <h3 style="font-size:clamp(26px,4vw,38px);margin-bottom:12px">Ready to start your project?</h3>
+    <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">Schedule an initial discovery consultation or calculate an indicative project estimate.</p>
+    <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
+      <a class="btn solid" href="#/contact">Schedule Project Discovery ↗</a>
+      <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+    </div>
+  </div>
+`,'style="padding-top:20px"'),
 technology:()=>head("Technology")+wrapS("",S.techs.length?`<div class="list">${S.techs.map(t=>`<div><h3>${esc(t[0])}</h3><div class="tags">${t[1].split(',').filter(x=>x.trim()).map(x=>`<span>${esc(x.trim())}</span>`).join('')}</div></div>`).join('')}</div>`:empty("Stack details coming soon.","Technologies will be listed here once confirmed."),'style="padding-top:20px"'),
 contact:()=>{
   const m=S.contact.email;
@@ -966,10 +1626,37 @@ contact:()=>{
 privacy:()=>head("Privacy Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>Caventra ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy details how we handle, collect, protect, and process data when you interact with our website and digital studio services.</p><h3>1. Data Controller</h3><p>Caventra is the data controller for information processed through this website. For any inquiries regarding your data, contact us at <a href="mailto:caventraofficial@gmail.com">caventraofficial@gmail.com</a>.</p><h3>2. Information We Collect &amp; Purpose</h3><p>We adhere to strict data minimization. We only collect information that you knowingly submit via our contact form:</p><ul><li><strong>Contact Details:</strong> Your name, email, company, request type, budget, and project brief.</li><li><strong>Purpose:</strong> To review project proposals, provide estimates, and deliver custom digital solutions.</li><li><strong>Zero Tracking SDKs:</strong> We do not track your activity across websites, and we do not use third-party behavioral analytics or advertising trackers.</li></ul><h3>3. Legal Basis for Processing</h3><p>We process personal data based on your explicit consent, pre-contractual discussions, and our legitimate business interest in responding to client inquiries.</p><h3>4. Age Restriction &amp; Protection of Minors</h3><p>Our website and software services are intended strictly for individuals aged 18 and older. We do not knowingly solicit or collect personal information from minors. If personal data of a minor is submitted, we will permanently delete it upon notice.</p><h3>5. Security &amp; Third-Party Audit</h3><p>Our infrastructure undergoes strict security controls, including parameterized database operations, cryptographic session tokens, secure HTTPS transport, and strict Content Security Policies (CSP). We do not embed untrusted third-party SDKs.</p><h3>6. Data Retention &amp; Deletion Option</h3><p>We retain inquiry information only as long as necessary to address your project or satisfy legal requirements.</p><h3>7. Your Rights &amp; Data Deletion Request</h3><p>You have the right to access, correct, or permanently delete your personal information from our systems at any time.</p><p>To request data deletion, select <strong>"Data Deletion Request"</strong> in our <a href="#/contact">Contact Form</a> or email <a href="mailto:caventraofficial@gmail.com?subject=Data%20Deletion%20Request">caventraofficial@gmail.com</a>. We will confirm deletion within 30 days.</p></div>`,'style="padding-top:20px"'),
 terms:()=>head("Terms of Service","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>These Terms of Service govern your access to and use of the website and services provided by Caventra. By browsing our website or initiating a project inquiry, you agree to these Terms.</p><h3>1. Studio Services</h3><p>Caventra provides digital software engineering, AI integrations, UI/UX design, and business automation. Specific project milestones, warranties, and deliverables are governed by individual written client agreements.</p><h3>2. Intellectual Property &amp; Licensing</h3><ul><li><strong>Client Deliverables:</strong> Ownership, licensing, and intellectual property rights for custom code and design deliverables transfer to the client upon full payment as defined in individual service contracts.</li><li><strong>Studio Assets:</strong> The Caventra brand, logo, typography, website design, and proprietary code patterns remain the exclusive intellectual property of Caventra.</li></ul><h3>3. Acceptable Use</h3><p>You agree not to misuse this website, probe vulnerabilities, perform unauthorized scraping, or transmit malicious code.</p><h3>4. Authentic Work &amp; No Unsupported Claims</h3><p>We build genuine, high-standard digital products. Caventra makes no exaggerated or unsupported claims regarding specific commercial turnover or search rankings unless explicitly warranted in a formal contract.</p><h3>5. Limitation of Liability</h3><p>Caventra is provided on an "as is" basis without warranties of uninterrupted uptime. We shall not be liable for indirect or consequential damages arising from site access.</p><h3>6. Governing Law</h3><p>These Terms are governed by and construed under the laws of India.</p></div>`,'style="padding-top:20px"'),
 cookies:()=>head("Cookie Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>This Cookie Policy explains how Caventra uses cookies and local storage.</p><h3>1. Strictly Necessary Cookies Only</h3><p>Caventra follows a privacy-by-design architecture. <strong>We do not use advertising, marketing, or behavioral tracking cookies.</strong></p><ul><li><strong>Admin Authentication:</strong> An encrypted <code>cv_sess</code> cookie is used solely when authorized administrators log into <code>/#/admin</code> to verify credentials. It expires after 7 days.</li><li><strong>Local Storage Preference:</strong> A single entry (<code>cv_cookie_consent</code>) is stored in your browser to remember your cookie banner choice.</li></ul><h3>2. Third-Party Auditing</h3><p>No third-party trackers, pixels, or profiling SDKs are present. Fonts are securely loaded from Google Fonts.</p><h3>3. Managing Cookies</h3><p>You may clear or block cookies in your browser settings at any time without impacting public browsing of this site.</p></div>`,'style="padding-top:20px"'),
-project:s=>{const p=S.projects.find(x=>x.slug===s&&x.published);if(!p)return V.notFound("The project you are looking for could not be found or has not been published yet.");
- const f=(p.features||'').split('\n').filter(x=>x.trim());
- const cv=getCover(p);
- return head(esc(p.name),esc(p.short))+wrapS("",(cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block">`:'')+`<div class="tags" style="margin-top:24px">${(p.tech||'').split(',').filter(x=>x.trim()).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div>`+sec("Client",p.client)+sec("Overview",p.overview)+sec("Challenge",p.challenge)+sec("Solution",p.solution)+(f.length?`<h3 style="margin:48px 0 12px">Features</h3><p>${f.map(esc).join('<br>')}</p>`:'')+sec("Results",p.results)+(p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)">`).join('')+`<div class="row" style="margin-top:48px">${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website</a>`:''}${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub</a>`:''}${p.case?`<a class="btn" href="${safe(p.case)}" target="_blank" rel="noopener">Case Study</a>`:''}</div>`,'style="padding-top:20px"')},
+project:s=>{
+  const p=S.projects.find(x=>x.slug===s&&x.published);
+  if(!p)return V.notFound("The project you are looking for could not be found or has not been published yet.");
+  const f=(p.features||'').split('\n').filter(x=>x.trim());
+  const cv=getCover(p);
+  const st=getProjectStatus(p);
+
+  return head(esc(p.name),esc(p.short))+wrapS("",
+    `<div class="service-breadcrumb"><a href="#/">Home</a> / <a href="#/work">Selected Work</a> / <span>${esc(p.name)}</span></div>`+
+    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block">`:'')+
+    `<div style="display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap">
+       <span class="project-status-badge ${st.cls}" style="margin-left:0;padding:5px 12px;font-size:12px">${esc(st.label)}</span>
+       <span style="font-size:14px;color:var(--mut)">Category: <b>${esc(p.category)}</b></span>
+     </div>`+
+    `<div class="tags" style="margin-top:20px">${(p.tech||'').split(',').filter(x=>x.trim()).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div>`+
+    sec("Client & Context",p.client)+
+    sec("Project Overview",p.overview)+
+    sec("The Business Challenge",p.challenge)+
+    sec("Engineered Solution",p.solution)+
+    (f.length?`<h3 style="margin:48px 0 12px">Key Features &amp; Technical Capabilities</h3><ul style="padding-left:20px;line-height:1.7;color:var(--mut)">${f.map(x=>`<li style="margin-bottom:6px"><span style="color:var(--tx)">${esc(x)}</span></li>`).join('')}</ul>`:'')+
+    sec("Tangible Results & Current Status",p.results)+
+    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)">`).join('')+
+    `<div class="row" style="margin-top:48px;flex-wrap:wrap;gap:12px">
+       ${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website ↗</a>`:''}
+       ${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub ↗</a>`:''}
+       ${p.case?`<a class="btn" href="${safe(p.case)}" target="_blank" rel="noopener">Case Study ↗</a>`:''}
+       <a class="btn solid" href="#/contact">Discuss a Similar Project ↗</a>
+       <a class="btn" href="#/services">Explore Services</a>
+     </div>`
+  ,'style="padding-top:20px"');
+},
 notFound:(msg)=>`<section style="min-height:72vh;display:flex;align-items:center;border:0;padding:80px 0"><div class="wrap" style="text-align:center;max-width:700px;margin:0 auto"><p style="font:800 clamp(80px,13vw,150px) var(--hd);line-height:.88;margin:0 0 20px;background:linear-gradient(100deg,#c9b8a0,#f8ecd8 50%,#b79f80);-webkit-background-clip:text;background-clip:text;color:transparent">404</p><h1 style="font-size:clamp(28px,4vw,44px);margin-bottom:16px">Page Not Found</h1><p style="font-size:17px;color:var(--mut);line-height:1.6;margin:0 auto 36px;max-width:48ch">${msg||"The link you followed may be broken, or the page may have been removed or relocated."}</p><div class="row" style="justify-content:center;gap:14px"><a class="btn solid" href="#/">Return to Homepage</a><a class="btn" href="#/work">Explore Our Work</a><a class="btn" href="#/blog">Read Insights &amp; Blog</a><a class="btn" href="#/contact">Contact Studio</a></div></div></section>`,
 admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+wrapS("",`<form id="lf" style="max-width:420px"><label>Admin password<input type="password" id="lp" autocomplete="current-password" required></label><div><button class="btn solid">Sign in</button></div><p id="lm"></p></form>`,'style="padding-top:20px"');
  const e=edit,P=S.projects,I=(k,l,t='input')=>`<label>${l}<${t} data-k="${k}">${t==='textarea'?esc(e[k]||''):''}</${t}></label>`.replace('<input data-k','<input data-k').replace(`</input>`,'').replace(`data-k="${k}">`,t==='input'?`data-k="${k}" value="${esc(e[k]||'')}">`:`data-k="${k}">`);
@@ -980,10 +1667,28 @@ admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+
 const kv=t=>t.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]&&a[1]);
 async function save(){try{const r=await fetch('/api/admin/site',{method:'PUT',headers:H,body:JSON.stringify(S)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||r.status);if(j.site){const keep=S;S=Object.assign(JSON.parse(JSON.stringify(D)),j.site)}return true}catch(x){alert('Could not save: '+x.message);return false}}
 function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.split('/');
- let v=r===''?V.home():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
+ let v=r===''?V.home():r==='services'&&s?V.serviceDetail(s):r==='services'?V.services():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
  app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
  document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r));
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
+
+ const titles = {
+   '': 'CAVENTRA — Digital Solutions & Web Engineering Studio | Ideas to Impact',
+   'services': 'Services & Capabilities — CAVENTRA',
+   'services/web-development': 'Website Design & Development — CAVENTRA',
+   'services/branding': 'Branding & Creative Design — CAVENTRA',
+   'services/maintenance': 'Website Management & Maintenance — CAVENTRA',
+   'services/hosting': 'Hosting & Cloud Deployment — CAVENTRA',
+   'services/security': 'Website Security & Protection — CAVENTRA',
+   'work': 'Selected Work & Case Studies — CAVENTRA',
+   'process': 'Our 7-Stage Engineering Process — CAVENTRA',
+   'about': 'About Us — CAVENTRA',
+   'blog': 'Knowledge & Engineering Insights — CAVENTRA',
+   'estimator': 'Website Project Cost Estimator — CAVENTRA',
+   'contact': 'Start a Project — CAVENTRA'
+ };
+ const fullRoute = s ? `${r}/${s}` : r;
+ document.title = titles[fullRoute] || (r === 'work' && s ? `${(S.projects.find(x=>x.slug===s)||{}).name || 'Project'} — CAVENTRA` : 'CAVENTRA — Ideas to Impact');
  const lf=$('#lf');if(lf)lf.onsubmit=doLogin;
  const cf=$('#cf');
  if(cf){
@@ -1046,6 +1751,7 @@ function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.sp
  }
 }
 document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=+t.dataset.i,P=S.projects;if(t.dataset.bcat){blogFilter=t.dataset.bcat;blogPage=1;render();return}
+ if(t.dataset.wcat){workFilter=t.dataset.wcat;render();return}
  if(t.id==='b-more'){blogPage++;render();return}
  if(t.id==='b-showall'){blogShowAll=true;render();return}
  if(a==='logout'){await fetch('/api/admin/logout',{method:'POST',headers:H});owner=false;render();return}if(a==='delq'){if(!confirm('Delete this inquiry?'))return;await fetch('/api/admin/inquiries/'+t.dataset.i,{method:'DELETE',headers:H});INQ=INQ.filter(q=>q.id!=t.dataset.i);render();return}

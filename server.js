@@ -18,7 +18,7 @@ const DATA = path.resolve(E.DATA_DIR || path.join(__dirname, 'data'));
 const PUB = path.join(__dirname, 'public'), UP = path.join(DATA, 'uploads');
 const PROD = E.NODE_ENV === 'production';
 const NOTIFY_TO = E.NOTIFY_TO || 'caventraofficial@gmail.com';
-if (!E.ADMIN_PASSWORD || E.ADMIN_PASSWORD.length < 10) { console.error('Set ADMIN_PASSWORD (at least 10 characters) in .env or the environment.'); process.exit(1); }
+if ((!E.ADMIN_PASSWORD || E.ADMIN_PASSWORD.length < 10) && !E.ADMIN_PASSWORD_HASH) { console.error('Set ADMIN_PASSWORD (at least 10 characters) or ADMIN_PASSWORD_HASH in .env or the environment.'); process.exit(1); }
 fs.mkdirSync(UP, { recursive: true });
 let SECRET = E.SESSION_SECRET;
 if (!SECRET) { const f = path.join(DATA, '.secret'); try { SECRET = fs.readFileSync(f, 'utf8'); } catch { SECRET = crypto.randomBytes(32).toString('hex'); fs.writeFileSync(f, SECRET, { mode: 0o600 }); } }
@@ -101,22 +101,26 @@ async function notify(q) {
 
 // ---------- routes ----------
 async function api(req, res, u) {
-  const p = u.pathname, m = req.method;
+  const p = u.pathname, m = req.method, ip = ipOf(req);
+  if (limited('api_' + ip, 60, 6e4)) return send(res, 429, { error: 'Too many API requests. Please slow down.' });
   if (m !== 'GET' && req.headers['x-requested-with'] !== 'caventra') return send(res, 403, { error: 'Forbidden' });
   if (p === '/api/site' && m === 'GET') { const s = getSite(); if (s.projects) s.projects = s.projects.filter(x => x.published); return send(res, 200, s, { 'Cache-Control': 'no-store' }); }
   if (p === '/api/contact' && m === 'POST') {
-    const ip = ipOf(req); if (limited('c' + ip, 5, 36e5)) return send(res, 429, { error: 'Too many messages. Please try again later.' });
+    if (limited('c' + ip, 5, 36e5)) return send(res, 429, { error: 'Too many messages. Please try again later.' });
     const b = await readJSON(req, 2e4); if (b.website) return send(res, 200, { ok: true }); // honeypot
     const q = { name: str(b.name, 120), email: str(b.email, 200), company: str(b.company, 200), type: str(b.type, 100), budget: str(b.budget, 100), timeline: str(b.timeline, 100), message: str(b.message, 5000) };
     if (!q.name || !q.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(q.email)) return send(res, 400, { error: 'Please fill in name, a valid email and a message.' });
-    db.prepare('INSERT INTO inquiries(name,email,company,type,budget,timeline,message,ip,created_at) VALUES(?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.company, q.type, q.budget, q.timeline, q.message, ip, Date.now());
+    const ipHash = crypto.createHash('sha256').update(ip + (SECRET || 'caventra')).digest('hex').slice(0, 16);
+    db.prepare('INSERT INTO inquiries(name,email,company,type,budget,timeline,message,ip,created_at) VALUES(?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.company, q.type, q.budget, q.timeline, q.message, ipHash, Date.now());
     notify(q); return send(res, 200, { ok: true });
   }
   if (p === '/api/admin/me' && m === 'GET') return send(res, 200, { admin: isAdmin(req) }, { 'Cache-Control': 'no-store' });
   if (p === '/api/admin/login' && m === 'POST') {
-    const ip = ipOf(req); if (limited('l' + ip, 5, 9e5)) return send(res, 429, { error: 'Too many attempts. Try again in 15 minutes.' });
+    if (limited('l' + ip, 5, 9e5)) return send(res, 429, { error: 'Too many attempts. Try again in 15 minutes.' });
     const b = await readJSON(req, 2e3);
-    if (typeof b.password !== 'string' || !crypto.timingSafeEqual(sha(b.password), sha(E.ADMIN_PASSWORD))) return send(res, 401, { error: 'Wrong password.' });
+    const target = E.ADMIN_PASSWORD_HASH ? Buffer.from(E.ADMIN_PASSWORD_HASH, 'hex') : sha(E.ADMIN_PASSWORD || '');
+    const given = typeof b.password === 'string' ? sha(b.password) : null;
+    if (!given || given.length !== target.length || !crypto.timingSafeEqual(given, target)) return send(res, 401, { error: 'Wrong password.' });
     return send(res, 200, { ok: true }, { 'Set-Cookie': `cv_sess=${makeSession()}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${PROD ? '; Secure' : ''}` });
   }
   if (p === '/api/admin/logout' && m === 'POST') return send(res, 200, { ok: true }, { 'Set-Cookie': 'cv_sess=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0' });
@@ -157,6 +161,8 @@ function serveStatic(req, res, u) {
 const server = http.createServer(async (req, res) => {
   for (const [k, v] of Object.entries(SEC)) res.setHeader(k, v);
   try {
+    const ip = ipOf(req);
+    if (limited('g_' + ip, 240, 6e4)) return send(res, 429, 'Too many requests. Please slow down.');
     const u = new URL(req.url, 'http://x');
     if (u.pathname === '/healthz') return send(res, 200, { ok: true });
     if (u.pathname.startsWith('/api/')) return await api(req, res, u);
