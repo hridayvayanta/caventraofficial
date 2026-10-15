@@ -76,9 +76,21 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => updateThemeLogos(html.getAttribute('data-theme') || 'dark'));
+    document.addEventListener('DOMContentLoaded', () => {
+      updateThemeLogos(html.getAttribute('data-theme') || 'dark');
+      preloadThemeLogos();
+    });
   } else {
     updateThemeLogos(initialTheme);
+    preloadThemeLogos();
+  }
+
+  // Preload alternate theme logos to guarantee instant zero-flash View Transitions
+  function preloadThemeLogos() {
+    ['/assets/logo-light.png', '/assets/logo-nav-light.png', '/assets/logo.png', '/assets/logo-nav.png'].forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
   }
 
   // 2. Progressive Nanotechnology Reveal Transition Engine

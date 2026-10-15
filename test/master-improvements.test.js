@@ -28,19 +28,28 @@ console.log('  CAVENTRA: Master Website Improvements Test Suite');
 console.log('======================================================\n');
 
 // 1. FILE PARITY VERIFICATION
-test('Parity: All 6 critical source/public file pairs are 100% byte-for-byte identical', () => {
+test('Parity: All 7 critical source/public file pairs are 100% byte-for-byte identical', () => {
   const files = [
     'app.js',
     'styles.css',
     'index.html',
     'ventrabot.js',
     'sitemap.xml',
-    'estimator-config.js'
+    'estimator-config.js',
+    'theme.js'
   ];
   for (const f of files) {
     const rootContent = fs.readFileSync(path.join(ROOT, f), 'utf8');
     const pubContent = fs.readFileSync(path.join(ROOT, 'public', f), 'utf8');
     assert.strictEqual(rootContent, pubContent, `File parity mismatch for ${f}`);
+  }
+
+  // Also verify light logo assets binary parity
+  const lightLogos = ['assets/logo-light.png', 'assets/logo-nav-light.png'];
+  for (const f of lightLogos) {
+    const rootBuf = fs.readFileSync(path.join(ROOT, f));
+    const pubBuf = fs.readFileSync(path.join(ROOT, 'public', f));
+    assert.ok(rootBuf.equals(pubBuf), `Binary parity mismatch for ${f}`);
   }
 });
 
