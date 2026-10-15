@@ -37,7 +37,7 @@ window.BLOGS = [
       <p>A website is an active business asset. Ongoing costs include high-speed cloud edge hosting (typically ₹1,000 – ₹2,500/month with global CDN and automated SSL) and routine security/maintenance care (₹3,000 – ₹8,000/month for monitoring, backups, and content updates).</p>
 
       <h2>4. Calculating an Instant Estimate</h2>
-      <p>To help founders get immediate pricing clarity without waiting days for sales meetings, we built an interactive tool: visit our <a href="#/estimator">Website Project Cost Estimator</a> to configure your exact requirements and view transparent price ranges instantly.</p>
+      <p>To help founders get immediate pricing clarity without waiting days for sales meetings, we built an interactive tool: visit our <a href="/estimator/">Website Project Cost Estimator</a> to configure your exact requirements and view transparent price ranges instantly.</p>
     `
   },
   {
@@ -48,7 +48,7 @@ window.BLOGS = [
     "location": "Global",
     "date": "September 2026",
     "readTime": "6 min read",
-    "author": "Sauran Mansuri",
+    "author": "Sauranahmed Mansuri",
     "authorRole": "Founder & Backend Engineer",
     "summary": "Why cheap shared hosting crashes under traffic, what essential website maintenance includes, and how managed cloud hosting protects your revenue.",
     "content": `
@@ -81,7 +81,7 @@ window.BLOGS = [
         <li><strong>Performance Audits:</strong> Quarterly checks on mobile Core Web Vitals to keep Google rankings strong.</li>
       </ul>
 
-      <p>Explore our dedicated <a href="#/services/hosting">Cloud Hosting</a> and <a href="#/services/maintenance">Website Management</a> service tiers for complete details.</p>
+      <p>Explore our dedicated <a href="/services/hosting/">Cloud Hosting</a> and <a href="/services/maintenance/">Website Management</a> service tiers for complete details.</p>
     `
   },
   {
@@ -121,7 +121,7 @@ window.BLOGS = [
       <h2>7. Formula Injection Protection</h2>
       <p>If your website stores enquiries into Google Sheets or CSV exports, user inputs starting with <code>=</code>, <code>+</code>, <code>-</code>, or <code>@</code> can execute arbitrary commands in spreadsheet software. Sanitizing these inputs protects your administrative team.</p>
 
-      <p>Learn more about our proactive protection in our <a href="#/services/security">Website Security</a> capabilities.</p>
+      <p>Learn more about our proactive protection in our <a href="/services/security/">Website Security</a> capabilities.</p>
     `
   },
   {
@@ -132,7 +132,7 @@ window.BLOGS = [
     "location": "Global",
     "date": "August 2026",
     "readTime": "7 min read",
-    "author": "Ved Nimbark",
+    "author": "Ved Nimbaark",
     "authorRole": "Founder & UI/UX Lead",
     "summary": "A direct comparison of upfront costs, speed, security, and maintenance overhead between custom-coded websites and WordPress or drag-and-drop builders.",
     "content": `
@@ -154,7 +154,7 @@ window.BLOGS = [
       <h2>4. Brand Distinction</h2>
       <p>Template builders look like templates. Discerning clients and B2B buyers immediately recognize generic themes. Bespoke engineering delivers custom typography, fluid responsive layouts, and polished micro-interactions that elevate your brand above competitors.</p>
 
-      <p>See our bespoke projects in <a href="#/work">Selected Work</a>.</p>
+      <p>See our bespoke projects in <a href="/work/">Selected Work</a>.</p>
     `
   },
   {
@@ -190,7 +190,7 @@ window.BLOGS = [
         <li><strong>Global Edge Network Delivery:</strong> Serving assets from edge cache nodes located nearest to your visitors.</li>
       </ul>
 
-      <p>Ready to upgrade your website speed? Test our interactive <a href="#/estimator">Project Cost Estimator</a> to get started.</p>
+      <p>Ready to upgrade your website speed? Test our interactive <a href="/estimator/">Project Cost Estimator</a> to get started.</p>
     `
   },
   {
@@ -223,7 +223,7 @@ window.BLOGS = [
         <li><strong>Direct Domain and Hosting Control:</strong> All cloud hosting, DNS records, and domain assets are configured under your organization's credentials.</li>
       </ul>
 
-      <p>Read about our founding standards on our <a href="#/about">About Caventra</a> page.</p>
+      <p>Read about our founding standards on our <a href="/about/">About Caventra</a> page.</p>
     `
   },
   {
@@ -234,7 +234,7 @@ window.BLOGS = [
     "location": "Global",
     "date": "June 2026",
     "readTime": "6 min read",
-    "author": "Ved Nimbark",
+    "author": "Ved Nimbaark",
     "authorRole": "Founder & UI/UX Lead",
     "summary": "When to refresh vs. rebuild from scratch: mobile responsiveness issues, high bounce rates, slow speeds, outdated branding, and lost customer enquiries.",
     "content": `
@@ -263,7 +263,7 @@ window.BLOGS = [
       <h2>7. Unclear Company Messaging</h2>
       <p>If a visitor cannot tell what you build, host, or manage within 5 seconds of landing on your hero section, your copy is costing you business.</p>
 
-      <p>Review our <a href="#/process">7-Stage Engineering Process</a> to see how we deliver seamless rebuilds.</p>
+      <p>Review our <a href="/process/">7-Stage Engineering Process</a> to see how we deliver seamless rebuilds.</p>
     `
   },
   {
@@ -274,7 +274,7 @@ window.BLOGS = [
     "location": "Ahmedabad & India",
     "date": "June 2026",
     "readTime": "6 min read",
-    "author": "Sauran Mansuri",
+    "author": "Sauranahmed Mansuri",
     "authorRole": "Founder & Backend Engineer",
     "summary": "How to eliminate missed email enquiries by automatically routing website submissions directly into Google Sheets and instant WhatsApp notifications.",
     "content": `
@@ -294,7 +294,7 @@ window.BLOGS = [
       <h2>4. Zero Recurring Third-Party Tool Fees</h2>
       <p>Unlike monthly Zapier or Make subscriptions that charge per task, custom Google Apps Script integrations run on Google's free infrastructure with zero recurring monthly subscription costs.</p>
 
-      <p>Interested in automating your business workflows? <a href="#/contact">Contact Caventra</a> to discuss your requirements.</p>
+      <p>Interested in automating your business workflows? <a href="/contact/">Contact Caventra</a> to discuss your requirements.</p>
     `
   }
 ];

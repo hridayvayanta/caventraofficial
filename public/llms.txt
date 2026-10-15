@@ -1,0 +1,33 @@
+# Caventra
+
+> Engineering bespoke digital solutions, web applications, and custom cloud infrastructure for growing businesses and startups.
+
+Caventra is a specialized digital solutions and web engineering studio founded and headquartered in Ahmedabad, Gujarat, India. Caventra engineers bespoke, hand-crafted software and web applications with zero page-builders, delivering sub-second page performance, 100% client code and IP ownership, enterprise-grade security, and transparent upfront scoping.
+
+## Core Capabilities & Services
+
+- [Custom Web Development & Engineering](https://caventraofficial.in/services/web-development/): Bespoke full-stack web applications, custom APIs, database engineering, and zero-builder responsive websites.
+- [Cloud Hosting & Infrastructure](https://caventraofficial.in/services/hosting/): Ultra-low latency global CDN deployment, automated SSL, isolated database environments, and 99.9% uptime reliability.
+- [Website Security & Protection](https://caventraofficial.in/services/security/): Hardened Content Security Policies (CSP), automated DDoS mitigation, form sanitization, penetration testing, and intrusion monitoring.
+- [Website Management & Maintenance](https://caventraofficial.in/services/maintenance/): Ongoing technical care, automated database backups, dependency updates, uptime monitoring, and Core Web Vitals optimization.
+- [Brand Identity & Digital Design](https://caventraofficial.in/services/branding/): Design systems, responsive component libraries, accessible UI/UX, and typography hierarchies.
+
+## Interactive Tools & Case Studies
+
+- [Website Project Cost Estimator](https://caventraofficial.in/estimator/): Interactive estimation tool supporting multi-currency pricing (INR and USD) across 7 project tiers with real-time scope breakdown.
+- [Selected Work & Case Studies](https://caventraofficial.in/work/): Production implementations including The Wheel Master ERP, PLINTH real-estate platform, and specialized e-commerce applications.
+- [Engineering Blog & Technical Insights](https://caventraofficial.in/blog/): In-depth guides on website pricing, Core Web Vitals, hosting architectures, security audits, and form automation.
+
+## Leadership & Founding Team
+
+- **Hriday Vayanta**: Founder & Lead Architect (Full-Stack Architecture, Systems Design, Scoping)
+- **Ved Nimbaark**: Founder & UI/UX Lead (Design Systems, Typography, High-Conversion UI)
+- **Sauranahmed Mansuri**: Founder & Backend Engineer (Backend Services, Databases, Automation Workflows)
+
+## Contact Information
+
+- **Website**: https://caventraofficial.in
+- **Email**: caventraofficial@gmail.com
+- **Telephone / WhatsApp**: +91 8866790989
+- **Headquarters**: Ahmedabad, Gujarat, India
+- **Operating Model**: Direct founder collaboration with businesses globally, with core focus on US SMBs and Indian enterprises.

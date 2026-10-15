@@ -89,8 +89,8 @@ const routes = [];
 routes.push({
   slug: '',
   urlPath: '',
-  title: 'Caventra — Digital Solutions & Web Engineering Studio | Ideas to Impact',
-  description: 'Caventra is an engineering-focused digital solutions studio. We build, host, secure, and manage custom websites, web applications, and digital products for modern businesses.',
+  title: 'Custom Websites & Web Applications for SMBs | Caventra',
+  description: 'Custom web design, full-stack engineering, cloud hosting, and security for modern businesses. Bespoke code with zero page-builders and 100% IP ownership.',
   activeNav: '',
   changefreq: 'weekly',
   priority: '1.0',
@@ -106,7 +106,19 @@ routes.push({
   activeNav: 'services',
   changefreq: 'weekly',
   priority: '0.9',
-  render: () => sandbox.V.services()
+  render: () => sandbox.V.services(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Services', 'item': `${BASE_URL}/services/` }
+        ]
+      }
+    ]
+  }
 });
 
 // 5 Dedicated Service Pages
@@ -139,6 +151,45 @@ const serviceMeta = {
 };
 
 for (const [slug, meta] of Object.entries(serviceMeta)) {
+  const srvData = sandbox.CAVENTRA_SERVICES_DATA ? sandbox.CAVENTRA_SERVICES_DATA[slug] : null;
+  const srvGraph = [
+    {
+      '@type': 'Service',
+      '@id': `${BASE_URL}/services/${slug}/#service`,
+      'name': meta.title.split(' | ')[0],
+      'serviceType': meta.title.split(' | ')[0],
+      'provider': {
+        '@type': 'Organization',
+        'name': 'Caventra',
+        'url': `${BASE_URL}/`
+      },
+      'description': meta.description,
+      'areaServed': ['IN', 'US', 'Worldwide']
+    },
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Services', 'item': `${BASE_URL}/services/` },
+        { '@type': 'ListItem', 'position': 3, 'name': meta.title.split(' | ')[0], 'item': `${BASE_URL}/services/${slug}/` }
+      ]
+    }
+  ];
+
+  if (srvData && Array.isArray(srvData.faqs) && srvData.faqs.length) {
+    srvGraph.push({
+      '@type': 'FAQPage',
+      'mainEntity': srvData.faqs.map(f => ({
+        '@type': 'Question',
+        'name': f.q,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': f.a
+        }
+      }))
+    });
+  }
+
   routes.push({
     slug: `services/${slug}`,
     urlPath: `services/${slug}`,
@@ -150,16 +201,7 @@ for (const [slug, meta] of Object.entries(serviceMeta)) {
     render: () => sandbox.V.serviceDetail(slug),
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'Service',
-      'name': meta.title.split(' | ')[0],
-      'serviceType': meta.title.split(' | ')[0],
-      'provider': {
-        '@type': 'Organization',
-        'name': 'Caventra',
-        'url': BASE_URL
-      },
-      'description': meta.description,
-      'areaServed': 'Worldwide'
+      '@graph': srvGraph
     }
   });
 }
@@ -173,7 +215,19 @@ routes.push({
   activeNav: 'work',
   changefreq: 'weekly',
   priority: '0.85',
-  render: () => sandbox.V.work()
+  render: () => sandbox.V.work(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Selected Work', 'item': `${BASE_URL}/work/` }
+        ]
+      }
+    ]
+  }
 });
 
 // 7 Project Case Study Pages
@@ -187,7 +241,34 @@ for (const p of projects) {
     activeNav: 'work',
     changefreq: 'monthly',
     priority: '0.8',
-    render: () => sandbox.V.project(p.slug)
+    render: () => sandbox.V.project(p.slug),
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+            { '@type': 'ListItem', 'position': 2, 'name': 'Selected Work', 'item': `${BASE_URL}/work/` },
+            { '@type': 'ListItem', 'position': 3, 'name': p.name, 'item': `${BASE_URL}/work/${p.slug}/` }
+          ]
+        },
+        {
+          '@type': 'CreativeWork',
+          '@id': `${BASE_URL}/work/${p.slug}/#project`,
+          'name': p.name,
+          'headline': `${p.name} — Technical Case Study`,
+          'description': p.short || `Comprehensive engineering case study for ${p.name} built by Caventra.`,
+          'creator': {
+            '@type': 'Organization',
+            'name': 'Caventra',
+            'url': `${BASE_URL}/`
+          },
+          'url': `${BASE_URL}/work/${p.slug}/`,
+          'image': `${BASE_URL}${p.cover || '/assets/og-caventra.png'}`
+        }
+      ]
+    }
   });
 }
 
@@ -200,7 +281,19 @@ routes.push({
   activeNav: 'estimator',
   changefreq: 'weekly',
   priority: '0.85',
-  render: () => sandbox.V.estimator()
+  render: () => sandbox.V.estimator(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Cost Estimator', 'item': `${BASE_URL}/estimator/` }
+        ]
+      }
+    ]
+  }
 });
 
 // About Page
@@ -212,7 +305,19 @@ routes.push({
   activeNav: 'about',
   changefreq: 'monthly',
   priority: '0.8',
-  render: () => sandbox.V.about()
+  render: () => sandbox.V.about(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'About', 'item': `${BASE_URL}/about/` }
+        ]
+      }
+    ]
+  }
 });
 
 // Process Page
@@ -224,7 +329,19 @@ routes.push({
   activeNav: 'process',
   changefreq: 'monthly',
   priority: '0.8',
-  render: () => sandbox.V.process()
+  render: () => sandbox.V.process(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Our Process', 'item': `${BASE_URL}/process/` }
+        ]
+      }
+    ]
+  }
 });
 
 // Contact Page
@@ -236,7 +353,19 @@ routes.push({
   activeNav: 'contact',
   changefreq: 'weekly',
   priority: '0.9',
-  render: () => sandbox.V.contact()
+  render: () => sandbox.V.contact(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Contact', 'item': `${BASE_URL}/contact/` }
+        ]
+      }
+    ]
+  }
 });
 
 // Blog / Insights Hub
@@ -248,10 +377,22 @@ routes.push({
   activeNav: 'blog',
   changefreq: 'weekly',
   priority: '0.85',
-  render: () => sandbox.V.blog()
+  render: () => sandbox.V.blog(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Insights & Blog', 'item': `${BASE_URL}/blog/` }
+        ]
+      }
+    ]
+  }
 });
 
-// 12 Curated Blog Articles
+// 8 Curated Blog Articles
 const blogArticles = sandbox.getB ? sandbox.getB() : [];
 for (const b of blogArticles) {
   routes.push({
@@ -265,23 +406,39 @@ for (const b of blogArticles) {
     render: () => sandbox.V.article(b.slug),
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      'headline': b.title,
-      'description': b.summary,
-      'author': {
-        '@type': 'Person',
-        'name': b.author
-      },
-      'publisher': {
-        '@type': 'Organization',
-        'name': 'Caventra',
-        'logo': {
-          '@type': 'ImageObject',
-          'url': `${BASE_URL}/assets/logo-nav.png`
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+            { '@type': 'ListItem', 'position': 2, 'name': 'Insights & Blog', 'item': `${BASE_URL}/blog/` },
+            { '@type': 'ListItem', 'position': 3, 'name': b.title, 'item': `${BASE_URL}/blog/${b.slug}/` }
+          ]
+        },
+        {
+          '@type': 'BlogPosting',
+          '@id': `${BASE_URL}/blog/${b.slug}/#article`,
+          'headline': b.title,
+          'description': b.summary,
+          'image': `${BASE_URL}/assets/og-caventra.png`,
+          'author': {
+            '@type': 'Person',
+            'name': b.author,
+            'jobTitle': b.authorRole || 'Founder'
+          },
+          'publisher': {
+            '@type': 'Organization',
+            'name': 'Caventra',
+            'logo': {
+              '@type': 'ImageObject',
+              'url': `${BASE_URL}/assets/logo-nav.png`
+            }
+          },
+          'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
+          'datePublished': '2026-10-01',
+          'dateModified': '2026-10-15'
         }
-      },
-      'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
-      'datePublished': '2026-10-01'
+      ]
     }
   });
 }
@@ -363,7 +520,7 @@ for (const r of routes) {
 
   // Nav Active States
   if (r.activeNav) {
-    html = html.replace(new RegExp(`(<a [^>]*href="#/${r.activeNav}"[^>]*)`), '$1 class="on"');
+    html = html.replace(new RegExp(`(<a [^>]*href="(?:#\/|\/)${r.activeNav}\/?"[^>]*)`), '$1 class="on"');
   }
 
   // Optional JSON-LD injection
@@ -397,13 +554,13 @@ for (const r of routes) {
 // 5. Generate canonical clean sitemap.xml
 console.log('\nGenerating canonical sitemap.xml...');
 
-const sitemapEntries = routes.map(r => {
+// Exclude legal pages from primary index sitemap
+const sitemapRoutes = routes.filter(r => !['privacy', 'terms', 'cookies'].includes(r.urlPath));
+const sitemapEntries = sitemapRoutes.map(r => {
   const loc = `${BASE_URL}/${r.urlPath ? r.urlPath + '/' : ''}`;
   return `  <url>
     <loc>${loc}</loc>
-    <lastmod>2026-10-15</lastmod>
-    <changefreq>${r.changefreq}</changefreq>
-    <priority>${r.priority}</priority>
+    <lastmod>${r.lastmod || '2026-10-15'}</lastmod>
   </url>`;
 }).join('\n');
 
@@ -415,7 +572,7 @@ ${sitemapEntries}
 
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml);
 fs.writeFileSync(path.join(ROOT, 'public', 'sitemap.xml'), sitemapXml);
-console.log(`✓ Saved sitemap.xml with ${routes.length} canonical URLs.`);
+console.log(`✓ Saved sitemap.xml with ${sitemapRoutes.length} canonical URLs (legal routes excluded).`);
 
 console.log('\n====================================================');
 console.log(`  Static Build Completed: ${generatedCount} pages generated.`);

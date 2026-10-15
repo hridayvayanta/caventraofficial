@@ -139,7 +139,7 @@ const D={
     "published": true,
     "featured": true
   }
-],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbark: 8849186747, Sauran Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
+],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbaark: 8849186747, Sauranahmed Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
 let S=JSON.parse(JSON.stringify(D)),owner=false,edit=null,INQ=[];const H={'Content-Type':'application/json','X-Requested-With':'caventra'};
 
 // Google Apps Script Web App Endpoint for Project Enquiries (Connected to private sheet owned by caventraofficial@gmail.com)
@@ -333,7 +333,7 @@ function renderContactSuccess(container, f, result) {
         ${isMock ? `<div class="meta-item mock-tag"><span class="meta-label">Integration</span><span class="meta-val" style="color:var(--gold2);font-size:12px">Test Mode (Local Mock Verification)</span></div>` : ''}
       </div>
       <div class="success-actions row" style="justify-content:center;margin-top:28px;gap:12px">
-        <a class="btn solid" href="#/">Back to Home</a>
+        <a class="btn solid" href="/">Back to Home</a>
         <button class="btn" type="button" id="btn-submit-another">Submit Another Project</button>
       </div>
     </div>
@@ -362,7 +362,7 @@ const pub=()=>S.projects.filter(p=>p.published);
 const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'project';
 const empty=(t,m)=>`<div class="empty"><h3>${t}</h3><p>${m}</p></div>`;
 const sp=t=>t.split(' ').map((w,i)=>`<span class="w"><span style="--i:${i}">${w}</span></span>`).join(' ');
-const cta=`<a class="btn solid" href="#/contact">Start a Project ↗</a>`;
+const cta=`<a class="btn solid" href="/contact/">Start a Project ↗</a>`;
 const head=(h,p)=>`<section style="border:0;padding-bottom:40px"><div class="wrap"><h1 style="font-size:clamp(38px,6vw,76px)">${sp(h)}</h1>${p?`<p style="margin-top:24px;font-size:18px">${p}</p>`:''}</div></section>`;
 const SP=[4,2,2,2,2,6];const svc=()=>`<div class="bento">${S.services.map((s,i)=>`<div class="bc" style="grid-column:span ${SP[i]||2}"><b>${String(i+1).padStart(2,'0')}</b><i>↗</i><div><h3>${esc(s[0])}</h3><p>${esc(s[1])}</p></div></div>`).join('')}</div>`;
 const spc=(t,m)=>t.split(' ').map((w,i)=>`<span class="w"><span class="${m[i]||''}" style="--i:${i}">${w}</span></span>`).join(' ');
@@ -380,7 +380,7 @@ const getProjectStatus=(p)=>{
 const card=p=>{
   const cv=getCover(p);
   const st=getProjectStatus(p);
-  return `<a class="card" href="#/work/${esc(p.slug)}">
+  return `<a class="card" href="/work/${esc(p.slug)}/">
     <div class="im" style="background-image:url('${esc(cv)}');background-size:cover;background-position:center">
       <div style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"></div>
     </div>
@@ -577,7 +577,7 @@ function signatureModelSection() {
       title: "Design & Development",
       desc: "Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times.",
       deliverables: ["Custom Websites & Web Apps", "Sub-Second Fast Loading", "100% Code & Asset Ownership", "Zero Page-Builder Bloat"],
-      route: "#/services/web-development",
+      route: "/services/web-development/",
       linkText: "Explore Web Development ↗"
     },
     {
@@ -586,7 +586,7 @@ function signatureModelSection() {
       title: "Management & Care",
       desc: "Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free.",
       deliverables: ["Routine Updates & Backups", "Fast Turnaround for Updates", "Core Web Vitals Audits", "Direct Engineer Support"],
-      route: "#/services/maintenance",
+      route: "/services/maintenance/",
       linkText: "Explore Management ↗"
     },
     {
@@ -595,7 +595,7 @@ function signatureModelSection() {
       title: "Security & Protection",
       desc: "Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected.",
       deliverables: ["Strict Security Headers", "Invisible Bot & Spam Traps", "TLS 1.3 SSL Encryption", "Automated Daily Backups"],
-      route: "#/services/security",
+      route: "/services/security/",
       linkText: "Explore Security ↗"
     },
     {
@@ -604,7 +604,7 @@ function signatureModelSection() {
       title: "Hosting & Deployment",
       desc: "Managed cloud hosting with global edge CDN delivery, automatic SSL, and guaranteed 99.9% uptime.",
       deliverables: ["Global Edge CDN Delivery", "Zero-Downtime Releases", "Automated HTTPS / SSL", "24/7 Uptime Monitoring"],
-      route: "#/services/hosting",
+      route: "/services/hosting/",
       linkText: "Explore Hosting ↗"
     }
   ];
@@ -667,8 +667,8 @@ function deliveryProcessSection() {
           `).join('')}
         </div>
         <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
-          <a class="btn solid" href="#/contact">Discuss Your Project Scope ↗</a>
-          <a class="btn" href="#/estimator">Calculate Indicative Budget</a>
+          <a class="btn solid" href="/contact/">Discuss Your Project Scope ↗</a>
+          <a class="btn" href="/estimator/">Calculate Indicative Budget</a>
         </div>
       </div>
     </section>
@@ -840,15 +840,15 @@ home:()=>{
         <p class="fi" style="margin:0 0 14px">We build, host, secure, and manage custom websites and digital software for businesses. Clean code, sub-second performance, and dedicated ongoing engineering.</p>
         <p class="fi" style="margin:0 0 28px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p>
         <div class="row fi" style="gap:12px;flex-wrap:wrap">
-          <a class="btn solid" href="#/contact">Start a Project ↗</a>
-          <a class="btn" href="#/services">Explore Services</a>
-          <a class="btn" href="#/estimator" style="border-style:dashed">Cost Estimator ↗</a>
+          <a class="btn solid" href="/contact/">Start a Project ↗</a>
+          <a class="btn" href="/services/">Explore Services</a>
+          <a class="btn" href="/estimator/" style="border-style:dashed">Cost Estimator ↗</a>
         </div>
         ${heroHighlights}
       </div>
       <div class="hlw">
         <div class="hlf">
-          <img class="hl" src="${getLogo()}" alt="Caventra — Ideas to Impact">
+          <img class="hl" src="${getLogo()}" alt="Caventra — Ideas to Impact" width="810" height="445" fetchpriority="high">
           <div class="shine"></div>
         </div>
       </div>
@@ -862,14 +862,14 @@ home:()=>{
   + wrapS("", bigp(S.about.who) + `<p style="font-size:18px;max-width:58ch;line-height:1.6;margin-top:16px">Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
   + deliveryProcessSection()
   + trustStandardsSection()
-  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="#/work">Explore All Selected Work ↗</a> <a class="btn" href="#/contact">Discuss a Project ↗</a></p>`)
+  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
   + homepageTestimonialsSection()
   + homepageFAQSection()
   + wrapS("Latest Insights &amp; Engineering", `
     <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
     <div class="blog-grid" style="margin:0">
       ${getB().slice(0,3).map(b=>`
-        <a class="b-card" href="#/blog/${esc(b.slug)}" style="grid-column:span 4">
+        <a class="b-card" href="/blog/${esc(b.slug)}/" style="grid-column:span 4">
           <div>
             <div class="meta"><span>${esc(b.category)}</span><span class="dot-sep"></span><span>${esc(b.readTime)}</span></div>
             <h3 style="font-size:20px">${esc(b.title)}</h3>
@@ -879,16 +879,16 @@ home:()=>{
         </a>
       `).join('')}
     </div>
-    <p style="margin-top:36px"><a class="btn" href="#/blog">Explore All Articles ↗</a></p>
+    <p style="margin-top:36px"><a class="btn" href="/blog/">Explore All Articles ↗</a></p>
   `)
-  + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="#/contact">Start a Project ↗</a><a class="btn" href="#/estimator">Launch Cost Estimator</a></div></div></section>`
+  + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
   + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
 },
 services: () => {
   const serviceCards = [
     {
       slug: "web-development",
-      route: "#/services/web-development",
+      route: "/services/web-development/",
       num: "01",
       pillar: "BUILD",
       title: "Website Design & Development",
@@ -897,7 +897,7 @@ services: () => {
     },
     {
       slug: "branding",
-      route: "#/services/branding",
+      route: "/services/branding/",
       num: "02",
       pillar: "DESIGN",
       title: "Branding & Creative Design",
@@ -906,7 +906,7 @@ services: () => {
     },
     {
       slug: "maintenance",
-      route: "#/services/maintenance",
+      route: "/services/maintenance/",
       num: "03",
       pillar: "MANAGE",
       title: "Website Management & Maintenance",
@@ -915,7 +915,7 @@ services: () => {
     },
     {
       slug: "hosting",
-      route: "#/services/hosting",
+      route: "/services/hosting/",
       num: "04",
       pillar: "HOST",
       title: "Hosting & Deployment",
@@ -924,7 +924,7 @@ services: () => {
     },
     {
       slug: "security",
-      route: "#/services/security",
+      route: "/services/security/",
       num: "05",
       pillar: "SECURE",
       title: "Website Security & Protection",
@@ -957,7 +957,7 @@ services: () => {
           <h3>Estimate Your Website Project Cost</h3>
           <p>Use our interactive estimator to configure your website requirements, select features, and calculate an indicative budget.</p>
         </div>
-        <a class="btn solid" href="#/estimator">Launch Cost Estimator ↗</a>
+        <a class="btn solid" href="/estimator/">Launch Cost Estimator ↗</a>
       </div>
     `, 'style="padding-top:20px"');
 },
@@ -969,15 +969,15 @@ serviceDetail: (slug) => {
 
   return `<div class="service-detail-wrap">
     <div class="service-breadcrumb">
-      <a href="#/">Home</a> / <a href="#/services">Services</a> / <span>${esc(srv.title)}</span>
+      <a href="/">Home</a> / <a href="/services/">Services</a> / <span>${esc(srv.title)}</span>
     </div>
     <div class="service-hero-header">
       <span class="service-badge">${esc(srv.category)}</span>
       <h1 class="service-hero-title">${sp(srv.title)}</h1>
       <p class="service-hero-lead">${esc(srv.tagline)}</p>
       <div class="service-actions-row">
-        <a class="btn solid" href="#/contact">Request a Tailored Quote ↗</a>
-        <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+        <a class="btn solid" href="/contact/">Request a Tailored Quote ↗</a>
+        <a class="btn" href="/estimator/">Launch Cost Estimator</a>
         <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
       </div>
     </div>
@@ -1027,7 +1027,7 @@ serviceDetail: (slug) => {
           <p style="margin:0;color:var(--mut);font-size:15px">Every project is scoped transparently with zero hidden markups or surprise fees. Calculate an indicative estimate for your required scope or speak directly with an architect.</p>
         </div>
         <div class="service-pricing-cta" style="display:flex;gap:12px;flex-wrap:wrap">
-          <a class="btn solid" href="#/estimator">Calculate in Estimator ↗</a>
+          <a class="btn solid" href="/estimator/">Calculate in Estimator ↗</a>
           <a class="btn" href="https://wa.me/918866790989?text=Hi%20Caventra%20team,%20I'd%20like%20to%20discuss%20${encodeURIComponent(srv.title)}" target="_blank" rel="noopener">WhatsApp Us ↗</a>
         </div>
       </div>
@@ -1074,9 +1074,9 @@ serviceDetail: (slug) => {
       <h3 style="font-size:clamp(26px,4vw,38px);margin-bottom:12px">Ready to discuss your project?</h3>
       <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">Get a transparent, itemized proposal for ${esc(srv.title.toLowerCase())} tailored directly to your commercial goals.</p>
       <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
-        <a class="btn solid" href="#/contact">Request Formal Quote ↗</a>
-        <a class="btn" href="#/estimator">Launch Cost Estimator</a>
-        <a class="btn" href="#/services">All Services</a>
+        <a class="btn solid" href="/contact/">Request Formal Quote ↗</a>
+        <a class="btn" href="/estimator/">Launch Cost Estimator</a>
+        <a class="btn" href="/services/">All Services</a>
       </div>
     </div>
   </div>`;
@@ -1420,8 +1420,8 @@ work:()=>{
         <h3 style="font-size:26px;margin-bottom:12px">Need a bespoke solution engineered for your business?</h3>
         <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">We architect, design, and deliver custom web platforms with clean code and transparent pricing.</p>
         <div class="row" style="justify-content:center;gap:12px">
-          <a class="btn solid" href="#/contact">Start a Project ↗</a>
-          <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+          <a class="btn solid" href="/contact/">Start a Project ↗</a>
+          <a class="btn" href="/estimator/">Launch Cost Estimator</a>
         </div>
       </div>
     `, 'style="padding-top:20px"');
@@ -1484,13 +1484,13 @@ about:()=>{
           <span class="founder-focus">Full-Stack Architecture · Performance · Scoping</span>
         </div>
         <div class="founder-card">
-          <h3>Ved Nimbark</h3>
+          <h3>Ved Nimbaark</h3>
           <span class="founder-role">Founder &amp; UI/UX Lead</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
         </div>
         <div class="founder-card">
-          <h3>Sauran Mansuri</h3>
+          <h3>Sauranahmed Mansuri</h3>
           <span class="founder-role">Founder &amp; Backend Engineer</span>
           <p class="founder-bio">Focuses on backend services, database design, server architecture, API integrations, and automated lead workflows.</p>
           <span class="founder-focus">Backend Engineering · Databases · Automation</span>
@@ -1501,9 +1501,9 @@ about:()=>{
       <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Have an idea worth building?</h2>
       <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline directly with our founding team.</p>
       <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
-        <a class="btn solid" href="#/contact">Start a Project ↗</a>
+        <a class="btn solid" href="/contact/">Start a Project ↗</a>
         <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
-        <a class="btn" href="#/estimator">Cost Estimator</a>
+        <a class="btn" href="/estimator/">Cost Estimator</a>
       </div>
     </div>
   `,'style="padding-top:20px"')
@@ -1542,7 +1542,7 @@ blog:()=>{
     </div>
     <div class="blog-grid" id="bg-grid">
       ${visible.map((b,i)=>`
-        <a class="b-card" href="#/blog/${esc(b.slug)}">
+        <a class="b-card" href="/blog/${esc(b.slug)}/">
           <div>
             <div class="meta">
               <span>${esc(b.category)}</span>
@@ -1577,7 +1577,7 @@ article:s=>{
   const related = list.filter(x=>x.slug !== b.slug && (x.category === b.category || x.author === b.author)).slice(0, 2);
 
   return `<section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
-    <a class="btn sm" href="#/blog" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>
+    <a class="btn sm" href="/blog/" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>
     <div class="article-meta">
       <span>${esc(b.category)}</span>
       <span>·</span>
@@ -1603,7 +1603,7 @@ article:s=>{
         <h3 style="font-size:22px;margin-bottom:24px;color:var(--gold2)">Related Articles</h3>
         <div class="blog-grid" style="margin:0">
           ${related.map(r=>`
-            <a class="b-card" href="#/blog/${esc(r.slug)}" style="grid-column:span 6">
+            <a class="b-card" href="/blog/${esc(r.slug)}/" style="grid-column:span 6">
               <div>
                 <div class="meta"><span>${esc(r.category)}</span></div>
                 <h3 style="font-size:20px">${esc(r.title)}</h3>
@@ -1618,7 +1618,7 @@ article:s=>{
     <div class="article-cta">
       <h3>Have an idea worth building?</h3>
       <p>Caventra turns digital concepts into scalable software products. Let's discuss your project.</p>
-      <div class="row" style="justify-content:center">${cta}<a class="btn" href="#/blog">Explore All Articles</a></div>
+      <div class="row" style="justify-content:center">${cta}<a class="btn" href="/blog/">Explore All Articles</a></div>
     </div>
   </div></div></section>`;
 },
@@ -1668,8 +1668,8 @@ process:()=>head("Our 7-Stage Process","A disciplined engineering methodology fr
     <h3 style="font-size:clamp(26px,4vw,38px);margin-bottom:12px">Ready to start your project?</h3>
     <p style="margin:0 auto 28px;color:var(--mut);max-width:54ch">Schedule an initial discovery consultation or calculate an indicative project estimate.</p>
     <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
-      <a class="btn solid" href="#/contact">Schedule Project Discovery ↗</a>
-      <a class="btn" href="#/estimator">Launch Cost Estimator</a>
+      <a class="btn solid" href="/contact/">Schedule Project Discovery ↗</a>
+      <a class="btn" href="/estimator/">Launch Cost Estimator</a>
     </div>
   </div>
 `,'style="padding-top:20px"'),
@@ -1718,7 +1718,7 @@ contact:()=>{
       </label>
       <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-top:4px">
         <input type="checkbox" name="consent" required style="width:18px;height:18px;accent-color:var(--gold);margin-top:2px;cursor:pointer">
-        <span>I confirm that I am at least 18 years of age and consent to Caventra processing my inquiry in accordance with the <a href="#/privacy" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.</span>
+        <span>I confirm that I am at least 18 years of age and consent to Caventra processing my inquiry in accordance with the <a href="/privacy/" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.</span>
       </label>
       <div style="margin-top:8px">
         <button class="btn solid">${p ? 'Submit Formal Quote Request ↗' : 'Send Message'}</button>
@@ -1727,9 +1727,9 @@ contact:()=>{
     ${contactInfo()?`<div style="margin-top:48px">${contactInfo()}</div>`:''}
   `,'style="padding-top:20px"');
 },
-privacy:()=>head("Privacy Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>Caventra ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy details how we handle, collect, protect, and process data when you interact with our website and digital studio services.</p><h3>1. Data Controller</h3><p>Caventra is the data controller for information processed through this website. For any inquiries regarding your data, contact us at <a href="mailto:caventraofficial@gmail.com">caventraofficial@gmail.com</a>.</p><h3>2. Information We Collect &amp; Purpose</h3><p>We adhere to strict data minimization. We only collect information that you knowingly submit via our contact form:</p><ul><li><strong>Contact Details:</strong> Your name, email, company, request type, budget, and project brief.</li><li><strong>Purpose:</strong> To review project proposals, provide estimates, and deliver custom digital solutions.</li><li><strong>Zero Tracking SDKs:</strong> We do not track your activity across websites, and we do not use third-party behavioral analytics or advertising trackers.</li></ul><h3>3. Legal Basis for Processing</h3><p>We process personal data based on your explicit consent, pre-contractual discussions, and our legitimate business interest in responding to client inquiries.</p><h3>4. Age Restriction &amp; Protection of Minors</h3><p>Our website and software services are intended strictly for individuals aged 18 and older. We do not knowingly solicit or collect personal information from minors. If personal data of a minor is submitted, we will permanently delete it upon notice.</p><h3>5. Security &amp; Third-Party Audit</h3><p>Our infrastructure undergoes strict security controls, including parameterized database operations, cryptographic session tokens, secure HTTPS transport, and strict Content Security Policies (CSP). We do not embed untrusted third-party SDKs.</p><h3>6. Data Retention &amp; Deletion Option</h3><p>We retain inquiry information only as long as necessary to address your project or satisfy legal requirements.</p><h3>7. Your Rights &amp; Data Deletion Request</h3><p>You have the right to access, correct, or permanently delete your personal information from our systems at any time.</p><p>To request data deletion, select <strong>"Data Deletion Request"</strong> in our <a href="#/contact">Contact Form</a> or email <a href="mailto:caventraofficial@gmail.com?subject=Data%20Deletion%20Request">caventraofficial@gmail.com</a>. We will confirm deletion within 30 days.</p></div>`,'style="padding-top:20px"'),
+privacy:()=>head("Privacy Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>Caventra ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy details how we handle, collect, protect, and process data when you interact with our website and digital studio services.</p><h3>1. Data Controller</h3><p>Caventra is the data controller for information processed through this website. For any inquiries regarding your data, contact us at <a href="mailto:caventraofficial@gmail.com">caventraofficial@gmail.com</a>.</p><h3>2. Information We Collect &amp; Purpose</h3><p>We adhere to strict data minimization. We only collect information that you knowingly submit via our contact form:</p><ul><li><strong>Contact Details:</strong> Your name, email, company, request type, budget, and project brief.</li><li><strong>Purpose:</strong> To review project proposals, provide estimates, and deliver custom digital solutions.</li><li><strong>Zero Tracking SDKs:</strong> We do not track your activity across websites, and we do not use third-party behavioral analytics or advertising trackers.</li></ul><h3>3. Legal Basis for Processing</h3><p>We process personal data based on your explicit consent, pre-contractual discussions, and our legitimate business interest in responding to client inquiries.</p><h3>4. Age Restriction &amp; Protection of Minors</h3><p>Our website and software services are intended strictly for individuals aged 18 and older. We do not knowingly solicit or collect personal information from minors. If personal data of a minor is submitted, we will permanently delete it upon notice.</p><h3>5. Security &amp; Third-Party Audit</h3><p>Our infrastructure undergoes strict security controls, including parameterized database operations, cryptographic session tokens, secure HTTPS transport, and strict Content Security Policies (CSP). We do not embed untrusted third-party SDKs.</p><h3>6. Data Retention &amp; Deletion Option</h3><p>We retain inquiry information only as long as necessary to address your project or satisfy legal requirements.</p><h3>7. Your Rights &amp; Data Deletion Request</h3><p>You have the right to access, correct, or permanently delete your personal information from our systems at any time.</p><p>To request data deletion, select <strong>"Data Deletion Request"</strong> in our <a href="/contact/">Contact Form</a> or email <a href="mailto:caventraofficial@gmail.com?subject=Data%20Deletion%20Request">caventraofficial@gmail.com</a>. We will confirm deletion within 30 days.</p></div>`,'style="padding-top:20px"'),
 terms:()=>head("Terms of Service","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>These Terms of Service govern your access to and use of the website and services provided by Caventra. By browsing our website or initiating a project inquiry, you agree to these Terms.</p><h3>1. Studio Services</h3><p>Caventra provides digital software engineering, AI integrations, UI/UX design, and business automation. Specific project milestones, warranties, and deliverables are governed by individual written client agreements.</p><h3>2. Intellectual Property &amp; Licensing</h3><ul><li><strong>Client Deliverables:</strong> Ownership, licensing, and intellectual property rights for custom code and design deliverables transfer to the client upon full payment as defined in individual service contracts.</li><li><strong>Studio Assets:</strong> The Caventra brand, logo, typography, website design, and proprietary code patterns remain the exclusive intellectual property of Caventra.</li></ul><h3>3. Acceptable Use</h3><p>You agree not to misuse this website, probe vulnerabilities, perform unauthorized scraping, or transmit malicious code.</p><h3>4. Authentic Work &amp; No Unsupported Claims</h3><p>We build genuine, high-standard digital products. Caventra makes no exaggerated or unsupported claims regarding specific commercial turnover or search rankings unless explicitly warranted in a formal contract.</p><h3>5. Limitation of Liability</h3><p>Caventra is provided on an "as is" basis without warranties of uninterrupted uptime. We shall not be liable for indirect or consequential damages arising from site access.</p><h3>6. Governing Law</h3><p>These Terms are governed by and construed under the laws of India.</p></div>`,'style="padding-top:20px"'),
-cookies:()=>head("Cookie Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>This Cookie Policy explains how Caventra uses cookies and local storage.</p><h3>1. Strictly Necessary Cookies Only</h3><p>Caventra follows a privacy-by-design architecture. <strong>We do not use advertising, marketing, or behavioral tracking cookies.</strong></p><ul><li><strong>Admin Authentication:</strong> An encrypted <code>cv_sess</code> cookie is used solely when authorized administrators log into <code>/#/admin</code> to verify credentials. It expires after 7 days.</li><li><strong>Local Storage Preference:</strong> A single entry (<code>cv_cookie_consent</code>) is stored in your browser to remember your cookie banner choice.</li></ul><h3>2. Third-Party Auditing</h3><p>No third-party trackers, pixels, or profiling SDKs are present. Fonts are securely loaded from Google Fonts.</p><h3>3. Managing Cookies</h3><p>You may clear or block cookies in your browser settings at any time without impacting public browsing of this site.</p></div>`,'style="padding-top:20px"'),
+cookies:()=>head("Cookie Policy","Last updated: October 2026")+wrapS("",`<div class="legal-content"><p>This Cookie Policy explains how Caventra uses cookies and local storage.</p><h3>1. Strictly Necessary Cookies Only</h3><p>Caventra follows a privacy-by-design architecture. <strong>We do not use advertising, marketing, or behavioral tracking cookies.</strong></p><ul><li><strong>Admin Authentication:</strong> An encrypted <code>cv_sess</code> cookie is used solely when authorized administrators log into <code>/admin/</code> to verify credentials. It expires after 7 days.</li><li><strong>Local Storage Preference:</strong> A single entry (<code>cv_cookie_consent</code>) is stored in your browser to remember your cookie banner choice.</li></ul><h3>2. Third-Party Auditing</h3><p>No third-party trackers, pixels, or profiling SDKs are present. Fonts are securely loaded from Google Fonts.</p><h3>3. Managing Cookies</h3><p>You may clear or block cookies in your browser settings at any time without impacting public browsing of this site.</p></div>`,'style="padding-top:20px"'),
 project:s=>{
   const p=S.projects.find(x=>x.slug===s&&x.published);
   if(!p)return V.notFound("The project you are looking for could not be found or has not been published yet.");
@@ -1738,8 +1738,8 @@ project:s=>{
   const st=getProjectStatus(p);
 
   return head(esc(p.name),esc(p.short))+wrapS("",
-    `<div class="service-breadcrumb"><a href="#/">Home</a> / <a href="#/work">Selected Work</a> / <span>${esc(p.name)}</span></div>`+
-    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block">`:'')+
+    `<div class="service-breadcrumb"><a href="/">Home</a> / <a href="/work/">Selected Work</a> / <span>${esc(p.name)}</span></div>`+
+    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block" loading="lazy">`:'')+
     `<div style="display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap">
        <span class="project-status-badge ${st.cls}" style="margin-left:0;padding:5px 12px;font-size:12px">${esc(st.label)}</span>
        <span style="font-size:14px;color:var(--mut)">Category: <b>${esc(p.category)}</b></span>
@@ -1751,17 +1751,17 @@ project:s=>{
     sec("Engineered Solution",p.solution)+
     (f.length?`<h3 style="margin:48px 0 12px">Key Features &amp; Technical Capabilities</h3><ul style="padding-left:20px;line-height:1.7;color:var(--mut)">${f.map(x=>`<li style="margin-bottom:6px"><span style="color:var(--tx)">${esc(x)}</span></li>`).join('')}</ul>`:'')+
     sec("Tangible Results & Current Status",p.results)+
-    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)">`).join('')+
+    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)" loading="lazy">`).join('')+
     `<div class="row" style="margin-top:48px;flex-wrap:wrap;gap:12px">
        ${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website ↗</a>`:''}
        ${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub ↗</a>`:''}
        ${p.case?`<a class="btn" href="${safe(p.case)}" target="_blank" rel="noopener">Case Study ↗</a>`:''}
-       <a class="btn solid" href="#/contact">Discuss a Similar Project ↗</a>
-       <a class="btn" href="#/services">Explore Services</a>
+       <a class="btn solid" href="/contact/">Discuss a Similar Project ↗</a>
+       <a class="btn" href="/services/">Explore Services</a>
      </div>`
   ,'style="padding-top:20px"');
 },
-notFound:(msg)=>`<section style="min-height:72vh;display:flex;align-items:center;border:0;padding:80px 0"><div class="wrap" style="text-align:center;max-width:700px;margin:0 auto"><p style="font:800 clamp(80px,13vw,150px) var(--hd);line-height:.88;margin:0 0 20px;background:linear-gradient(100deg,#c9b8a0,#f8ecd8 50%,#b79f80);-webkit-background-clip:text;background-clip:text;color:transparent">404</p><h1 style="font-size:clamp(28px,4vw,44px);margin-bottom:16px">Page Not Found</h1><p style="font-size:17px;color:var(--mut);line-height:1.6;margin:0 auto 36px;max-width:48ch">${msg||"The link you followed may be broken, or the page may have been removed or relocated."}</p><div class="row" style="justify-content:center;gap:14px"><a class="btn solid" href="#/">Return to Homepage</a><a class="btn" href="#/work">Explore Our Work</a><a class="btn" href="#/blog">Read Insights &amp; Blog</a><a class="btn" href="#/contact">Contact Studio</a></div></div></section>`,
+notFound:(msg)=>`<section style="min-height:72vh;display:flex;align-items:center;border:0;padding:80px 0"><div class="wrap" style="text-align:center;max-width:700px;margin:0 auto"><p style="font:800 clamp(80px,13vw,150px) var(--hd);line-height:.88;margin:0 0 20px;background:linear-gradient(100deg,#c9b8a0,#f8ecd8 50%,#b79f80);-webkit-background-clip:text;background-clip:text;color:transparent">404</p><h1 style="font-size:clamp(28px,4vw,44px);margin-bottom:16px">Page Not Found</h1><p style="font-size:17px;color:var(--mut);line-height:1.6;margin:0 auto 36px;max-width:48ch">${msg||"The link you followed may be broken, or the page may have been removed or relocated."}</p><div class="row" style="justify-content:center;gap:14px"><a class="btn solid" href="/">Return to Homepage</a><a class="btn" href="/work/">Explore Our Work</a><a class="btn" href="/blog/">Read Insights &amp; Blog</a><a class="btn" href="/contact/">Contact Studio</a></div></div></section>`,
 admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+wrapS("",`<form id="lf" style="max-width:420px"><label>Admin password<input type="password" id="lp" autocomplete="current-password" required></label><div><button class="btn solid">Sign in</button></div><p id="lm"></p></form>`,'style="padding-top:20px"');
  const e=edit,P=S.projects,I=(k,l,t='input')=>`<label>${l}<${t} data-k="${k}">${t==='textarea'?esc(e[k]||''):''}</${t}></label>`.replace('<input data-k','<input data-k').replace(`</input>`,'').replace(`data-k="${k}">`,t==='input'?`data-k="${k}" value="${esc(e[k]||'')}">`:`data-k="${k}">`);
  return head("Admin")+wrapS("",`<div class="adm"><div class="ro" style="border:0;padding:0"><h3>Inquiries (${INQ.length})</h3><button class="btn sm" data-a="logout">Sign out</button></div>${INQ.map(q=>`<div class="ro" style="align-items:flex-start"><span><b>${esc(q.name)}</b> · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.company?' · '+esc(q.company):''}<br><small>${esc(q.type)} ${q.budget?'· '+esc(q.budget):''} ${q.timeline?'· '+esc(q.timeline):''} · ${new Date(q.created_at).toLocaleString()}</small><br>${esc(q.message)}</span><button class="btn sm" data-a="delq" data-i="${q.id}">Delete</button></div>`).join('')||'<p>No inquiries yet.</p>'}</div><div class="adm"><h3>Projects</h3><p>Nothing is published until you add it here.</p>${P.map((p,i)=>`<div class="ro"><span>${esc(p.name)} ${p.published?'':'(draft)'} ${p.featured?'★':''}</span><span class="row"><button class="btn sm" data-a="pub" data-i="${i}">${p.published?'Unpublish':'Publish'}</button><button class="btn sm" data-a="feat" data-i="${i}">${p.featured?'Unfeature':'Feature'}</button><button class="btn sm" data-a="up" data-i="${i}">Up</button><button class="btn sm" data-a="dn" data-i="${i}">Down</button><button class="btn sm" data-a="ed" data-i="${i}">Edit</button><button class="btn sm" data-a="del" data-i="${i}">Delete</button></span></div>`).join('')}<p style="margin-top:20px"><button class="btn solid sm" data-a="new">Add project</button></p></div>`
@@ -1785,11 +1785,11 @@ function getRouteParts() {
 function render(){const [r,s]=getRouteParts();
  let v=r===''?V.home():r==='services'&&s?V.serviceDetail(s):r==='services'?V.services():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
  app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
- document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r || a.getAttribute('href')==='/'+r || (r==='' && (a.getAttribute('href')==='#/' || a.getAttribute('href')==='/'))));
+ document.querySelectorAll('.links a').forEach(a=>{const h=(a.getAttribute('href')||'').replace(/^#\/?/,'').replace(/^\//,'').replace(/\/$/,'');a.classList.toggle('on',(r===''&&h==='')||(r!==''&&h===r));});
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
 
  const titles = {
-   '': 'CAVENTRA — Digital Solutions & Web Engineering Studio | Ideas to Impact',
+   '': 'Custom Websites & Web Applications for SMBs | Caventra',
    'services': 'Website Design, Hosting & Security Services | Caventra',
    'services/web-development': 'Custom Web Development & Engineering | Caventra',
    'services/branding': 'Brand Identity & Digital Design | Caventra',
@@ -2123,7 +2123,7 @@ document.addEventListener('input', e => {
     const grid = document.getElementById('bg-grid');
     if (grid) {
       grid.innerHTML = visible.map(b => `
-        <a class="b-card" href="#/blog/${esc(b.slug)}">
+        <a class="b-card" href="/blog/${esc(b.slug)}/">
           <div>
             <div class="meta">
               <span>${esc(b.category)}</span>
@@ -2146,15 +2146,24 @@ document.addEventListener('input', e => {
 
 addEventListener('hashchange',nav);
 if(typeof window!=='undefined'){
+  if(location.hash&&location.hash.startsWith('#/')){
+    const clean=location.hash.replace(/^#\/?/,'').replace(/\/$/,'');
+    const target=clean?`/${clean}/`:'/';
+    if(window.history&&window.history.replaceState){try{history.replaceState(null,'',target+location.search)}catch(_){}}
+  }
   addEventListener('popstate',nav);
   document.addEventListener('click', e => {
     const a = e.target && e.target.closest && e.target.closest('a');
     if (!a) return;
     const href = a.getAttribute('href');
     if (!href || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:') || a.target === '_blank' || a.hasAttribute('download')) return;
-    if (href.startsWith('#/')) {
-      const clean = href.replace(/^#\/?/, '').replace(/\/$/, '');
-      const targetUrl = clean ? `/${clean}/` : '/';
+    if (href.startsWith('/') || href.startsWith('#/')) {
+      let targetUrl = href;
+      if (href.startsWith('#/')) {
+        const clean = href.replace(/^#\/?/, '').replace(/\/$/, '');
+        targetUrl = clean ? `/${clean}/` : '/';
+      }
+      if (targetUrl.endsWith('.xml') || targetUrl.endsWith('.txt') || targetUrl.endsWith('.png') || targetUrl.endsWith('.ico')) return;
       if (window.history && window.history.pushState) {
         try {
           history.pushState(null, '', targetUrl);

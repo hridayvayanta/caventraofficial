@@ -228,9 +228,9 @@ test('File Parity: estimator-config.js is 100% byte-for-byte identical with publ
   assert.strictEqual(root, pub);
 });
 
-test('HTML Integration: Navigation link to #/estimator and script tags present in index.html', () => {
+test('HTML Integration: Navigation link to /estimator/ and script tags present in index.html', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.ok(html.includes('<a href="#/estimator">Estimator</a>'), 'Nav must have link to #/estimator');
+  assert.ok(html.includes('<a href="/estimator/">Estimator</a>') || html.includes('<a href="#/estimator">Estimator</a>'), 'Nav must have link to estimator');
   assert.ok(html.includes('estimator-config.js'), 'index.html must load estimator-config.js');
   assert.ok(html.indexOf('estimator-config.js') < html.indexOf('app.js'), 'estimator-config.js must load before app.js');
 });

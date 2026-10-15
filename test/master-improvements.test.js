@@ -72,9 +72,9 @@ test('Change 1: Homepage hero contains headline "Websites & Digital Solutions, E
   assert.ok(js.includes('100% Client Code &amp; IP Ownership'), 'Client Code Ownership highlight present');
   assert.ok(js.includes('Sub-Second Fast Loading'), 'Sub-second loading highlight present');
   assert.ok(js.includes('Upfront Transparent Quotes'), 'Upfront quotes highlight present');
-  assert.ok(js.includes('href="#/contact">Start a Project ↗</a>'), 'Hero primary CTA 1: Start a Project');
-  assert.ok(js.includes('href="#/services">Explore Services</a>'), 'Hero primary CTA 2: Explore Services');
-  assert.ok(js.includes('href="#/estimator"'), 'Hero estimator link present');
+  assert.ok(js.includes('href="/contact/">Start a Project ↗</a>') || js.includes('href="#/contact">Start a Project ↗</a>'), 'Hero primary CTA 1: Start a Project');
+  assert.ok(js.includes('href="/services/">Explore Services</a>') || js.includes('href="#/services">Explore Services</a>'), 'Hero primary CTA 2: Explore Services');
+  assert.ok(js.includes('href="/estimator/"') || js.includes('href="#/estimator"'), 'Hero estimator link present');
 });
 
 // 4. CHANGE 2: PORTFOLIO & CASE STUDIES
@@ -105,7 +105,7 @@ test('Change 3: All 5 dedicated service profiles exist with required business co
 
   for (const s of services) {
     assert.ok(js.includes(`"slug": "${s}"`) || js.includes(`slug: "${s}"`), `Service data contains slug ${s}`);
-    assert.ok(js.includes(`#/services/${s}`), `Service route #/services/${s} is linked`);
+    assert.ok(js.includes(`#/services/${s}`) || js.includes(`/services/${s}/`), `Service route for ${s} is linked`);
   }
 
   // Verify routing in render()
@@ -115,8 +115,7 @@ test('Change 3: All 5 dedicated service profiles exist with required business co
   const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
   for (const s of services) {
     assert.ok(
-      sitemap.includes(`https://caventraofficial.in/services/${s}`) ||
-      sitemap.includes(`https://caventra.com/#/services/${s}`),
+      sitemap.includes(`https://caventraofficial.in/services/${s}/`),
       `sitemap.xml contains service ${s}`
     );
   }

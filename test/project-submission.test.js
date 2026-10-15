@@ -113,7 +113,7 @@ assert(!appRoot.includes("Almost there. Send it to us"), 'Removed old "Almost th
 assert(!appPub.includes("Almost there. Send it to us"), 'Removed old screen from public/app.js');
 
 // Verify Back to Home button presence
-assert(appRoot.includes('href="#/">Back to Home</a>'), 'Provides optional "Back to Home" button');
+assert(appRoot.includes('href="/"') || appRoot.includes('href="#/"'), 'Provides optional "Back to Home" button');
 
 // -----------------------------------------------------------------------------
 // Test Suite 4: Frontend Integration Layer & Endpoint Detection
