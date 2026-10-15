@@ -2974,3 +2974,197 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   border-color: rgba(90, 67, 30, 0.3);
   font-weight: 700;
 }
+
+/* --- Testimonials Section --- */
+.testimonials-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--line);
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.testimonial-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.testimonial-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+}
+.testimonial-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(201, 184, 160, 0.12);
+  color: var(--gold2);
+  border: 1px solid rgba(201, 184, 160, 0.25);
+  margin-bottom: 20px;
+}
+.testimonial-quote {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--tx);
+  font-style: italic;
+  margin: 0 0 24px;
+  flex-grow: 1;
+}
+.testimonial-meta {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.testimonial-author {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--tx);
+}
+.testimonial-company {
+  font-size: 13px;
+  color: var(--mut);
+}
+
+/* --- Service Target & Pricing Enhancements --- */
+.service-who-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 32px;
+  margin-bottom: 12px;
+}
+.service-pricing-banner {
+  background: radial-gradient(ellipse at 85% 50%, rgba(201, 184, 160, 0.14), transparent 70%) var(--bg2);
+  border: 1px solid var(--gold);
+  border-radius: var(--r);
+  padding: 36px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.service-pricing-info {
+  max-width: 640px;
+}
+
+/* --- Founders & Leadership Section --- */
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 36px;
+}
+.founder-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 32px 24px;
+  transition: border-color 0.3s ease;
+}
+.founder-card:hover {
+  border-color: var(--gold);
+}
+.founder-card h3 {
+  font-size: 20px;
+  margin: 0 0 4px;
+  color: var(--tx);
+}
+.founder-role {
+  font-size: 13px;
+  color: var(--gold2);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: block;
+}
+.founder-bio {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mut);
+  margin-bottom: 20px;
+}
+.founder-focus {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: block;
+}
+
+/* --- Accessibility Focus Outlines --- */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--gold) !important;
+  outline-offset: 3px !important;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 860px) {
+  .testimonial-grid, .founders-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-pricing-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* --- Warm Light Mode Overrides for New Elements --- */
+[data-theme="light"] .testimonial-card,
+[data-theme="light"] .service-who-card,
+[data-theme="light"] .founder-card {
+  background: #E7E4DA;
+  border-color: rgba(30, 34, 38, 0.14);
+}
+[data-theme="light"] .testimonial-card:hover,
+[data-theme="light"] .founder-card:hover {
+  border-color: #5A431E;
+}
+[data-theme="light"] .testimonial-badge {
+  background: rgba(90, 67, 30, 0.1);
+  color: #5A431E;
+  border-color: rgba(90, 67, 30, 0.3);
+}
+[data-theme="light"] .testimonial-quote {
+  color: #1E2226;
+}
+[data-theme="light"] .testimonial-meta {
+  border-top-color: rgba(30, 34, 38, 0.12);
+}
+[data-theme="light"] .testimonial-author {
+  color: #1E2226;
+}
+[data-theme="light"] .testimonial-company {
+  color: #565C63;
+}
+[data-theme="light"] .service-pricing-banner {
+  background: radial-gradient(ellipse at 85% 50%, rgba(90, 67, 30, 0.08), transparent 70%) #E7E4DA;
+  border-color: #785D2F;
+}
+[data-theme="light"] .founder-card h3 {
+  color: #1E2226;
+}
+[data-theme="light"] .founder-role {
+  color: #5A431E;
+}
+[data-theme="light"] .founder-bio {
+  color: #383D44;
+}
+[data-theme="light"] .founder-focus {
+  color: #5A431E;
+  border-top-color: rgba(30, 34, 38, 0.12);
+}

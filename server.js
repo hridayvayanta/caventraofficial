@@ -86,7 +86,7 @@ function cleanSite(b) {
     desc: str(b.desc, 500), contact: { email: str(c.email, 200), phone: str(c.phone, 200), address: str(c.address, 300) }, projects
   };
 }
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.json': 'application/json' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.json': 'application/json', '.xml': 'application/xml; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
 const sniff = b => (b.length > 12 && ((b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 && 'png') || (b[0] === 0xff && b[1] === 0xd8 && 'jpg') || (b.slice(0, 3).toString() === 'GIF' && 'gif') || (b.slice(0, 4).toString() === 'RIFF' && b.slice(8, 12).toString() === 'WEBP' && 'webp'))) || null;
 
 async function notify(q) {
@@ -141,8 +141,20 @@ async function api(req, res, u) {
 }
 function serveStatic(req, res, u) {
   let file;
-  if (u.pathname.startsWith('/uploads/')) { const n = u.pathname.slice(9); if (!/^[a-f0-9]{32}\.(png|jpe?g|webp|gif)$/.test(n)) return send(res, 404, 'Not found'); file = path.join(UP, n); }
-  else { const rel = path.normalize(decodeURIComponent(u.pathname === '/' ? '/index.html' : u.pathname)); file = path.join(PUB, rel); if (!file.startsWith(PUB + path.sep) || path.basename(file).startsWith('.')) return send(res, 403, 'Forbidden'); }
+  if (u.pathname.startsWith('/uploads/')) {
+    const n = u.pathname.slice(9);
+    if (!/^[a-f0-9]{32}\.(png|jpe?g|webp|gif)$/.test(n)) return send(res, 404, 'Not found');
+    file = path.join(UP, n);
+  } else {
+    let rel = path.normalize(decodeURIComponent(u.pathname === '/' ? '/index.html' : u.pathname));
+    file = path.join(PUB, rel);
+    try {
+      if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+      else if (!path.extname(file) && fs.existsSync(file + '.html')) file = file + '.html';
+      else if (!path.extname(file) && fs.existsSync(path.join(file, 'index.html'))) file = path.join(file, 'index.html');
+    } catch {}
+    if (!file.startsWith(PUB + path.sep) || path.basename(file).startsWith('.')) return send(res, 403, 'Forbidden');
+  }
   fs.readFile(file, (e, buf) => {
     if (e) {
       return fs.readFile(path.join(PUB, '404.html'), (e2, b404) => {

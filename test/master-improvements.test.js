@@ -114,7 +114,11 @@ test('Change 3: All 5 dedicated service profiles exist with required business co
   // Verify sitemap.xml contains all 5 routes
   const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
   for (const s of services) {
-    assert.ok(sitemap.includes(`https://caventra.com/#/services/${s}`), `sitemap.xml contains https://caventra.com/#/services/${s}`);
+    assert.ok(
+      sitemap.includes(`https://caventraofficial.in/services/${s}`) ||
+      sitemap.includes(`https://caventra.com/#/services/${s}`),
+      `sitemap.xml contains service ${s}`
+    );
   }
 });
 

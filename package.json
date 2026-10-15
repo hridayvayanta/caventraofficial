@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node --no-warnings server.js",
+    "build:static": "node scripts/build-static.js",
     "test": "node --no-warnings test/smoke.js"
   }
 }

@@ -434,6 +434,8 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "04", title: "Launch", desc: "We audit speed, verify forms, configure DNS, and deploy live." }
     ],
     projectSlugs: ["the-wheel-master", "genresume", "divine-bridal-accessories"],
+    whoItsFor: "Growing SMEs, founders, service businesses, and e-commerce brands looking to eliminate slow page-builders and invest in a fast, bespoke digital platform that converts.",
+    pricingTier: "Bespoke projects starting from ₹25,000 / $450",
     faqs: [
       { q: "Do you use WordPress, Wix, or page-builders?", a: "No. We hand-craft custom code. This makes your site significantly faster, more secure, and completely free of plugin subscriptions." },
       { q: "Do I own the website and source code after launch?", a: "Yes, 100%. All source code, design files, and deployment accounts belong entirely to you with zero vendor lock-in." },
@@ -464,6 +466,8 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "04", title: "Delivery", desc: "We export production-ready vector assets and your brand style guide." }
     ],
     projectSlugs: ["divine-bridal-accessories", "ironforge-fitness-store"],
+    whoItsFor: "Modern startups, established firms undergoing a rebrand, and companies requiring an authoritative visual identity, logo suite, typographic system, and UI guidelines.",
+    pricingTier: "Brand packages starting from ₹20,000 / $350",
     faqs: [
       { q: "What files and formats do I receive?", a: "You get full vector files (SVG, PDF, EPS) and web-optimized transparent PNGs for both dark and light modes, plus font packages." },
       { q: "Can you refresh an existing brand?", a: "Yes. We modernize outdated logos and typography while preserving established brand equity." },
@@ -493,6 +497,8 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "04", title: "On-Demand Tasks", desc: "We implement new features, pages, and content updates as your business grows." }
     ],
     projectSlugs: ["the-wheel-master", "crm-platform"],
+    whoItsFor: "Business owners who want peace of mind knowing their website is continuously monitored, updated with fresh content within 24–48 hours, patched, and running smoothly.",
+    pricingTier: "Care plans starting from ₹4,500/month / $85/month",
     faqs: [
       { q: "Can you maintain a site built by someone else?", a: "Yes. We audit your codebase, resolve urgent issues, and take over ongoing maintenance and updates." },
       { q: "How fast do you handle content updates?", a: "Standard content updates are completed within 24 to 48 hours. Urgent bug fixes receive immediate priority response." },
@@ -522,6 +528,8 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "04", title: "Monitoring", desc: "We activate automated health checks to ensure continuous 99.9% uptime." }
     ],
     projectSlugs: ["plinth", "the-wheel-master"],
+    whoItsFor: "Organizations seeking guaranteed 99.9% uptime, global CDN edge caching, automated SSL encryption, and direct client account ownership without slow shared server headaches.",
+    pricingTier: "Cloud edge hosting starting from ₹1,500/month / $30/month",
     faqs: [
       { q: "Do I own the hosting account?", a: "Yes, 100%. We set up hosting under your company credentials so you maintain full control and ownership." },
       { q: "What uptime can I expect?", a: "Our configurations target 99.9% uptime backed by multi-region cloud edge networks." },
@@ -551,6 +559,8 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "04", title: "Backup Setup", desc: "We set up automated backup schedules and verify restore procedures." }
     ],
     projectSlugs: ["the-wheel-master", "crm-platform"],
+    whoItsFor: "Websites and web applications handling client inquiries, customer data, or payments that need hardened CSP headers, invisible bot mitigation, and defenses against spam and injection.",
+    pricingTier: "Security hardening starting from ₹15,000 / $280",
     faqs: [
       { q: "Do static or simple websites need security?", a: "Yes. Form submissions, customer inquiries, and domain reputation require protection from automated spam and hijacking." },
       { q: "Do you use annoying CAPTCHAs?", a: "No. We use invisible bot traps that block spam without asking visitors to solve image puzzles." },
@@ -752,6 +762,53 @@ function homepageFAQSection() {
   `;
 }
 
+function homepageTestimonialsSection() {
+  const testimonials = [
+    {
+      quote: "Caventra engineered The Wheel Master ERP from scratch. Our sales team went from juggling messy spreadsheets to managing every order in real-time. Sub-second speed and zero downtime.",
+      author: "Operations Director",
+      company: "The Wheel Master",
+      badge: "Client Production ERP"
+    },
+    {
+      quote: "Their 100% code ownership model is rare. No monthly plugin fees, no hidden agency lock-in, just clean code that loads instantly and ranks on Google.",
+      author: "Lead Product Engineer",
+      company: "GenResume",
+      badge: "Production Web App"
+    },
+    {
+      quote: "The transparent pricing, clean dark/light themes, and instant WhatsApp notifications completely streamlined our bridal retail enquiry flow.",
+      author: "Creative Director",
+      company: "Divine Bridal Accessories",
+      badge: "E-Commerce Showcase"
+    }
+  ];
+
+  return `
+    <section class="testimonials-section">
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">Client Feedback</span>
+          <h2 class="section-title">Built with Precision. Trusted by Founders.</h2>
+          <p class="section-subtitle">Real outcomes from businesses that chose clean software engineering over generic templates.</p>
+        </div>
+        <div class="testimonial-grid">
+          ${testimonials.map(t => `
+            <div class="testimonial-card">
+              <span class="testimonial-badge">${esc(t.badge)}</span>
+              <p class="testimonial-quote">“${esc(t.quote)}”</p>
+              <div class="testimonial-meta">
+                <span class="testimonial-author">${esc(t.author)}</span>
+                <span class="testimonial-company">${esc(t.company)}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 const V={
 home:()=>{
   const heroHighlights = `
@@ -780,7 +837,7 @@ home:()=>{
     <h1>${spc("Websites & Digital Solutions, Engineered for Growing Businesses.",{4:'o',7:'g'})}</h1>
     <div class="hrow">
       <div>
-        <p class="fi" style="margin:0 0 14px">We partner with businesses to engineer custom websites, business software, and scalable digital solutions. Clean code, intentional design, and dedicated post-launch support.</p>
+        <p class="fi" style="margin:0 0 14px">We build, host, secure, and manage custom websites and digital software for businesses. Clean code, sub-second performance, and dedicated ongoing engineering.</p>
         <p class="fi" style="margin:0 0 28px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p>
         <div class="row fi" style="gap:12px;flex-wrap:wrap">
           <a class="btn solid" href="#/contact">Start a Project ↗</a>
@@ -806,6 +863,7 @@ home:()=>{
   + deliveryProcessSection()
   + trustStandardsSection()
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="#/work">Explore All Selected Work ↗</a> <a class="btn" href="#/contact">Discuss a Project ↗</a></p>`)
+  + homepageTestimonialsSection()
   + homepageFAQSection()
   + wrapS("Latest Insights &amp; Engineering", `
     <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
@@ -821,7 +879,7 @@ home:()=>{
         </a>
       `).join('')}
     </div>
-    <p style="margin-top:36px"><a class="btn" href="#/blog">Explore All 105+ Articles ↗</a></p>
+    <p style="margin-top:36px"><a class="btn" href="#/blog">Explore All Articles ↗</a></p>
   `)
   + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="#/contact">Start a Project ↗</a><a class="btn" href="#/estimator">Launch Cost Estimator</a></div></div></section>`
   + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
@@ -950,6 +1008,28 @@ serviceDetail: (slug) => {
             <p>${esc(d.desc)}</p>
           </div>
         `).join('')}
+      </div>
+    </div>
+
+    <div class="service-block-section">
+      <div class="service-who-card">
+        <span class="section-kicker">Target Audience</span>
+        <h3 class="service-block-heading">Who This Service Is Engineered For</h3>
+        <p class="service-block-desc" style="font-size:16px;line-height:1.65">${esc(srv.whoItsFor || "Growing businesses, professional firms, and founders seeking reliable digital execution.")}</p>
+      </div>
+    </div>
+
+    <div class="service-block-section">
+      <div class="service-pricing-banner">
+        <div class="service-pricing-info">
+          <span class="section-kicker">Transparent Pricing</span>
+          <h3 style="font-size:22px;margin:6px 0 8px">${esc(srv.pricingTier || "Indicative Scope Pricing")}</h3>
+          <p style="margin:0;color:var(--mut);font-size:15px">Every project is scoped transparently with zero hidden markups or surprise fees. Calculate an indicative estimate for your required scope or speak directly with an architect.</p>
+        </div>
+        <div class="service-pricing-cta" style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn solid" href="#/estimator">Calculate in Estimator ↗</a>
+          <a class="btn" href="https://wa.me/918866790989?text=Hi%20Caventra%20team,%20I'd%20like%20to%20discuss%20${encodeURIComponent(srv.title)}" target="_blank" rel="noopener">WhatsApp Us ↗</a>
+        </div>
       </div>
     </div>
 
@@ -1393,24 +1473,48 @@ about:()=>{
           <div><h3>Cloud &amp; Security</h3><p>Scalable databases, high-availability deployments, and robust security protocols protecting your data.</p></div>
         </div>
       </div>
+    <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:64px">
+      <h2 style="margin-bottom:14px">Founders &amp; Leadership</h2>
+      <p style="margin-bottom:40px;font-size:17px;color:var(--mut)">Caventra is founder-led. You collaborate directly with the engineers and designers building your platform.</p>
+      <div class="founders-grid">
+        <div class="founder-card">
+          <h3>Hriday Vayanta</h3>
+          <span class="founder-role">Founder &amp; Lead Architect</span>
+          <p class="founder-bio">Specializes in high-performance web architecture, systems design, Core Web Vitals optimization, and enterprise software scoping.</p>
+          <span class="founder-focus">Full-Stack Architecture · Performance · Scoping</span>
+        </div>
+        <div class="founder-card">
+          <h3>Ved Nimbark</h3>
+          <span class="founder-role">Founder &amp; UI/UX Lead</span>
+          <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
+          <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
+        </div>
+        <div class="founder-card">
+          <h3>Sauran Mansuri</h3>
+          <span class="founder-role">Founder &amp; Backend Engineer</span>
+          <p class="founder-bio">Focuses on backend services, database design, server architecture, API integrations, and automated lead workflows.</p>
+          <span class="founder-focus">Backend Engineering · Databases · Automation</span>
+        </div>
+      </div>
     </div>
     <div style="margin-top:72px;padding:52px 32px;border:1px solid var(--gold);border-radius:var(--r);background:radial-gradient(ellipse at 50% 0%,rgba(201,184,160,.12),transparent 75%) var(--bg2);text-align:center">
       <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Have an idea worth building?</h2>
-      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline.</p>
-      ${cta}
+      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline directly with our founding team.</p>
+      <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
+        <a class="btn solid" href="#/contact">Start a Project ↗</a>
+        <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        <a class="btn" href="#/estimator">Cost Estimator</a>
+      </div>
     </div>
   `,'style="padding-top:20px"')
 },
 blog:()=>{
   const list = getB();
-  const cats = [
-    { name: 'All', count: list.length },
-    { name: 'Canva & Design', count: list.filter(x=>x.category==='Canva & Design').length },
-    { name: 'Applied AI', count: list.filter(x=>x.category==='Applied AI').length },
-    { name: 'Web Engineering', count: list.filter(x=>x.category==='Web Engineering').length },
-    { name: 'Global Tech Hubs', count: list.filter(x=>x.category==='Global Tech Hubs').length },
-    { name: 'UI/UX & Growth', count: list.filter(x=>x.category==='UI/UX & Growth').length }
-  ];
+  const uniqueCats = ['All', ...new Set(list.map(x=>x.category))];
+  const cats = uniqueCats.map(name => ({
+    name,
+    count: name === 'All' ? list.length : list.filter(x=>x.category === name).length
+  }));
   
   const filtered = list.filter(b => {
     const matchCat = (blogFilter === 'All') || (b.category === blogFilter);
@@ -1423,13 +1527,13 @@ blog:()=>{
   const visible = blogShowAll ? filtered : filtered.slice(0, blogPage * pageSize);
   const hasMore = !blogShowAll && visible.length < filtered.length;
 
-  return head("Knowledge &amp; Engineering","100+ technical perspectives, design systems, applied AI, and global software engineering.") + wrapS("",`
+  return head("Knowledge &amp; Engineering Insights","Practical guides on website pricing, cloud hosting, security audits, and modern web architecture.") + wrapS("",`
     <div style="margin-bottom:36px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px">
       <div class="blog-filter" style="margin:0">
         ${cats.map(c=>`<button class="${blogFilter===c.name?'active':''}" data-bcat="${esc(c.name)}">${esc(c.name)} (${c.count})</button>`).join('')}
       </div>
       <div>
-        <input id="b-search" placeholder="Search by topic, keyword, or city..." value="${esc(blogQuery)}" style="border-radius:999px;padding:10px 22px;font-size:14px;background:var(--bg2);border:1px solid var(--line);color:var(--tx);min-width:280px">
+        <input id="b-search" placeholder="Search by topic or keyword..." value="${esc(blogQuery)}" style="border-radius:999px;padding:10px 22px;font-size:14px;background:var(--bg2);border:1px solid var(--line);color:var(--tx);min-width:280px">
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
@@ -1458,7 +1562,7 @@ blog:()=>{
     </div>
     ${hasMore ? `
       <div class="row" style="justify-content:center;margin-top:48px;gap:14px">
-        <button class="btn solid" id="b-more">Load 24 More</button>
+        <button class="btn solid" id="b-more">Load More</button>
         <button class="btn" id="b-showall">Show All ${filtered.length} Articles</button>
       </div>
     ` : ''}
@@ -1473,7 +1577,7 @@ article:s=>{
   const related = list.filter(x=>x.slug !== b.slug && (x.category === b.category || x.author === b.author)).slice(0, 2);
 
   return `<section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
-    <a class="btn sm" href="#/blog" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All 100+ Articles</a>
+    <a class="btn sm" href="#/blog" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>
     <div class="article-meta">
       <span>${esc(b.category)}</span>
       <span>·</span>
@@ -1514,7 +1618,7 @@ article:s=>{
     <div class="article-cta">
       <h3>Have an idea worth building?</h3>
       <p>Caventra turns digital concepts into scalable software products. Let's discuss your project.</p>
-      <div class="row" style="justify-content:center">${cta}<a class="btn" href="#/blog">Explore 100+ Articles</a></div>
+      <div class="row" style="justify-content:center">${cta}<a class="btn" href="#/blog">Explore All Articles</a></div>
     </div>
   </div></div></section>`;
 },
@@ -1666,29 +1770,56 @@ admin:()=>{if(!owner)return head("Admin","Sign in to manage Caventra content.")+
 };
 const kv=t=>t.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]&&a[1]);
 async function save(){try{const r=await fetch('/api/admin/site',{method:'PUT',headers:H,body:JSON.stringify(S)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||r.status);if(j.site){const keep=S;S=Object.assign(JSON.parse(JSON.stringify(D)),j.site)}return true}catch(x){alert('Could not save: '+x.message);return false}}
-function render(){const h=location.hash.replace(/^#\/?/,'')||'';const [r,s]=h.split('/');
+function getRouteParts() {
+  if (typeof location === 'undefined') return ['', ''];
+  if (location.hash && location.hash !== '#/' && location.hash !== '#') {
+    const h = location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
+    const [r, s] = h.split('/');
+    return [r || '', s || ''];
+  }
+  const p = (location.pathname || '/').replace(/^\/+/, '').replace(/\/+$/, '').replace(/^index\.html$/, '');
+  if (!p) return ['', ''];
+  const [r, s] = p.split('/');
+  return [r || '', s || ''];
+}
+function render(){const [r,s]=getRouteParts();
  let v=r===''?V.home():r==='services'&&s?V.serviceDetail(s):r==='services'?V.services():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
  app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
- document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r));
+ document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+r || a.getAttribute('href')==='/'+r || (r==='' && (a.getAttribute('href')==='#/' || a.getAttribute('href')==='/'))));
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
 
  const titles = {
    '': 'CAVENTRA — Digital Solutions & Web Engineering Studio | Ideas to Impact',
-   'services': 'Services & Capabilities — CAVENTRA',
-   'services/web-development': 'Website Design & Development — CAVENTRA',
-   'services/branding': 'Branding & Creative Design — CAVENTRA',
-   'services/maintenance': 'Website Management & Maintenance — CAVENTRA',
-   'services/hosting': 'Hosting & Cloud Deployment — CAVENTRA',
-   'services/security': 'Website Security & Protection — CAVENTRA',
-   'work': 'Selected Work & Case Studies — CAVENTRA',
-   'process': 'Our 7-Stage Engineering Process — CAVENTRA',
-   'about': 'About Us — CAVENTRA',
-   'blog': 'Knowledge & Engineering Insights — CAVENTRA',
-   'estimator': 'Website Project Cost Estimator — CAVENTRA',
-   'contact': 'Start a Project — CAVENTRA'
+   'services': 'Website Design, Hosting & Security Services | Caventra',
+   'services/web-development': 'Custom Web Development & Engineering | Caventra',
+   'services/branding': 'Brand Identity & Digital Design | Caventra',
+   'services/maintenance': 'Website Management & Maintenance Plans | Caventra',
+   'services/hosting': 'High-Performance Cloud Hosting & Infrastructure | Caventra',
+   'services/security': 'Website Security, Hardening & Protection | Caventra',
+   'work': 'Selected Work & Case Studies | Caventra',
+   'process': 'Our 7-Stage Engineering Process | Caventra',
+   'about': 'About Caventra — Founders & Engineering Philosophy',
+   'blog': 'Insights & Engineering Blog | Caventra',
+   'estimator': 'Website Project Cost Estimator | Caventra',
+   'contact': 'Start a Project | Caventra',
+   'privacy': 'Privacy Policy | Caventra',
+   'terms': 'Terms of Service | Caventra',
+   'cookies': 'Cookie Policy | Caventra'
  };
  const fullRoute = s ? `${r}/${s}` : r;
- document.title = titles[fullRoute] || (r === 'work' && s ? `${(S.projects.find(x=>x.slug===s)||{}).name || 'Project'} — CAVENTRA` : 'CAVENTRA — Ideas to Impact');
+ if (r === 'blog' && s) {
+   const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
+   document.title = art ? `${art.title} | Caventra` : 'Article — CAVENTRA';
+ } else if (r === 'work' && s) {
+   const prj = (S.projects || []).find(x => x.slug === s);
+   document.title = prj ? `${prj.name} Case Study | Caventra` : 'Project — CAVENTRA';
+ } else {
+   document.title = titles[fullRoute] || 'CAVENTRA — Ideas to Impact';
+ }
+ const canEl = document.querySelector('link[rel="canonical"]');
+ if (canEl) {
+   canEl.setAttribute('href', `https://caventraofficial.in/${fullRoute ? fullRoute + '/' : ''}`);
+ }
  const lf=$('#lf');if(lf)lf.onsubmit=doLogin;
  const cf=$('#cf');
  if(cf){
@@ -2013,7 +2144,28 @@ document.addEventListener('input', e => {
   }
 });
 
-addEventListener('hashchange',nav);render();
+addEventListener('hashchange',nav);
+if(typeof window!=='undefined'){
+  addEventListener('popstate',nav);
+  document.addEventListener('click', e => {
+    const a = e.target && e.target.closest && e.target.closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:') || a.target === '_blank' || a.hasAttribute('download')) return;
+    if (href.startsWith('#/')) {
+      const clean = href.replace(/^#\/?/, '').replace(/\/$/, '');
+      const targetUrl = clean ? `/${clean}/` : '/';
+      if (window.history && window.history.pushState) {
+        try {
+          history.pushState(null, '', targetUrl);
+          nav();
+          e.preventDefault();
+        } catch (_) {}
+      }
+    }
+  });
+}
+render();
 const norm=()=>{if(!S.socials||!S.socials.length)S.socials=D.socials.slice();S.contact=Object.assign({},D.contact,Object.fromEntries(Object.entries(S.contact||{}).filter(([k,v])=>v)));if(Array.isArray(S.projects)){S.projects.forEach(p=>{if(!p.cover||!p.cover.trim()){const m=D.projects.find(x=>x.slug===p.slug||x.name===p.name);if(m&&m.cover)p.cover=m.cover;}});}};
 async function loadAdmin(){const r=await fetch('/api/admin/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const q=await fetch('/api/admin/inquiries');if(q.ok)INQ=await q.json()}
 async function doLogin(e){e.preventDefault();const m=$('#lm');try{const r=await fetch('/api/admin/login',{method:'POST',headers:H,body:JSON.stringify({password:$('#lp').value})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Login failed');owner=true;await loadAdmin();render()}catch(x){m.textContent=x.message}}
