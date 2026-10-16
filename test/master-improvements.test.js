@@ -36,7 +36,8 @@ test('Parity: All 7 critical source/public file pairs are 100% byte-for-byte ide
     'ventrabot.js',
     'sitemap.xml',
     'estimator-config.js',
-    'theme.js'
+    'theme.js',
+    'blogs.js'
   ];
   for (const f of files) {
     const rootContent = fs.readFileSync(path.join(ROOT, f), 'utf8');
