@@ -463,6 +463,57 @@
     });
   }
 
+  function dispatchOtpEmail(cleanEmail, otpCode, type) {
+    const gasUrl = (typeof window !== 'undefined' && window.CAVENTRA_CONFIG && window.CAVENTRA_CONFIG.APPS_SCRIPT_URL)
+      || 'https://script.google.com/macros/s/AKfycbyVljM0fD4e6Gqc2F_ugBnjGK0ODWnC88WKn2wFyqn2QOT4_GPZuS6Bwu9ltzwPaL19/exec';
+
+    // 1. Google Apps Script Web App (Serverless - runs on caventraofficial@gmail.com, live on GitHub Pages)
+    try {
+      if (typeof fetch === 'function') {
+        fetch(gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'SEND_AUTH_OTP',
+            email: cleanEmail,
+            code: otpCode,
+            type: type || 'LOGIN_OTP'
+          })
+        }).catch(function (err) {
+          console.warn('[CAVENTRA] Google Apps Script OTP dispatch notice:', err);
+        });
+      }
+    } catch (e) {}
+
+    // 2. Local / Node.js backend endpoint (/api/auth/send-otp via server.js / Resend)
+    try {
+      if (typeof fetch === 'function') {
+        fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
+          body: JSON.stringify({ email: cleanEmail, code: otpCode, type: type || 'LOGIN_OTP' })
+        }).catch(function () {});
+      }
+    } catch (e) {}
+
+    // 3. Dispatch client-side CustomEvent
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: type || 'LOGIN_OTP' } }));
+    }
+
+    // 4. Developer / Founder instant DevTools console notice
+    if (typeof console !== 'undefined' && typeof console.info === 'function') {
+      console.info(
+        '%c[CAVENTRA SECURITY OTP]%c ' + (type || 'OTP') + ' for %c' + cleanEmail + '%c: %c' + otpCode,
+        'background:#15345a;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px',
+        '',
+        'color:#58a6ff;font-weight:bold',
+        '',
+        'color:#3fb950;font-weight:bold;font-size:14px'
+      );
+    }
+  }
+
   // --- CaventraAuth API ---
   const CaventraAuth = {
     config: DEV_FIREBASE_CONFIG,
@@ -582,20 +633,8 @@
       };
       storage.setItem('caventra_dev_pending_reg_otp_' + cleanEmail, JSON.stringify(challenge));
 
-      // Dispatch real email via Resend
-      try {
-        if (typeof fetch === 'function') {
-          fetch('/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-            body: JSON.stringify({ email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' })
-          }).catch(function () {});
-        }
-      } catch (e) {}
-
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' } }));
-      }
+      // Dispatch real email via Google Apps Script & local backend
+      dispatchOtpEmail(cleanEmail, otpCode, 'REGISTRATION_OTP');
 
       saveDatabase(db);
 
@@ -698,18 +737,7 @@
       };
       storage.setItem(key, JSON.stringify(record));
 
-      try {
-        if (typeof fetch === 'function') {
-          fetch('/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-            body: JSON.stringify({ email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' })
-          }).catch(function () {});
-        }
-      } catch (e) {}
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' } }));
-      }
+      dispatchOtpEmail(cleanEmail, otpCode, 'REGISTRATION_OTP');
 
       return {
         ok: true,
@@ -812,18 +840,8 @@
           createdAt: Date.now()
         };
         storage.setItem('caventra_dev_pending_reg_otp_' + cleanEmail, JSON.stringify(challenge));
-        try {
-          if (typeof fetch === 'function') {
-            fetch('/api/auth/send-otp', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-              body: JSON.stringify({ email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' })
-            }).catch(function () {});
-          }
-        } catch (e) {}
-        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: 'REGISTRATION_OTP' } }));
-        }
+        dispatchOtpEmail(cleanEmail, otpCode, 'REGISTRATION_OTP');
+
         return {
           requiresEmailVerification: true,
           email: cleanEmail,
@@ -865,18 +883,7 @@
       };
       storage.setItem('caventra_dev_pending_login_otp_' + cleanEmail, JSON.stringify(loginChallenge));
 
-      try {
-        if (typeof fetch === 'function') {
-          fetch('/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-            body: JSON.stringify({ email: cleanEmail, code: otpCode, type: 'LOGIN_OTP' })
-          }).catch(function () {});
-        }
-      } catch (e) {}
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: 'LOGIN_OTP' } }));
-      }
+      dispatchOtpEmail(cleanEmail, otpCode, 'LOGIN_OTP');
 
       // DO NOT issue session yet!
       return {
@@ -990,18 +997,7 @@
       };
       storage.setItem(key, JSON.stringify(record));
 
-      try {
-        if (typeof fetch === 'function') {
-          fetch('/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-            body: JSON.stringify({ email: cleanEmail, code: otpCode, type: 'LOGIN_OTP' })
-          }).catch(function () {});
-        }
-      } catch (e) {}
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: cleanEmail, code: otpCode, type: 'LOGIN_OTP' } }));
-      }
+      dispatchOtpEmail(cleanEmail, otpCode, 'LOGIN_OTP');
 
       return {
         ok: true,
@@ -1103,18 +1099,7 @@
       });
       saveDatabase(db);
 
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('caventra:otp_sent', { detail: { email: user.email, code: otpCode, type: 'EMAIL_VERIFICATION' } }));
-      }
-      try {
-        if (typeof fetch === 'function') {
-          fetch('/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
-            body: JSON.stringify({ email: user.email, code: otpCode, type: 'EMAIL_VERIFICATION' })
-          }).catch(function () {});
-        }
-      } catch (e) {}
+      dispatchOtpEmail(user.email, otpCode, 'EMAIL_VERIFICATION');
 
       return {
         ok: true,

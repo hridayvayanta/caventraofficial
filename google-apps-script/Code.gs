@@ -39,6 +39,26 @@ function doPost(e) {
       return jsonResponse({ ok: false, error: 'Invalid JSON payload.' });
     }
 
+    // 0. Handle OTP email dispatch for CAVENTRA Client Portal & Founder Authentication
+    if (data.action === 'SEND_AUTH_OTP' || data.type === 'LOGIN_OTP' || data.type === 'REGISTRATION_OTP' || data.type === 'EMAIL_VERIFICATION') {
+      var recipientEmail = cleanString(data.email, 200);
+      var otpCode = cleanString(data.code, 10);
+      var otpType = cleanString(data.type || 'LOGIN_OTP', 50);
+
+      if (!recipientEmail || !isValidEmail(recipientEmail)) {
+        return jsonResponse({ ok: false, error: 'A valid recipient email is required.' });
+      }
+      if (!otpCode || !/^\d{6}$/.test(otpCode)) {
+        return jsonResponse({ ok: false, error: 'A valid 6-digit OTP code is required.' });
+      }
+
+      sendAuthOtpEmail(recipientEmail, otpCode, otpType);
+      return jsonResponse({
+        ok: true,
+        message: 'OTP verification email dispatched to ' + recipientEmail
+      });
+    }
+
     // 1. Honeypot anti-spam check
     // The "website" field is hidden from real users. Bots fill it out.
     if (data.website && String(data.website).trim().length > 0) {
@@ -321,6 +341,49 @@ function sendNotificationEmail(id, date, name, email, phone, company, type, budg
     replyTo: email,
     subject: subject,
     body: body
+  });
+}
+
+/**
+ * Dispatch 6-digit security OTP email to client or founder
+ */
+function sendAuthOtpEmail(toEmail, otpCode, type) {
+  var subject = 'CAVENTRA — Sign-In Verification Code';
+  var heading = 'Here is your 6-digit sign-in verification code:';
+  if (type === 'REGISTRATION_OTP') {
+    subject = 'CAVENTRA — Verify Your Client Account';
+    heading = 'Here is your 6-digit registration verification code:';
+  } else if (type === 'EMAIL_VERIFICATION') {
+    subject = 'CAVENTRA — Email Verification Code';
+    heading = 'Here is your 6-digit email verification code:';
+  }
+
+  var textBody = 'Hello,\n\n' +
+    'Your CAVENTRA security verification code is: ' + otpCode + '\n\n' +
+    'This 6-digit code is valid for 5 minutes. If you did not request this verification, please contact security@caventraofficial.in immediately.\n\n' +
+    'Best regards,\n' +
+    'CAVENTRA Digital Solutions\n' +
+    'Ahmedabad, Gujarat, India\n' +
+    'https://caventraofficial.in';
+
+  var htmlBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:32px 28px;background:#0d1117;color:#f0f6fc;border-radius:12px;border:1px solid #30363d;">' +
+    '<div style="text-align:center;margin-bottom:20px;">' +
+    '<h1 style="color:#c9b8a0;margin:0;font-size:22px;letter-spacing:2px;font-weight:700;">CAVENTRA</h1>' +
+    '<p style="color:#8b949e;font-size:12px;margin:4px 0 0;letter-spacing:1px;text-transform:uppercase;">Security &amp; Client Access</p>' +
+    '</div>' +
+    '<p style="font-size:15px;line-height:1.5;color:#e6edf3;margin:20px 0 10px;">' + heading + '</p>' +
+    '<div style="font-size:36px;font-weight:800;letter-spacing:10px;padding:20px;background:#161b22;border-radius:8px;text-align:center;color:#3fb950;margin:24px 0;border:1.5px solid #30363d;font-family:Consolas,monaco,monospace;">' + otpCode + '</div>' +
+    '<p style="color:#8b949e;font-size:13px;line-height:1.5;">This 6-digit code is valid for <strong>5 minutes</strong>. If you did not request this verification code, please ignore this email or contact us immediately.</p>' +
+    '<hr style="border:none;border-top:1px solid #30363d;margin:28px 0 20px;"/>' +
+    '<p style="color:#8b949e;font-size:11px;margin:0;text-align:center;">CAVENTRA Digital Solutions &bull; Ahmedabad, Gujarat, India &bull; <a href="https://caventraofficial.in" style="color:#c9b8a0;text-decoration:none;">caventraofficial.in</a></p>' +
+    '</div>';
+
+  MailApp.sendEmail({
+    to: toEmail,
+    name: 'CAVENTRA Security',
+    subject: subject,
+    body: textBody,
+    htmlBody: htmlBody
   });
 }
 
