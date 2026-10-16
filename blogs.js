@@ -132,7 +132,7 @@ window.BLOGS = [
     "location": "Global",
     "date": "August 2026",
     "readTime": "7 min read",
-    "author": "Ved Nimbaark",
+    "author": "Ved Nimbark",
     "authorRole": "Founder & UI/UX Lead",
     "summary": "A direct comparison of upfront costs, speed, security, and maintenance overhead between custom-coded websites and WordPress or drag-and-drop builders.",
     "content": `
@@ -234,7 +234,7 @@ window.BLOGS = [
     "location": "Global",
     "date": "June 2026",
     "readTime": "6 min read",
-    "author": "Ved Nimbaark",
+    "author": "Ved Nimbark",
     "authorRole": "Founder & UI/UX Lead",
     "summary": "When to refresh vs. rebuild from scratch: mobile responsiveness issues, high bounce rates, slow speeds, outdated branding, and lost customer enquiries.",
     "content": `

@@ -139,7 +139,7 @@ const D={
     "published": true,
     "featured": true
   }
-],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbaark: 8849186747, Sauranahmed Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
+],techs:[],contact:{email:"caventraofficial@gmail.com",phone:"Hriday Vayanta: 8866790989, Ved Nimbark: 8849186747, Sauranahmed Mansuri: 7990652097",address:""},socials:[["Instagram","https://www.instagram.com/caventra__/"]]};
 let S=JSON.parse(JSON.stringify(D)),owner=false,edit=null,INQ=[];const H={'Content-Type':'application/json','X-Requested-With':'caventra'};
 
 // Google Apps Script Web App Endpoint for Project Enquiries (Connected to private sheet owned by caventraofficial@gmail.com)
@@ -1484,7 +1484,7 @@ about:()=>{
           <span class="founder-focus">Full-Stack Architecture · Performance · Scoping</span>
         </div>
         <div class="founder-card">
-          <h3>Ved Nimbaark</h3>
+          <h3>Ved Nimbark</h3>
           <span class="founder-role">Founder &amp; UI/UX Lead</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>

@@ -21,7 +21,7 @@ Caventra is a specialized digital solutions and web engineering studio founded a
 ## Leadership & Founding Team
 
 - **Hriday Vayanta**: Founder & Lead Architect (Full-Stack Architecture, Systems Design, Scoping)
-- **Ved Nimbaark**: Founder & UI/UX Lead (Design Systems, Typography, High-Conversion UI)
+- **Ved Nimbark**: Founder & UI/UX Lead (Design Systems, Typography, High-Conversion UI)
 - **Sauranahmed Mansuri**: Founder & Backend Engineer (Backend Services, Databases, Automation Workflows)
 
 ## Contact Information
