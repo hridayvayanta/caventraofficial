@@ -73,8 +73,10 @@ vm.createContext(sandbox);
 // 2. Load configurations and application
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'estimator-config.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'blogs.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(ROOT, 'firebase-config.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(ROOT, 'portal.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8'), sandbox);
-vm.runInContext('this.V = V; this.D = D; this.S = S; this.CAVENTRA_SERVICES_DATA = CAVENTRA_SERVICES_DATA; this.getB = getB;', sandbox);
+vm.runInContext('this.V = V; this.D = D; this.S = S; this.CAVENTRA_SERVICES_DATA = CAVENTRA_SERVICES_DATA; this.getB = getB; this.CaventraPortal = this.window ? this.window.CaventraPortal : null;', sandbox);
 
 const templateHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const baseTemplate = templateHtml.replace(/<main id="app">[\s\S]*?<\/main>/, '<main id="app"></main>');
@@ -494,6 +496,74 @@ routes.push({
   render: () => sandbox.V.cookies()
 });
 
+// Portal Gateway
+routes.push({
+  slug: 'portal',
+  urlPath: 'portal',
+  title: 'Client Portal & Founder Command | Caventra',
+  description: 'Caventra Client Portal and Founder Command Dashboard for active software project tracking, milestone reviews, and direct collaboration.',
+  activeNav: 'portal',
+  changefreq: 'weekly',
+  priority: '0.7',
+  render: () => sandbox.V.portal()
+});
+
+// Auth Routes
+routes.push({
+  slug: 'login',
+  urlPath: 'login',
+  title: 'Sign In — Client Portal | Caventra',
+  description: 'Sign in to the Caventra Client Portal to access your project dashboard, review milestone progress, and download deliverables.',
+  activeNav: 'portal',
+  changefreq: 'monthly',
+  priority: '0.5',
+  render: () => sandbox.V.login()
+});
+
+routes.push({
+  slug: 'register',
+  urlPath: 'register',
+  title: 'Create Client Account | Caventra',
+  description: 'Register for a Caventra client account to collaborate with our engineering team and monitor digital software delivery.',
+  activeNav: 'portal',
+  changefreq: 'monthly',
+  priority: '0.5',
+  render: () => sandbox.V.register()
+});
+
+routes.push({
+  slug: 'reset-password',
+  urlPath: 'reset-password',
+  title: 'Reset Password — Client Portal | Caventra',
+  description: 'Recover or reset your Caventra client portal account password.',
+  activeNav: 'portal',
+  changefreq: 'monthly',
+  priority: '0.2',
+  render: () => sandbox.V['reset-password']()
+});
+
+routes.push({
+  slug: 'client-dashboard',
+  urlPath: 'client-dashboard',
+  title: 'Client Dashboard | Caventra',
+  description: 'Protected Caventra Client Dashboard for active projects, milestone sign-offs, documents, and support.',
+  activeNav: 'portal',
+  changefreq: 'monthly',
+  priority: '0.2',
+  render: () => sandbox.V['client-dashboard']()
+});
+
+routes.push({
+  slug: 'founder-dashboard',
+  urlPath: 'founder-dashboard',
+  title: 'Founder Command Dashboard | Caventra',
+  description: 'Caventra Founder Executive Dashboard for lead management, clients, active projects, and financial tracking.',
+  activeNav: 'portal',
+  changefreq: 'monthly',
+  priority: '0.1',
+  render: () => sandbox.V['founder-dashboard']()
+});
+
 console.log(`Prepared ${routes.length} routes for pre-rendering.\n`);
 
 // Clean up any stale blog directories
@@ -571,8 +641,8 @@ for (const r of routes) {
 // 5. Generate canonical clean sitemap.xml
 console.log('\nGenerating canonical sitemap.xml...');
 
-// Exclude legal pages from primary index sitemap
-const sitemapRoutes = routes.filter(r => !['privacy', 'terms', 'cookies'].includes(r.urlPath));
+// Exclude legal pages and internal auth/dashboard routes from primary index sitemap
+const sitemapRoutes = routes.filter(r => !['privacy', 'terms', 'cookies', 'login', 'register', 'reset-password', 'client-dashboard', 'founder-dashboard'].includes(r.urlPath));
 const sitemapEntries = sitemapRoutes.map(r => {
   const loc = `${BASE_URL}/${r.urlPath ? r.urlPath + '/' : ''}`;
   return `  <url>

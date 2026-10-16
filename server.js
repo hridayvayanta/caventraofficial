@@ -53,7 +53,7 @@ function send(res, code, body, extra = {}) {
   res.end(isJ ? JSON.stringify(body) : body);
 }
 const SEC = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.googleapis.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.firebaseapp.com; frame-src 'self' https://*.firebaseapp.com https://accounts.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'",
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'X-Frame-Options': 'SAMEORIGIN',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', ...(PROD ? { 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains' } : {})
 };
@@ -93,10 +93,62 @@ async function notify(q) {
   if (!E.RESEND_API_KEY) return;
   try {
     const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + E.RESEND_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: E.MAIL_FROM || 'Caventra <onboarding@resend.dev>', to: [NOTIFY_TO], reply_to: q.email, subject: 'New project inquiry from ' + q.name,
+      body: JSON.stringify({ from: E.MAIL_FROM || 'CAVENTRA <security@caventraofficial.in>', to: [NOTIFY_TO], reply_to: q.email, subject: 'New project inquiry from ' + q.name,
         text: `Name: ${q.name}\nEmail: ${q.email}\nCompany: ${q.company}\nProject type: ${q.type}\nBudget: ${q.budget}\nTimeline: ${q.timeline}\n\n${q.message}` }) });
     if (!r.ok) console.error('Email notification failed:', r.status, await r.text());
   } catch (e) { console.error('Email notification error:', e.message); }
+}
+
+async function sendAuthEmail(toEmail, otpCode, type) {
+  let subject = 'CAVENTRA — Verify Your Client Account';
+  let heading = 'Here is your 6-digit registration verification code:';
+  if (type === 'LOGIN_OTP' || type === 'LOGIN_2FA') {
+    subject = 'CAVENTRA — Sign-In Verification Code';
+    heading = 'Here is your 6-digit sign-in verification code:';
+  } else if (type === 'EMAIL_VERIFICATION') {
+    subject = 'CAVENTRA — Email Verification Code';
+    heading = 'Here is your 6-digit email verification code:';
+  }
+  const text = `Hello,\n\nYour CAVENTRA security verification code is: ${otpCode}\n\nThis 6-digit code is valid for 5 minutes. If you did not request this verification, please contact security@caventraofficial.in immediately.\n\nBest regards,\nCAVENTRA Digital Solutions\nAhmedabad, Gujarat, India\nhttps://caventraofficial.in`;
+
+  console.log(`\n======================================================`);
+  console.log(`[CAVENTRA REAL EMAIL DISPATCH]`);
+  console.log(`To:        ${toEmail}`);
+  console.log(`Subject:   ${subject}`);
+  console.log(`OTP Code:  ${otpCode}`);
+  console.log(`Type:      ${type || 'AUTH'}`);
+  console.log(`Timestamp: ${new Date().toISOString()}`);
+  console.log(`======================================================\n`);
+
+  if (E.RESEND_API_KEY) {
+    try {
+      const html = `<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:28px;background:#0d1117;color:#f0f6fc;border-radius:12px;border:1px solid #30363d;"><h2 style="color:#58a6ff;margin-top:0;font-size:20px;">CAVENTRA Security</h2><p style="font-size:15px;line-height:1.5;">${heading}</p><div style="font-size:32px;font-weight:bold;letter-spacing:8px;padding:18px;background:#161b22;border-radius:8px;text-align:center;color:#3fb950;margin:24px 0;border:1px solid #30363d;">${otpCode}</div><p style="color:#8b949e;font-size:13px;line-height:1.4;">This code is valid for 5 minutes. If you did not request this code, please ignore this email.</p><hr style="border:none;border-top:1px solid #30363d;margin:24px 0;"/><p style="color:#8b949e;font-size:11px;margin:0;">CAVENTRA Digital Solutions &bull; Ahmedabad, Gujarat, India &bull; <a href="https://caventraofficial.in" style="color:#58a6ff;text-decoration:none;">caventraofficial.in</a></p></div>`;
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + E.RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: E.MAIL_FROM || 'CAVENTRA Security <security@caventraofficial.in>',
+          to: [toEmail],
+          subject: subject,
+          text: text,
+          html: html
+        })
+      });
+      if (!r.ok) {
+        const errText = await r.text();
+        console.error('Email dispatch notice from Resend:', r.status, errText);
+        if (r.status === 403 && errText.includes('You can only send testing emails to your own email address')) {
+          console.log(`[Resend Sandbox Mode]: Free unverified accounts only deliver external emails to the registered address (${NOTIFY_TO}).`);
+          console.log(`To deliver to ${toEmail}, verify your domain at https://resend.com/domains.`);
+          console.log(`-> Local Dev OTP Code for ${toEmail}: [ ${otpCode} ]`);
+        }
+      } else {
+        console.log(`✓ Real email dispatched to ${toEmail} via Resend`);
+      }
+    } catch (e) {
+      console.error('Email dispatch error:', e.message);
+    }
+  }
 }
 
 // ---------- routes ----------
@@ -104,6 +156,15 @@ async function api(req, res, u) {
   const p = u.pathname, m = req.method, ip = ipOf(req);
   if (limited('api_' + ip, 60, 6e4)) return send(res, 429, { error: 'Too many API requests. Please slow down.' });
   if (m !== 'GET' && req.headers['x-requested-with'] !== 'caventra') return send(res, 403, { error: 'Forbidden' });
+  if (p === '/api/auth/send-otp' && m === 'POST') {
+    const b = await readJSON(req, 2e3);
+    const email = str(b.email, 200);
+    const code = str(b.code, 10);
+    const type = str(b.type, 50);
+    if (!email || !code) return send(res, 400, { error: 'Email and code required.' });
+    await sendAuthEmail(email, code, type);
+    return send(res, 200, { ok: true, message: 'Dispatched to ' + email });
+  }
   if (p === '/api/site' && m === 'GET') { const s = getSite(); if (s.projects) s.projects = s.projects.filter(x => x.published); return send(res, 200, s, { 'Cache-Control': 'no-store' }); }
   if (p === '/api/contact' && m === 'POST') {
     if (limited('c' + ip, 5, 36e5)) return send(res, 429, { error: 'Too many messages. Please try again later.' });

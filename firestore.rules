@@ -1,0 +1,123 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Helper Functions ---
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isFounder() {
+      return isAuthenticated() && (
+        getUserData().role == 'founder' ||
+        request.auth.token.role == 'founder' ||
+        request.auth.token.email in [
+          'caventraofficial@gmail.com',
+          'hriday@caventra.com',
+          'sauran@caventra.com',
+          'ved@caventra.com'
+        ]
+      );
+    }
+
+    function isClient() {
+      return isAuthenticated() && getUserData().role == 'client';
+    }
+
+    // --- Users Collection ---
+    // Stores account profile and role information.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isFounder();
+      // Registration: User can create their own profile, but role MUST be 'client' (no self-promotion)
+      allow create: if isOwner(userId) && request.resource.data.role == 'client';
+      // Profile updates: Client cannot modify their role or administrative fields
+      allow update: if (isOwner(userId) && request.resource.data.role == resource.data.role) || isFounder();
+      allow delete: if isFounder();
+    }
+
+    // --- Clients Collection ---
+    // CRM client accounts mapped to organizations
+    match /clients/{clientId} {
+      allow read: if isFounder() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow write: if isFounder();
+    }
+
+    // --- Leads Collection ---
+    // Sales pipeline and business inquiries (strictly founder accessible)
+    match /leads/{leadId} {
+      allow read, write: if isFounder();
+    }
+
+    // --- Projects Collection ---
+    // Client projects and milestone progress
+    match /projects/{projectId} {
+      allow read: if isFounder() || (isAuthenticated() && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.clientId == request.auth.uid ||
+        resource.data.clientEmail == request.auth.token.email
+      ));
+      allow write: if isFounder();
+    }
+
+    // --- Project Updates Collection ---
+    // Milestone announcements, progress updates, and client sign-offs
+    match /projectUpdates/{updateId} {
+      allow read: if isFounder() || (isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.clientEmail == request.auth.token.email
+      ));
+      allow create, delete: if isFounder();
+      // Client can sign off / approve milestones and add feedback, but cannot alter update content
+      allow update: if isFounder() || (
+        isAuthenticated() && (
+          resource.data.userId == request.auth.uid ||
+          resource.data.clientEmail == request.auth.token.email
+        ) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['approved', 'approvedAt', 'clientFeedback'])
+      );
+    }
+
+    // --- Invoices Collection ---
+    // Financial statements and manual payment records
+    match /invoices/{invoiceId} {
+      allow read: if isFounder() || (isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.clientEmail == request.auth.token.email
+      ));
+      allow write: if isFounder();
+    }
+
+    // --- Support Tickets Collection ---
+    // Client inquiries and resolution notes
+    match /supportTickets/{ticketId} {
+      allow read: if isFounder() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      // Client can append notes; founder can update status, assignees, and responses
+      allow update: if isFounder() || (
+        isAuthenticated() && resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['message', 'updatedAt', 'additionalNotes'])
+      );
+      allow delete: if isFounder();
+    }
+
+    // --- Activity Logs Collection ---
+    // Administrative audit trail (append-only)
+    match /activityLogs/{logId} {
+      allow read: if isFounder();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
