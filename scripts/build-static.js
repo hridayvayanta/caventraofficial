@@ -3,7 +3,7 @@
 
 /**
  * CAVENTRA Static Page Generator & Sitemap Builder
- * Pre-renders all 35 application routes as static HTML with clean URLs,
+ * Pre-renders all 57 application routes as static HTML with clean URLs,
  * unique SEO metadata, and JSON-LD schema for search engine crawlers and GitHub Pages.
  */
 
@@ -392,9 +392,58 @@ routes.push({
   }
 });
 
-// 8 Curated Blog Articles
+// 34 Curated Blog Articles
 const blogArticles = sandbox.getB ? sandbox.getB() : [];
 for (const b of blogArticles) {
+  const articleGraph = [
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Insights & Blog', 'item': `${BASE_URL}/blog/` },
+        { '@type': 'ListItem', 'position': 3, 'name': b.title, 'item': `${BASE_URL}/blog/${b.slug}/` }
+      ]
+    },
+    {
+      '@type': 'BlogPosting',
+      '@id': `${BASE_URL}/blog/${b.slug}/#article`,
+      'headline': b.title,
+      'description': b.summary,
+      'image': `${BASE_URL}/assets/og-caventra.png`,
+      'author': {
+        '@type': 'Person',
+        'name': b.author,
+        'jobTitle': b.authorRole || 'Founder'
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'Caventra',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${BASE_URL}/assets/logo-nav.png`
+        }
+      },
+      'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
+      'datePublished': '2026-10-01',
+      'dateModified': '2026-10-16'
+    }
+  ];
+
+  if (b.faqs && Array.isArray(b.faqs) && b.faqs.length > 0) {
+    articleGraph.push({
+      '@type': 'FAQPage',
+      '@id': `${BASE_URL}/blog/${b.slug}/#faq`,
+      'mainEntity': b.faqs.map(f => ({
+        '@type': 'Question',
+        'name': f.q,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': f.a
+        }
+      }))
+    });
+  }
+
   routes.push({
     slug: `blog/${b.slug}`,
     urlPath: `blog/${b.slug}`,
@@ -406,39 +455,7 @@ for (const b of blogArticles) {
     render: () => sandbox.V.article(b.slug),
     jsonLd: {
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'BreadcrumbList',
-          'itemListElement': [
-            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
-            { '@type': 'ListItem', 'position': 2, 'name': 'Insights & Blog', 'item': `${BASE_URL}/blog/` },
-            { '@type': 'ListItem', 'position': 3, 'name': b.title, 'item': `${BASE_URL}/blog/${b.slug}/` }
-          ]
-        },
-        {
-          '@type': 'BlogPosting',
-          '@id': `${BASE_URL}/blog/${b.slug}/#article`,
-          'headline': b.title,
-          'description': b.summary,
-          'image': `${BASE_URL}/assets/og-caventra.png`,
-          'author': {
-            '@type': 'Person',
-            'name': b.author,
-            'jobTitle': b.authorRole || 'Founder'
-          },
-          'publisher': {
-            '@type': 'Organization',
-            'name': 'Caventra',
-            'logo': {
-              '@type': 'ImageObject',
-              'url': `${BASE_URL}/assets/logo-nav.png`
-            }
-          },
-          'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
-          'datePublished': '2026-10-01',
-          'dateModified': '2026-10-15'
-        }
-      ]
+      '@graph': articleGraph
     }
   });
 }
