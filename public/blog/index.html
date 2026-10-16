@@ -152,8 +152,10 @@
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <p style="color:var(--mut);font-size:14px;margin:0">Showing 24 of 34 articles</p>
-      <button class="btn sm" id="b-showall">Show All (34)</button>
+      <p id="b-count" style="color:var(--mut);font-size:14px;margin:0">Showing 24 of 34 articles</p>
+      <div id="b-top-showall-wrap">
+        <button class="btn sm b-showall-btn" id="b-showall-top">Show All (34)</button>
+      </div>
     </div>
     <div class="blog-grid" id="bg-grid">
       
@@ -566,12 +568,12 @@
         </a>
       
     </div>
-    
-      <div class="row" style="justify-content:center;margin-top:48px;gap:14px">
+    <div id="b-pagination" class="row" style="justify-content:center;margin-top:48px;gap:14px">
+      
         <button class="btn solid" id="b-more">Load More</button>
-        <button class="btn" id="b-showall">Show All 34 Articles</button>
-      </div>
-    
+        <button class="btn b-showall-btn" id="b-showall">Show All 34 Articles</button>
+      
+    </div>
   </div></section></main>
 <footer><div class="wrap">
   <div class="f-col brand-col">

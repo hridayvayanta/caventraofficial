@@ -1537,8 +1537,10 @@ blog:()=>{
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <p style="color:var(--mut);font-size:14px;margin:0">Showing ${visible.length} of ${filtered.length} articles</p>
-      ${!blogShowAll && filtered.length > pageSize ? `<button class="btn sm" id="b-showall">Show All (${filtered.length})</button>` : ''}
+      <p id="b-count" style="color:var(--mut);font-size:14px;margin:0">Showing ${visible.length} of ${filtered.length} articles</p>
+      <div id="b-top-showall-wrap">
+        ${!blogShowAll && filtered.length > pageSize ? `<button class="btn sm b-showall-btn" id="b-showall-top">Show All (${filtered.length})</button>` : ''}
+      </div>
     </div>
     <div class="blog-grid" id="bg-grid">
       ${visible.map((b,i)=>`
@@ -1560,12 +1562,12 @@ blog:()=>{
         </a>
       `).join('')}
     </div>
-    ${hasMore ? `
-      <div class="row" style="justify-content:center;margin-top:48px;gap:14px">
+    <div id="b-pagination" class="row" style="justify-content:center;margin-top:48px;gap:14px">
+      ${hasMore ? `
         <button class="btn solid" id="b-more">Load More</button>
-        <button class="btn" id="b-showall">Show All ${filtered.length} Articles</button>
-      </div>
-    ` : ''}
+        <button class="btn b-showall-btn" id="b-showall">Show All ${filtered.length} Articles</button>
+      ` : ''}
+    </div>
   `,'style="padding-top:20px"');
 },
 article:s=>{
@@ -1782,9 +1784,17 @@ function getRouteParts() {
   const [r, s] = p.split('/');
   return [r || '', s || ''];
 }
-function render(){const [r,s]=getRouteParts();
+function render(keepScroll = false){const [r,s]=getRouteParts();
  let v=r===''?V.home():r==='services'&&s?V.serviceDetail(s):r==='services'?V.services():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
- app.innerHTML=v;window.scrollTo(0,0);fx();$('#lk').classList.remove('open');
+ const prevY = (typeof window !== 'undefined' && keepScroll) ? window.scrollY : 0;
+ app.innerHTML=v;
+ if (typeof window !== 'undefined') {
+   if (!keepScroll) window.scrollTo(0, 0);
+   else window.scrollTo(0, prevY);
+ }
+ fx();
+ const lk = $('#lk');
+ if (lk) lk.classList.remove('open');
  document.querySelectorAll('.links a').forEach(a=>{const h=(a.getAttribute('href')||'').replace(/^#\/?/,'').replace(/^\//,'').replace(/\/$/,'');a.classList.toggle('on',(r===''&&h==='')||(r!==''&&h===r));});
  $('#fdesc').textContent=S.desc;const so=S.socials.map(x=>`<a href="${safe(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('');$('#fsoc').innerHTML=so;
 
@@ -1881,26 +1891,58 @@ function render(){const [r,s]=getRouteParts();
   };
  }
 }
-document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=+t.dataset.i,P=S.projects;if(t.dataset.bcat){blogFilter=t.dataset.bcat;blogPage=1;render();return}
- if(t.dataset.wcat){workFilter=t.dataset.wcat;render();return}
- if(t.id==='b-more'){blogPage++;render();return}
- if(t.id==='b-showall'){blogShowAll=true;render();return}
- if(a==='logout'){await fetch('/api/admin/logout',{method:'POST',headers:H});owner=false;render();return}if(a==='delq'){if(!confirm('Delete this inquiry?'))return;await fetch('/api/admin/inquiries/'+t.dataset.i,{method:'DELETE',headers:H});INQ=INQ.filter(q=>q.id!=t.dataset.i);render();return}
- if(a==='new'){edit={published:false,gallery:[]};}
- else if(a==='ed'){edit=JSON.parse(JSON.stringify(P[i]));edit._i=i}
- else if(a==='cancel')edit=null;
- else if(a==='pub')P[i].published=!P[i].published;
- else if(a==='feat')P[i].featured=!P[i].featured;
- else if(a==='up'&&i>0)[P[i-1],P[i]]=[P[i],P[i-1]];
- else if(a==='dn'&&i<P.length-1)[P[i+1],P[i]]=[P[i],P[i+1]];
- else if(a==='del'){if(!confirm('Delete this project?'))return;P.splice(i,1)}
- else if(a==='savep'){document.querySelectorAll('#pf [data-k]').forEach(x=>edit[x.dataset.k]=x.value);
-  if(!edit.name){alert('Add a project name first.');return}
-  try{const up=async f=>{const r=await fetch('/api/admin/upload?name='+encodeURIComponent(f.name),{method:'POST',headers:{'Content-Type':f.type,'X-Requested-With':'caventra'},body:f});const j=await r.json();if(!r.ok)throw new Error(j.error);return j.url};const c=$('#pcv').files[0];if(c)edit.cover=await up(c);for(const f of $('#gl').files)edit.gallery.push(await up(f))}catch(x){alert('Image upload failed: '+(x.message||x.code));return}
-  edit.slug=slug(edit.name);const j=edit._i;delete edit._i;if(j!=null)P[j]=edit;else P.push(edit);edit=null}
- else if(a==='saves'){document.querySelectorAll('#sf [data-s]').forEach(x=>{const k=x.dataset.s;if(k==='socials')S.socials=kv(x.value);else if(k==='techs')S.techs=kv(x.value);else if(k.includes('.')){const[a1,b1]=k.split('.');S[a1][b1]=x.value}else S[k]=x.value})}
- else return;
- if(!['new','ed','cancel'].includes(a))await save();render()});
+document.addEventListener('click',async ev=>{
+  // 1. Blog & Work filters and pagination
+  const bcat = ev.target && ev.target.closest && ev.target.closest('[data-bcat]');
+  if (bcat) {
+    blogFilter = bcat.dataset.bcat;
+    blogPage = 1;
+    blogShowAll = false;
+    render(true);
+    return;
+  }
+
+  const wcat = ev.target && ev.target.closest && ev.target.closest('[data-wcat]');
+  if (wcat) {
+    workFilter = wcat.dataset.wcat;
+    render(true);
+    return;
+  }
+
+  const more = ev.target && ev.target.closest && ev.target.closest('#b-more');
+  if (more) {
+    blogPage++;
+    render(true);
+    return;
+  }
+
+  const showall = ev.target && ev.target.closest && ev.target.closest('#b-showall, #b-showall-top, .b-showall-btn');
+  if (showall) {
+    blogShowAll = true;
+    render(true);
+    return;
+  }
+
+  // 2. Admin actions requiring [data-a]
+  const t = ev.target && ev.target.closest && ev.target.closest('[data-a]');
+  if (!t) return;
+  const a = t.dataset.a, i = +t.dataset.i, P = S.projects;
+  if(a==='logout'){await fetch('/api/admin/logout',{method:'POST',headers:H});owner=false;render();return}if(a==='delq'){if(!confirm('Delete this inquiry?'))return;await fetch('/api/admin/inquiries/'+t.dataset.i,{method:'DELETE',headers:H});INQ=INQ.filter(q=>q.id!=t.dataset.i);render();return}
+  if(a==='new'){edit={published:false,gallery:[]};}
+  else if(a==='ed'){edit=JSON.parse(JSON.stringify(P[i]));edit._i=i}
+  else if(a==='cancel')edit=null;
+  else if(a==='pub')P[i].published=!P[i].published;
+  else if(a==='feat')P[i].featured=!P[i].featured;
+  else if(a==='up'&&i>0)[P[i-1],P[i]]=[P[i],P[i-1]];
+  else if(a==='dn'&&i<P.length-1)[P[i+1],P[i]]=[P[i],P[i+1]];
+  else if(a==='del'){if(!confirm('Delete this project?'))return;P.splice(i,1)}
+  else if(a==='savep'){document.querySelectorAll('#pf [data-k]').forEach(x=>edit[x.dataset.k]=x.value);
+   if(!edit.name){alert('Add a project name first.');return}
+   try{const up=async f=>{const r=await fetch('/api/admin/upload?name='+encodeURIComponent(f.name),{method:'POST',headers:{'Content-Type':f.type,'X-Requested-With':'caventra'},body:f});const j=await r.json();if(!r.ok)throw new Error(j.error);return j.url};const c=$('#pcv').files[0];if(c)edit.cover=await up(c);for(const f of $('#gl').files)edit.gallery.push(await up(f))}catch(x){alert('Image upload failed: '+(x.message||x.code));return}
+   edit.slug=slug(edit.name);const j=edit._i;delete edit._i;if(j!=null)P[j]=edit;else P.push(edit);edit=null}
+  else if(a==='saves'){document.querySelectorAll('#sf [data-s]').forEach(x=>{const k=x.dataset.s;if(k==='socials')S.socials=kv(x.value);else if(k==='techs')S.techs=kv(x.value);else if(k.includes('.')){const[a1,b1]=k.split('.');S[a1][b1]=x.value}else S[k]=x.value})}
+  else return;
+  if(!['new','ed','cancel'].includes(a))await save();render()});
 
 // Interactive Website Project Cost Estimator event delegation
 document.addEventListener('click', ev => {
@@ -2112,34 +2154,55 @@ document.addEventListener('input', e => {
   if (e.target && e.target.id === 'b-search') {
     blogQuery = e.target.value;
     blogPage = 1;
+    blogShowAll = false;
     const list = getB();
     const filtered = list.filter(b => {
       const matchCat = (blogFilter === 'All') || (b.category === blogFilter);
       const q = blogQuery.toLowerCase().trim();
       return matchCat && (!q || b.title.toLowerCase().includes(q) || b.summary.toLowerCase().includes(q) || (b.location && b.location.toLowerCase().includes(q)));
     });
-    const pageSize = 12;
+    const pageSize = 24;
     const visible = filtered.slice(0, blogPage * pageSize);
+    const hasMore = visible.length < filtered.length;
+
+    const countEl = document.getElementById('b-count');
+    if (countEl) countEl.textContent = `Showing ${visible.length} of ${filtered.length} articles`;
+
+    const topWrap = document.getElementById('b-top-showall-wrap');
+    if (topWrap) topWrap.innerHTML = (!blogShowAll && filtered.length > pageSize) ? `<button class="btn sm b-showall-btn" id="b-showall-top">Show All (${filtered.length})</button>` : '';
+
     const grid = document.getElementById('bg-grid');
     if (grid) {
-      grid.innerHTML = visible.map(b => `
-        <a class="b-card" href="/blog/${esc(b.slug)}/">
-          <div>
-            <div class="meta">
-              <span>${esc(b.category)}</span>
-              <span class="dot-sep"></span>
-              <span>${esc(b.readTime)}</span>
-              ${b.location && b.location !== 'Global' ? `<span class="dot-sep"></span><span style="color:var(--gold2)">📍 ${esc(b.location)}</span>` : ''}
+      if (visible.length === 0) {
+        grid.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:48px 24px;text-align:center"><h3 style="font-size:20px;margin-bottom:8px">No matching articles found</h3><p style="color:var(--mut);font-size:14px">Try searching for other topics like "pricing", "hosting", "security", or "SEO".</p></div>`;
+      } else {
+        grid.innerHTML = visible.map(b => `
+          <a class="b-card" href="/blog/${esc(b.slug)}/">
+            <div>
+              <div class="meta">
+                <span>${esc(b.category)}</span>
+                <span class="dot-sep"></span>
+                <span>${esc(b.readTime)}</span>
+                ${b.location && b.location !== 'Global' ? `<span class="dot-sep"></span><span style="color:var(--gold2)">📍 ${esc(b.location)}</span>` : ''}
+              </div>
+              <h3>${esc(b.title)}</h3>
+              <p>${esc(b.summary)}</p>
             </div>
-            <h3>${esc(b.title)}</h3>
-            <p>${esc(b.summary)}</p>
-          </div>
-          <div class="ftr">
-            <span class="tag">${esc(b.author)}</span>
-            <span class="read-link">Read Article ↗</span>
-          </div>
-        </a>
-      `).join('');
+            <div class="ftr">
+              <span class="tag">${esc(b.author)}</span>
+              <span class="read-link">Read Article ↗</span>
+            </div>
+          </a>
+        `).join('');
+      }
+    }
+
+    const pagEl = document.getElementById('b-pagination');
+    if (pagEl) {
+      pagEl.innerHTML = hasMore ? `
+        <button class="btn solid" id="b-more">Load More</button>
+        <button class="btn b-showall-btn" id="b-showall">Show All ${filtered.length} Articles</button>
+      ` : '';
     }
   }
 });
