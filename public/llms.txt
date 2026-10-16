@@ -18,11 +18,11 @@ Caventra is a specialized digital solutions and web engineering studio founded a
 - [Selected Work & Case Studies](https://caventraofficial.in/work/): Production implementations including The Wheel Master ERP, PLINTH real-estate platform, and specialized e-commerce applications.
 - [Engineering Blog & Technical Insights](https://caventraofficial.in/blog/): In-depth guides on custom web app costs, US-India engineering partnerships, custom e-commerce vs Shopify, applied AI workflows, zero-bloat Node architecture, and DPDP/GDPR compliance.
 
-## Leadership & Founding Team
+## Leadership Team
 
-- **Hriday Vayanta**: Founder & Lead Architect (Full-Stack Architecture, Systems Design, Scoping)
-- **Ved Nimbark**: Founder & UI/UX Lead (Design Systems, Typography, High-Conversion UI)
-- **Sauranahmed Mansuri**: Founder & Backend Engineer (Backend Services, Databases, Automation Workflows)
+- **Hriday Vayanta**: Head of Growth (Client Acquisition, Marketing, Advertising, Talent & Business Operations)
+- **Ved Nimbark**: Head of Design (Design Systems, Typography, High-Conversion UI)
+- **Sauranahmed Mansuri**: Head of Technology (Full-Stack Engineering, Cloud Infrastructure, Systems Architecture)
 
 ## Contact Information
 
@@ -30,4 +30,4 @@ Caventra is a specialized digital solutions and web engineering studio founded a
 - **Email**: caventraofficial@gmail.com
 - **Telephone / WhatsApp**: +91 8866790989
 - **Headquarters**: Ahmedabad, Gujarat, India
-- **Operating Model**: Direct founder collaboration with businesses globally, with core focus on US SMBs and Indian enterprises.
+- **Operating Model**: Direct executive collaboration with businesses globally, with core focus on US SMBs and Indian enterprises.

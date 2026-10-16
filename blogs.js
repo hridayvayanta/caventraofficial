@@ -10,7 +10,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "7 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "An honest, transparent breakdown of website development costs in India across landing pages, small business sites, corporate platforms, and custom web applications.",
     "content": `
       <p>One of the first questions business owners ask when planning a digital overhaul is: <strong>"How much does a professional website actually cost in India?"</strong> Depending on who you ask, quotes can range anywhere from ₹5,000 from an overseas freelancer to ₹5,00,000+ from a traditional agency.</p>
@@ -49,7 +49,7 @@ window.BLOGS = [
     "date": "September 2026",
     "readTime": "6 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Why cheap shared hosting crashes under traffic, what essential website maintenance includes, and how managed cloud hosting protects your revenue.",
     "content": `
       <p>Many businesses invest significantly in designing their website, only to host it on a ₹200/month shared server. Within months, pages load sluggishly, contact forms silently break, and security patches fall months behind.</p>
@@ -93,7 +93,7 @@ window.BLOGS = [
     "date": "September 2026",
     "readTime": "8 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "A non-technical security checklist covering SSL certificates, Content Security Policies, spam bot traps, form sanitization, and automated backups.",
     "content": `
       <p>Cybersecurity is often treated as an enterprise-only concern until a small business discovers their contact forms are being exploited for spam relaying, or their customer database is scraped by automated bots.</p>
@@ -133,7 +133,7 @@ window.BLOGS = [
     "date": "August 2026",
     "readTime": "7 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "A direct comparison of upfront costs, speed, security, and maintenance overhead between custom-coded websites and WordPress or drag-and-drop builders.",
     "content": `
       <p>When planning a company website, business owners typically face a crossroads: <strong>Should we build on WordPress / Elementor / Wix, or invest in a custom hand-coded website?</strong></p>
@@ -166,7 +166,7 @@ window.BLOGS = [
     "date": "July 2026",
     "readTime": "6 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Why Amazon, Google, and modern research prove that every second of load delay costs conversions, and how sub-second engineering drives organic rankings.",
     "content": `
       <p>Speed is not a cosmetic feature; speed is a fundamental business metric. Amazon found that every 100ms of latency cost them 1% in sales. Google discovered that as page load time increases from 1 to 3 seconds, the probability of a bounce increases by 32%.</p>
@@ -202,7 +202,7 @@ window.BLOGS = [
     "date": "July 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "How proprietary agency CMS platforms and locked builders trap businesses, and why demanding 100% source code and repository ownership protects your investment.",
     "content": `
       <p>One of the most concerning practices in the web agency industry is vendor lock-in. A business pays an agency a substantial budget, only to discover later that their website is built inside the agency's proprietary CMS or host, making it impossible to migrate or update without continuous monthly ransom fees.</p>
@@ -235,7 +235,7 @@ window.BLOGS = [
     "date": "June 2026",
     "readTime": "6 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "When to refresh vs. rebuild from scratch: mobile responsiveness issues, high bounce rates, slow speeds, outdated branding, and lost customer enquiries.",
     "content": `
       <p>Websites age faster than physical storefronts. What looked modern four years ago may now look outdated, load sluggishly on modern phones, and fail to generate qualified customer inquiries.</p>
@@ -275,7 +275,7 @@ window.BLOGS = [
     "date": "June 2026",
     "readTime": "6 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "How to eliminate missed email enquiries by automatically routing website submissions directly into Google Sheets and instant WhatsApp notifications.",
     "content": `
       <p>A website form that only sends an email is an unreliable workflow. Emails land in spam filters, customer inquiries go unnoticed for days, and high-intent leads hire competitors who respond first.</p>
@@ -307,7 +307,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "8 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "How US SMBs and startups partner with specialized Indian web studios without typical outsourcing friction: time-zone overlap, IP ownership, and direct engineering.",
     "content": `<p>For US-based small and mid-sized businesses (SMBs), hiring local software engineering agencies often comes with prohibitive price tags—proposals routinely range from $80,000 to $200,000 for standard custom web applications. Consequently, hundreds of American founders turn their attention to India, the world's largest engineering hub.</p>
 
@@ -359,7 +359,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "9 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "A realistic cost guide for custom web apps, client portals, and SaaS MVPs. Understand database architecture, authentication, integrations, and hosting expenses.",
     "content": `<p>When business owners and founders decide to move beyond basic marketing websites to build interactive software—such as a SaaS minimum viable product (MVP), an internal ERP, or a secure client portal—budgeting becomes the central question. <strong>"How much does custom web application development actually cost in 2026?"</strong></p>
 
@@ -405,7 +405,7 @@ window.BLOGS = [
     "date": "September 2026",
     "readTime": "7 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Discover when scaling DTC and retail brands outgrow Shopify. Compare transaction fees, liquid template bloat, bespoke checkout funnels, and true lifetime ROI.",
     "content": `<p>For early-stage direct-to-consumer (DTC) brands launching their first product, Shopify is an exceptional turnkey platform. However, as an e-commerce brand scales past $30,000 to $100,000 in monthly revenue, the limitations of off-the-shelf platforms begin to create serious friction: escalating app subscriptions, sluggish page load times, rigid checkout restrictions, and platform transaction penalties.</p>
 
@@ -444,7 +444,7 @@ window.BLOGS = [
     "date": "September 2026",
     "readTime": "8 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Cut through AI hype: 5 practical, high-ROI applied AI workflows for SMB websites including intelligent lead qualification, proposal generation, and CRM routing.",
     "content": `<p>Artificial Intelligence is dominating business headlines, but most small and medium businesses struggle to find practical implementations beyond generic chatbots that parrot canned responses. The true business value of AI lies not in novelty, but in <strong>applied automation workflows</strong> that eliminate repetitive manual labor, qualify high-intent buyers, and accelerate sales response times.</p>
 
@@ -469,7 +469,7 @@ window.BLOGS = [
       <h2>Privacy &amp; Security: The Non-Negotiable Standard</h2>
       <p>When implementing AI workflows, business data must remain private. At Caventra, our custom AI integrations use zero-retention enterprise API endpoints, ensuring your proprietary customer communications and pricing data are never exposed or used to train public machine learning models.</p>
 
-      <p>Ready to automate your company's digital pipeline? <a href="/contact/">Speak with our engineering founders</a> to design your custom applied AI workflow.</p>`
+      <p>Ready to automate your company's digital pipeline? <a href="/contact/">Speak with our engineering team</a> to design your custom applied AI workflow.</p>`
   }
   ,
   {
@@ -481,7 +481,7 @@ window.BLOGS = [
     "date": "August 2026",
     "readTime": "8 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Why modern web development suffers from dependency bloat and hydration lag — and why clean Node.js and SQLite deliver sub-second performance and zero vendor lock-in.",
     "content": `<p>The modern web engineering ecosystem is caught in a complexity crisis. A routine corporate website today often ships with hundreds of megabytes of <code>node_modules</code>, deeply nested React component trees, complex webpack/Vite configuration layers, and fragile cloud infrastructure dependencies.</p>
 
@@ -520,7 +520,7 @@ window.BLOGS = [
     "date": "August 2026",
     "readTime": "7 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "An actionable legal and technical compliance guide for business websites in 2026: India's DPDP Act, GDPR consent standards, Content Security Policy, and SSL hardening.",
     "content": `<p>Many small and medium business owners operate under a dangerous misconception: <em>"My company is too small to be targeted by cyber attackers, and data privacy regulations only apply to tech giants like Google and Meta."</em></p>
 
@@ -564,7 +564,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "6 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Your dental website looks fine but the phone stays quiet. Here are five fixable reasons, and what to change first.",
     "faqs": [{"q":"How do I get my dental practice to show up on Google in my city?","a":"Name your city and service areas clearly on your site, keep a complete Google Business Profile, and give each treatment its own page."},{"q":"How fast should a dental website load?","a":"Aim for under three seconds on a phone. Slower than that and visitors start leaving."},{"q":"Do dentists need a custom website?","a":"Not always, but a site built around your practice, your treatments and your patients will almost always outperform a generic template."}],
     "content": `<p>Most dentists we talk to say the same thing: they paid good money for a website, it looks clean and modern, but the practice phone still doesn't ring. New patient appointments remain stagnant.</p>
@@ -610,7 +610,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "6 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "You don't need a security team. You need these six habits. A plain-English guide to protecting your small business website.",
     "faqs": [{"q":"Is my small business website really at risk?","a":"Yes. Automated attacks scan for outdated and weakly protected sites regardless of size."},{"q":"What is the most important website security step?","a":"Keeping everything updated and using unique passwords with two-factor authentication."},{"q":"How often should a website be backed up?","a":"At minimum daily for sites that change often, weekly for rarely changing ones, always stored off the hosting server."}],
     "content": `<p>A lot of small business owners believe cyber attackers only target Fortune 500 banks or tech conglomerates. In practice, small commercial websites are prime targets because they are almost always the least protected.</p>
@@ -659,7 +659,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Cheap hosting saves money until the site goes down. Here is what managed hosting really includes and when it is worth it.",
     "faqs": [{"q":"What is managed website hosting?","a":"Hosting where the provider also handles updates, security, backups and support for you."},{"q":"Does hosting affect SEO?","a":"Yes. Speed and reliability affect user experience and how search engines treat your site."},{"q":"Is shared hosting good enough for a business website?","a":"It can work for very small or low-traffic sites, but businesses that depend on their site usually outgrow it."}],
     "content": `<p>Website hosting often seems like the least exciting part of launching a company website. Yet it is the single infrastructural layer that dictates whether your site is fast, secure, and accessible when a high-value customer lands on it.</p>
@@ -702,7 +702,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Quotes vary wildly. Here is what really drives the cost of a business website and the questions to ask before you hire.",
     "faqs": [{"q":"Why do website quotes vary so much?","a":"Because scope, design depth, features and ongoing care differ from one quote to the next."},{"q":"Do I own my website after it's built?","a":"You should. Confirm in writing that you own the domain and site files."}],
     "content": `<p>If you have requested proposals from three different digital agencies, you likely received three wildly different numbers: one for $1,200, one for $6,500, and one for $20,000+. That discrepancy is normal, and it doesn't necessarily mean someone is overcharging.</p>
@@ -746,7 +746,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Slow, outdated, or silent? Seven clear signs your website needs a redesign, and how to tell if a fix is enough.",
     "faqs": [{"q":"How often should a business website be redesigned?","a":"There is no fixed schedule. Redesign when it stops loading well, looking right or bringing in enquiries."},{"q":"Will a redesign hurt my Google rankings?","a":"It can if URLs and content are handled carelessly. Done properly, with redirects in place, it usually helps."}],
     "content": `<p>Websites don't display an expiration date. Instead, they gradually stop generating inquiries, load sluggishly on modern phones, and quietly fall behind competitor benchmarks. Here are the seven clearest indicators that your business has outgrown its current website.</p>
@@ -791,7 +791,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Slow sites lose visitors and rankings. Learn what slows a website down and the simple fixes that help.",
     "faqs": [{"q":"How fast should my website load?","a":"Aim for around three seconds or less on a mobile connection."},{"q":"Does website speed affect SEO?","a":"Yes, it's part of the page experience that search engines consider."}],
     "content": `<p>Prospective customers never complain about a slow website. They simply click the back button, return to Google, and contact your faster competitor.</p>
@@ -833,7 +833,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Show up when customers search near them. How to set up your Google Business Profile and connect it to your website.",
     "faqs": [{"q":"What is local SEO?","a":"Improving how your business appears in searches tied to a location, like 'near me' queries."},{"q":"Do I need a website if I have a Google Business Profile?","a":"Yes. The profile attracts attention and the website builds trust and handles enquiries."}],
     "content": `<p>When someone in your community searches for "plumber near me," "dental clinic downtown," or "commercial web studio," the first result they see isn't a traditional web page. It is a map pack featuring top-rated local business listings.</p>
@@ -868,7 +868,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Most visitors use phones. Here is what a truly mobile-friendly website looks like and how to test yours in two minutes.",
     "faqs": [{"q":"What does mobile-friendly mean?","a":"A site that reads, loads and works smoothly on a small screen without zooming or sideways scrolling."},{"q":"Does Google rank mobile sites differently?","a":"Google mainly uses the mobile version of a site for indexing and ranking."}],
     "content": `<p>For modern commercial businesses, more than half of all customer visits occur on smartphones. Even if your specific industry has a desktop audience, Google exclusively uses mobile-first indexing to rank your website.</p>
@@ -903,7 +903,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Three ways to build a business website, compared in plain English, with a simple way to decide.",
     "faqs": [{"q":"Is WordPress good for small business?","a":"It can be, as long as someone keeps it updated and secured."},{"q":"What is a static website?","a":"A site made of fixed pages that doesn't rely on a database, which usually makes it fast and simple to secure."}],
     "content": `<p>There is no universally superior platform for building a company website—only the architectural setup that matches your specific business model, team resources, and technical requirements.</p>
@@ -924,7 +924,7 @@ window.BLOGS = [
         <li>Do we need unique interactive software, user logins, or custom calculators? (If yes, build a custom web app).</li>
         <li>Is our primary goal speed, credibility, local SEO, and zero maintenance headaches? (If yes, choose pre-rendered static engineering).</li>
       </ol>
-      <p>Discover our approach to <a href="/services/web-development/">Custom Web Engineering</a> or <a href="/contact/">consult with our founders</a>.</p>
+      <p>Discover our approach to <a href="/services/web-development/">Custom Web Engineering</a> or <a href="/contact/">consult with our team</a>.</p>
 
       <h2>Quick Answers</h2>
       <h3>Is WordPress good for small business?</h3>
@@ -942,7 +942,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Your site is live, but the work isn't over. A plain guide to what website maintenance includes and what happens without it.",
     "faqs": [{"q":"What is website maintenance?","a":"The ongoing work of updating, securing, backing up and checking a website after launch."},{"q":"How often should a website be maintained?","a":"Checks and updates should happen regularly, often monthly, with monitoring running all the time."}],
     "content": `<p>Launch day often feels like crossing the finish line. In reality, it is simply the starting line of your digital storefront's operational lifecycle.</p>
@@ -978,7 +978,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "6 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Hiring a web designer? These are the questions, red flags and green flags that help you choose well.",
     "faqs": [{"q":"What should I look for in a web design company?","a":"Clear pricing, relevant work, ownership terms in writing and a plan for ongoing support."},{"q":"Can anyone guarantee a number one Google ranking?","a":"No. Be cautious of anyone who promises it."}],
     "content": `<p>Selecting the right web engineering partner saves your company thousands of dollars and months of wasted effort. Selecting the wrong agency costs you twice: first to build a defective site, and second to hire another team to fix it.</p>
@@ -1023,7 +1023,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Social media is great, but it isn't yours. Why every business still needs its own website, and how both work together.",
     "faqs": [{"q":"Is a social media page enough for a business?","a":"It helps, but it can't replace a website you own and control."},{"q":"What should a first business website include?","a":"Your services, location, contact details, proof of your work, and a clear way to get in touch."}],
     "content": `<p>A frequent question from modern boutique founders and local service businesses is: <em>"We already have thousands of active followers on Instagram—do we really need a separate company website?"</em></p>
@@ -1058,7 +1058,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "A good backup turns a website disaster into a small delay. What to back up, how often, and how to know it works.",
     "faqs": [{"q":"How often should I back up my website?","a":"Daily for active sites, at least weekly for sites that rarely change."},{"q":"Where should website backups be stored?","a":"Off the hosting server, ideally in a separate secure location."}],
     "content": `<p>Nobody focuses on website backups until disaster strikes—and by then, setting up a backup system is too late.</p>
@@ -1091,7 +1091,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "Short, memorable and safely owned. How to pick a domain name and protect it from expiring or being lost.",
     "faqs": [{"q":"Should I use .com or a country domain?","a":"Choose what fits your audience. .com is widely recognised, while country domains signal local focus."},{"q":"Who should own my domain?","a":"The business owner. Always make sure it's registered under your name or company."}],
     "content": `<p>Your domain name is your primary permanent address on the global internet. Choosing it thoughtfully is essential, because migrating to a new domain later creates branding confusion, broken inbound links, and temporary search ranking disruptions.</p>
@@ -1129,7 +1129,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "That padlock is more than decoration. What HTTPS and SSL really do, and why every business site needs them.",
     "faqs": [{"q":"What does HTTPS mean?","a":"It means the connection to a website is encrypted for safety."},{"q":"Do all websites need HTTPS?","a":"Yes. Any site that collects even a contact form should have it."}],
     "content": `<p>You have undoubtedly seen the small padlock icon in your browser's address bar. It indicates that the connection between your computer and the web server is secured using HTTPS (Hypertext Transfer Protocol Secure).</p>
@@ -1163,7 +1163,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Sauranahmed Mansuri",
-    "authorRole": "Founder & Backend Engineer",
+    "authorRole": "Head of Technology",
     "summary": "Redirects, strange pages, security warnings. How to spot a hacked website and the first steps to take.",
     "faqs": [{"q":"How do I know if my website was hacked?","a":"Look for unexpected redirects, strange content, security warnings, sudden slowness or unknown admin users."},{"q":"Can a hacked website be fixed?","a":"Usually yes, by cleaning the site, restoring from backup and fixing the weakness that let attackers in."}],
     "content": `<p>A compromised website rarely advertises itself with dramatic skulls or ransom demands. Modern cyber intrusions are quiet: attackers want your server to remain operational so they can covertly redirect traffic, send spam emails, or harvest customer inquiries undetected for weeks.</p>
@@ -1203,7 +1203,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Five seconds to make an impression. How to write a homepage that explains what you do and gets people to act.",
     "faqs": [{"q":"What should a homepage include?","a":"What you do, who it's for, proof you're credible, and a clear next step."},{"q":"How long should homepage text be?","a":"As short as it can be while still answering the visitor's main questions."}],
     "content": `<p>Your homepage has approximately five seconds to answer three foundational questions in a visitor's mind: <strong>What do you do? Who is it for? And what should I do next?</strong></p>
@@ -1241,7 +1241,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Slow, hidden contact details, no backups. The ten website mistakes we see most, and quick fixes for each.",
     "faqs": [{"q":"What is the biggest website mistake small businesses make?","a":"Not giving visitors one clear next step."},{"q":"How can I improve my small business website quickly?","a":"Fix mobile layout, speed and contact visibility first. They have the biggest everyday impact."}],
     "content": `<p>After auditing hundreds of commercial web platforms, our team observes the exact same handful of structural mistakes repeated across industries. Every one of them is fixable.</p>
@@ -1279,7 +1279,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Ved Nimbark",
-    "authorRole": "Founder & UI/UX Lead",
+    "authorRole": "Head of Design",
     "summary": "Alt text, contrast, keyboard use. A practical introduction to making your website usable for everyone.",
     "faqs": [{"q":"What is website accessibility?","a":"Designing a site so people with disabilities can use it effectively."},{"q":"Does accessibility help SEO?","a":"Often, yes. Clear structure, descriptive text and good headings help both people and search engines."}],
     "content": `<p>Digital accessibility means engineering your website so that people of all abilities—including individuals who are blind, have low vision, are deaf, experience limited motor mobility, or have cognitive processing differences—can navigate and interact with your content effectively.</p>
@@ -1315,7 +1315,7 @@ window.BLOGS = [
     "date": "October 2026",
     "readTime": "5 min read",
     "author": "Hriday Vayanta",
-    "authorRole": "Founder & Lead Architect",
+    "authorRole": "Head of Growth",
     "summary": "When something breaks, who do you call? Why having one accountable team for your website saves time and stress.",
     "faqs": [{"q":"Should my web designer also host my website?","a":"It helps. One accountable team means faster fixes and fewer gaps."},{"q":"What is a fully managed website service?","a":"A service where the provider handles building, hosting, security and ongoing updates for you."}],
     "content": `<p>Here is a frustrating scenario small business owners face constantly: your website was designed by a freelance developer, hosted on a cheap server with a company that has never heard of you, and "secured" by a plugin nobody remembers configuring.</p>

@@ -1474,32 +1474,41 @@ about:()=>{
         </div>
       </div>
     <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:64px">
-      <h2 style="margin-bottom:14px">Founders &amp; Leadership</h2>
-      <p style="margin-bottom:40px;font-size:17px;color:var(--mut)">Caventra is founder-led. You collaborate directly with the engineers and designers building your platform.</p>
+      <h2 style="margin-bottom:14px">Leadership Team</h2>
+      <p style="margin-bottom:40px;font-size:17px;color:var(--mut)">Caventra is leadership-driven. You collaborate directly with the engineers, designers, and growth partners building your platform.</p>
       <div class="founders-grid">
         <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Head of Growth" width="320" height="320" loading="lazy">
+          </div>
           <h3>Hriday Vayanta</h3>
-          <span class="founder-role">Founder &amp; Lead Architect</span>
-          <p class="founder-bio">Specializes in high-performance web architecture, systems design, Core Web Vitals optimization, and enterprise software scoping.</p>
-          <span class="founder-focus">Full-Stack Architecture · Performance · Scoping</span>
+          <span class="founder-role">Head of Growth</span>
+          <p class="founder-bio">Leads commercial growth, client partnerships, digital advertising, marketing campaigns, social media management, and recruitment operations at Caventra.</p>
+          <span class="founder-focus">Growth &amp; Sales · Marketing &amp; Ads · Talent &amp; Operations</span>
         </div>
         <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Head of Design" width="320" height="320" loading="lazy">
+          </div>
           <h3>Ved Nimbark</h3>
-          <span class="founder-role">Founder &amp; UI/UX Lead</span>
+          <span class="founder-role">Head of Design</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
         </div>
         <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.svg" alt="Sauranahmed Mansuri — Head of Technology" width="320" height="320" loading="lazy">
+          </div>
           <h3>Sauranahmed Mansuri</h3>
-          <span class="founder-role">Founder &amp; Backend Engineer</span>
-          <p class="founder-bio">Focuses on backend services, database design, server architecture, API integrations, and automated lead workflows.</p>
-          <span class="founder-focus">Backend Engineering · Databases · Automation</span>
+          <span class="founder-role">Head of Technology</span>
+          <p class="founder-bio">Architects the end-to-end technical ecosystem at Caventra, engineering frontend and backend systems, database infrastructures, and cloud deployment pipelines.</p>
+          <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
         </div>
       </div>
     </div>
     <div style="margin-top:72px;padding:52px 32px;border:1px solid var(--gold);border-radius:var(--r);background:radial-gradient(ellipse at 50% 0%,rgba(201,184,160,.12),transparent 75%) var(--bg2);text-align:center">
       <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Have an idea worth building?</h2>
-      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline directly with our founding team.</p>
+      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline directly with our team.</p>
       <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
         <a class="btn solid" href="/contact/">Start a Project ↗</a>
         <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -1808,7 +1817,7 @@ function render(keepScroll = false){const [r,s]=getRouteParts();
    'services/security': 'Website Security, Hardening & Protection | Caventra',
    'work': 'Selected Work & Case Studies | Caventra',
    'process': 'Our 7-Stage Engineering Process | Caventra',
-   'about': 'About Caventra — Founders & Engineering Philosophy',
+   'about': 'About Caventra — Leadership & Engineering Philosophy',
    'blog': 'Insights & Engineering Blog | Caventra',
    'estimator': 'Website Project Cost Estimator | Caventra',
    'contact': 'Start a Project | Caventra',

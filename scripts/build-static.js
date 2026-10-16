@@ -300,8 +300,8 @@ routes.push({
 routes.push({
   slug: 'about',
   urlPath: 'about',
-  title: 'About Caventra — Founders & Engineering Philosophy',
-  description: 'Meet the founding engineers behind Caventra. We combine architectural rigor, direct engineer collaboration, and clean code principles to solve real business challenges.',
+  title: 'About Caventra — Leadership & Engineering Philosophy',
+  description: 'Meet the leadership team behind Caventra. We combine architectural rigor, direct engineer collaboration, and clean code principles to solve real business challenges.',
   activeNav: 'about',
   changefreq: 'monthly',
   priority: '0.8',
@@ -413,7 +413,7 @@ for (const b of blogArticles) {
       'author': {
         '@type': 'Person',
         'name': b.author,
-        'jobTitle': b.authorRole || 'Founder'
+        'jobTitle': b.authorRole || 'Engineering'
       },
       'publisher': {
         '@type': 'Organization',
