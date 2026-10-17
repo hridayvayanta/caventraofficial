@@ -1485,6 +1485,10 @@ about:()=>{
           <span class="founder-role">Head of Growth</span>
           <p class="founder-bio">Leads commercial growth, client partnerships, digital advertising, marketing campaigns, social media management, and recruitment operations at Caventra.</p>
           <span class="founder-focus">Growth &amp; Sales · Marketing &amp; Ads · Talent &amp; Operations</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:caventraofficial@gmail.com">Email ↗</a>
+          </div>
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
@@ -1494,6 +1498,10 @@ about:()=>{
           <span class="founder-role">Head of Design</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:vednimbark08@gmail.com">Email ↗</a>
+          </div>
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
@@ -1503,6 +1511,10 @@ about:()=>{
           <span class="founder-role">Head of Technology</span>
           <p class="founder-bio">Architects the end-to-end technical ecosystem at Caventra, engineering frontend and backend systems, database infrastructures, and cloud deployment pipelines.</p>
           <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com">Email ↗</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1562,6 +1574,7 @@ founders:()=>{
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
           <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:vednimbark08@gmail.com">Email ↗</a>
           </div>
         </div>
 
@@ -1575,6 +1588,7 @@ founders:()=>{
           <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
           <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com">Email ↗</a>
           </div>
         </div>
       </div>
@@ -1619,9 +1633,9 @@ founders:()=>{
         <div class="faq-item">
           <div class="faq-q">Who are the founders of Caventra?</div>
           <p class="faq-a">The three founders of Caventra are:
-            <br>1. <strong>Hriday Vayanta</strong> — Founder &amp; Head of Growth
-            <br>2. <strong>Ved Nimbark</strong> — Founder &amp; Head of Design
-            <br>3. <strong>Sauranahmed Mansuri</strong> — Founder &amp; Head of Technology
+            <br>1. <strong>Hriday Vayanta</strong> — Founder &amp; Head of Growth (Email: <a href="mailto:caventraofficial@gmail.com" style="color:var(--gold)">caventraofficial@gmail.com</a>)
+            <br>2. <strong>Ved Nimbark</strong> — Founder &amp; Head of Design (Email: <a href="mailto:vednimbark08@gmail.com" style="color:var(--gold)">vednimbark08@gmail.com</a>)
+            <br>3. <strong>Sauranahmed Mansuri</strong> — Founder &amp; Head of Technology (Email: <a href="mailto:sauranahmed12345678@gmail.com" style="color:var(--gold)">sauranahmed12345678@gmail.com</a>)
           </p>
         </div>
         <div class="faq-item">

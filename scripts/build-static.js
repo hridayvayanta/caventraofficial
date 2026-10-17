@@ -365,6 +365,8 @@ routes.push({
               'jobTitle': 'Founder & Head of Growth',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
               'image': `${BASE_URL}/assets/founders/hriday-vayanta.jpg`,
+              'email': 'caventraofficial@gmail.com',
+              'telephone': '+918866790989',
               'description': 'Founder and Head of Growth at Caventra, leading commercial strategy, client partnerships, marketing campaigns, and recruitment operations.',
               'sameAs': [
                 'https://www.instagram.com/caventra__/'
@@ -377,6 +379,8 @@ routes.push({
               'jobTitle': 'Founder & Head of Design',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
               'image': `${BASE_URL}/assets/founders/ved-nimbark.jpg`,
+              'email': 'vednimbark08@gmail.com',
+              'telephone': '+918849186747',
               'description': 'Founder and Head of Design at Caventra, directing brand identities, accessible design systems, typographic hierarchies, and high-conversion user interfaces.'
             },
             {
@@ -386,6 +390,8 @@ routes.push({
               'jobTitle': 'Founder & Head of Technology',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
               'image': `${BASE_URL}/assets/founders/sauranahmed-mansuri.jpg`,
+              'email': 'sauranahmed12345678@gmail.com',
+              'telephone': '+917990652097',
               'description': 'Founder and Head of Technology at Caventra, architecting full-stack web software, database infrastructures, security protocols, and cloud deployment pipelines.'
             }
           ]
@@ -408,7 +414,7 @@ routes.push({
             'name': 'Who are the founders of Caventra?',
             'acceptedAnswer': {
               '@type': 'Answer',
-              'text': 'Caventra was founded by three founders: 1. Hriday Vayanta (Head of Growth), 2. Ved Nimbark (Head of Design), and 3. Sauranahmed Mansuri (Head of Technology).'
+              'text': 'Caventra was founded by three founders: 1. Hriday Vayanta (Founder & Head of Growth - caventraofficial@gmail.com), 2. Ved Nimbark (Founder & Head of Design - vednimbark08@gmail.com), and 3. Sauranahmed Mansuri (Founder & Head of Technology - sauranahmed12345678@gmail.com).'
             }
           },
           {
