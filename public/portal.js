@@ -1043,6 +1043,319 @@
     return '';
   }
 
+  function renderFounderModals(users, projects, invoices) {
+    const clientUsers = (users || []).filter(u => u.role === 'client');
+    const invoiceCount = (invoices || []).length;
+    const projectList = projects || [];
+
+    return `
+      <!-- Create Lead Modal -->
+      <div id="pt-lead-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Create New Sales Lead</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-create-lead" class="pt-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Company Name *</span>
+                <input type="text" name="companyName" required placeholder="Acme Technologies">
+              </label>
+              <label>
+                <span>Contact Name *</span>
+                <input type="text" name="contactName" required placeholder="Rohan Sharma">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Email Address *</span>
+                <input type="email" name="email" required placeholder="contact@acme.com">
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input type="tel" name="phone" placeholder="+91 98765 00000">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <label>
+                <span>Enquiry Source</span>
+                <select name="source">
+                  <option value="Website Estimator">Website Estimator</option>
+                  <option value="Start a Project Form">Start a Project Form</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Direct Outreach">Direct Outreach</option>
+                </select>
+              </label>
+              <label>
+                <span>Sales Stage</span>
+                <select name="stage">
+                  <option value="New">New</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Proposal Sent">Proposal Sent</option>
+                  <option value="Negotiation">Negotiation</option>
+                  <option value="Closed Won">Closed Won</option>
+                  <option value="Closed Lost">Closed Lost</option>
+                </select>
+              </label>
+              <label>
+                <span>Assigned Owner</span>
+                <select name="owner">
+                  <option value="Hriday Vayanta">Hriday Vayanta (Growth)</option>
+                  <option value="Sauranahmed Mansuri">Sauranahmed Mansuri (Tech)</option>
+                  <option value="Ved Nimbaark">Ved Nimbaark (Design)</option>
+                </select>
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Estimated Budget</span>
+                <input type="text" name="budget" placeholder="e.g. ₹1,50,000">
+              </label>
+              <label>
+                <span>Follow-up Date</span>
+                <input type="date" name="followUpDate">
+              </label>
+            </div>
+            <label>
+              <span>Internal Notes</span>
+              <textarea name="notes" rows="3" placeholder="Project requirements, scope considerations, notes..."></textarea>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Create Lead</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Create Client Modal -->
+      <div id="pt-client-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Add New Client Record</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-create-client" class="pt-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Company Name *</span>
+                <input type="text" name="companyName" required placeholder="Zenith Retail Ltd">
+              </label>
+              <label>
+                <span>Contact Name *</span>
+                <input type="text" name="contactName" required placeholder="Ananya Sharma">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Email Address *</span>
+                <input type="email" name="email" required placeholder="ananya@zenith.com">
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input type="tel" name="phone" placeholder="+91 98220 00000">
+              </label>
+            </div>
+            <label>
+              <span>Link to Authenticated User</span>
+              <select name="userId">
+                <option value="">None (Stand-alone record)</option>
+                ${clientUsers.map(u => `
+                  <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
+                `).join('')}
+              </select>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Save Client</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Create Project Modal -->
+      <div id="pt-project-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Create New Client Project</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-create-project" class="pt-form">
+            <label>
+              <span>Project Title *</span>
+              <input type="text" name="name" required placeholder="e.g. Apex Health Cloud Portal">
+            </label>
+            <label>
+              <span>Assign to Client Account *</span>
+              <select name="userId" required>
+                ${clientUsers.map(u => `
+                  <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)}) — ${esc(u.company || 'Client')}</option>
+                `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
+              </select>
+            </label>
+            <label>
+              <span>Project Overview & Scope</span>
+              <textarea name="description" rows="3" placeholder="Full-stack web engineering, API integrations, and SLA deliverables..."></textarea>
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Delivery Stage</span>
+                <select name="status">
+                  <option value="Discovery">Discovery</option>
+                  <option value="In Development" selected>In Development</option>
+                  <option value="Client Review">Client Review</option>
+                  <option value="Launched">Launched</option>
+                </select>
+              </label>
+              <label>
+                <span>Estimated Completion Date</span>
+                <input type="date" name="estimatedCompletion">
+              </label>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Create Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Post Project Update Modal -->
+      <div id="pt-update-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Post Client Progress Update</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-post-update" class="pt-form">
+            <label>
+              <span>Target Project *</span>
+              <select name="projectId" required>
+                ${projectList.map(p => `
+                  <option value="${esc(p.id)}">${esc(p.name)} (${esc(p.clientEmail || 'Client')})</option>
+                `).join('') || '<option value="" disabled selected>No active projects to update</option>'}
+              </select>
+            </label>
+            <label>
+              <span>Update Title *</span>
+              <input type="text" name="title" required placeholder="e.g. Sprint 3 Deployed to Staging">
+            </label>
+            <label>
+              <span>Update Notes for Client *</span>
+              <textarea name="notes" rows="4" required placeholder="Summary of changes delivered, testing instructions, and next steps..."></textarea>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+              <input type="checkbox" name="needsApproval" value="true">
+              <span>Requires Milestone Sign-off from Client</span>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Publish Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Create Invoice Modal -->
+      <div id="pt-invoice-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Issue Client Invoice</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-create-invoice" class="pt-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Invoice Reference *</span>
+                <input type="text" name="reference" required value="INV-2026-00${invoiceCount + 1}">
+              </label>
+              <label>
+                <span>Select Client *</span>
+                <select name="userId" required>
+                  ${clientUsers.map(u => `
+                    <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
+                  `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
+                </select>
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px">
+              <label>
+                <span>Amount *</span>
+                <input type="number" name="amount" required placeholder="85000">
+              </label>
+              <label>
+                <span>Currency</span>
+                <select name="currency">
+                  <option value="INR" selected>INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                </select>
+              </label>
+              <label>
+                <span>Due Date</span>
+                <input type="date" name="dueDate">
+              </label>
+            </div>
+            <label>
+              <span>Description / Scope *</span>
+              <input type="text" name="description" required placeholder="Milestone 2 — Architecture & Frontend Engineering">
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Issue Invoice</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Record Payment Modal -->
+      <div id="pt-payment-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Record Manual Payment Verification</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-record-payment" class="pt-form">
+            <input type="hidden" name="invoiceId" id="pt-pay-inv-id">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Paid Amount *</span>
+                <input type="number" name="paidAmount" id="pt-pay-amount" required>
+              </label>
+              <label>
+                <span>Payment Date *</span>
+                <input type="date" name="paymentDate" required value="${new Date().toISOString().slice(0, 10)}">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Payment Method</span>
+                <select name="paymentMethod">
+                  <option value="Bank Transfer (IMPS/NEFT)">Bank Transfer (IMPS/NEFT)</option>
+                  <option value="UPI">UPI Transfer</option>
+                  <option value="Wire (International)">Wire Transfer</option>
+                  <option value="Cheque">Cheque</option>
+                </select>
+              </label>
+              <label>
+                <span>Transaction Reference</span>
+                <input type="text" name="transactionRef" placeholder="e.g. IMPS/AXIS/918237">
+              </label>
+            </div>
+            <label>
+              <span>Verification Notes</span>
+              <textarea name="notes" rows="2" placeholder="Bank ledger confirmation notes..."></textarea>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Confirm Payment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+  }
+
   // 5. FOUNDER DASHBOARD VIEW
   function renderFounderDashboard() {
     const user = global.CaventraAuth ? global.CaventraAuth.getCurrentUser() : null;
@@ -1116,6 +1429,7 @@
         <main class="wrap pt-dash-content">
           ${renderFounderTabContent(founderActiveTab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount)}
         </main>
+        ${renderFounderModals(users, projects, invoices)}
       </div>
     `;
   }
@@ -1223,86 +1537,6 @@
             <button class="btn solid sm" data-pt-action="open-create-lead">＋ Add New Lead</button>
           </div>
 
-          <!-- Create Lead Modal -->
-          <div id="pt-lead-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Create New Sales Lead</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-create-lead" class="pt-form">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Company Name *</span>
-                    <input type="text" name="companyName" required placeholder="Acme Technologies">
-                  </label>
-                  <label>
-                    <span>Contact Name *</span>
-                    <input type="text" name="contactName" required placeholder="Rohan Sharma">
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Email Address *</span>
-                    <input type="email" name="email" required placeholder="contact@acme.com">
-                  </label>
-                  <label>
-                    <span>Phone Number</span>
-                    <input type="tel" name="phone" placeholder="+91 98765 00000">
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-                  <label>
-                    <span>Enquiry Source</span>
-                    <select name="source">
-                      <option value="Website Estimator">Website Estimator</option>
-                      <option value="Start a Project Form">Start a Project Form</option>
-                      <option value="Referral">Referral</option>
-                      <option value="Direct Outreach">Direct Outreach</option>
-                    </select>
-                  </label>
-                  <label>
-                    <span>Sales Stage</span>
-                    <select name="stage">
-                      <option value="New">New</option>
-                      <option value="Qualified">Qualified</option>
-                      <option value="Proposal Sent">Proposal Sent</option>
-                      <option value="Negotiation">Negotiation</option>
-                      <option value="Closed Won">Closed Won</option>
-                      <option value="Closed Lost">Closed Lost</option>
-                    </select>
-                  </label>
-                  <label>
-                    <span>Assigned Owner</span>
-                    <select name="owner">
-                      <option value="Hriday Vayanta">Hriday Vayanta (Growth)</option>
-                      <option value="Sauranahmed Mansuri">Sauranahmed Mansuri (Tech)</option>
-                      <option value="Ved Nimbaark">Ved Nimbaark (Design)</option>
-                    </select>
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Estimated Budget</span>
-                    <input type="text" name="budget" placeholder="e.g. ₹1,50,000">
-                  </label>
-                  <label>
-                    <span>Follow-up Date</span>
-                    <input type="date" name="followUpDate">
-                  </label>
-                </div>
-                <label>
-                  <span>Internal Notes</span>
-                  <textarea name="notes" rows="3" placeholder="Project requirements, scope considerations, notes..."></textarea>
-                </label>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Create Lead</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
           <!-- Leads Table -->
           <div class="pt-table-wrap">
             <table class="pt-table">
@@ -1354,51 +1588,6 @@
           <div class="pt-panel-head">
             <h2>Client Accounts & User Association</h2>
             <button class="btn solid sm" data-pt-action="open-create-client">＋ Add Client Record</button>
-          </div>
-
-          <!-- Create Client Modal -->
-          <div id="pt-client-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Add New Client Record</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-create-client" class="pt-form">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Company Name *</span>
-                    <input type="text" name="companyName" required placeholder="Zenith Retail Ltd">
-                  </label>
-                  <label>
-                    <span>Contact Name *</span>
-                    <input type="text" name="contactName" required placeholder="Ananya Sharma">
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Email Address *</span>
-                    <input type="email" name="email" required placeholder="ananya@zenith.com">
-                  </label>
-                  <label>
-                    <span>Phone Number</span>
-                    <input type="tel" name="phone" placeholder="+91 98220 00000">
-                  </label>
-                </div>
-                <label>
-                  <span>Link to Authenticated User</span>
-                  <select name="userId">
-                    <option value="">None (Stand-alone record)</option>
-                    ${users.filter(u => u.role === 'client').map(u => `
-                      <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
-                    `).join('')}
-                  </select>
-                </label>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Save Client</button>
-                </div>
-              </form>
-            </div>
           </div>
 
           <!-- Clients Table -->
@@ -1457,89 +1646,6 @@
             <div style="display:flex;gap:10px">
               <button class="btn sm" data-pt-action="open-post-update">Post Client Update</button>
               <button class="btn solid sm" data-pt-action="open-create-project">＋ Create New Project</button>
-            </div>
-          </div>
-
-          <!-- Create Project Modal -->
-          <div id="pt-project-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Create New Client Project</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-create-project" class="pt-form">
-                <label>
-                  <span>Project Title *</span>
-                  <input type="text" name="name" required placeholder="e.g. Apex Health Cloud Portal">
-                </label>
-                <label>
-                  <span>Assign to Client Account *</span>
-                  <select name="userId" required>
-                    ${users.filter(u => u.role === 'client').map(u => `
-                      <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)}) — ${esc(u.company || 'Client')}</option>
-                    `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
-                  </select>
-                </label>
-                <label>
-                  <span>Project Overview & Scope</span>
-                  <textarea name="description" rows="3" placeholder="Full-stack web engineering, API integrations, and SLA deliverables..."></textarea>
-                </label>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Delivery Stage</span>
-                    <select name="status">
-                      <option value="Discovery">Discovery</option>
-                      <option value="In Development" selected>In Development</option>
-                      <option value="Client Review">Client Review</option>
-                      <option value="Launched">Launched</option>
-                    </select>
-                  </label>
-                  <label>
-                    <span>Estimated Completion Date</span>
-                    <input type="date" name="estimatedCompletion">
-                  </label>
-                </div>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Create Project</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Post Project Update Modal -->
-          <div id="pt-update-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Post Client Progress Update</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-post-update" class="pt-form">
-                <label>
-                  <span>Target Project *</span>
-                  <select name="projectId" required>
-                    ${projects.map(p => `
-                      <option value="${esc(p.id)}">${esc(p.name)} (${esc(p.clientEmail || 'Client')})</option>
-                    `).join('') || '<option value="" disabled selected>No active projects to update</option>'}
-                  </select>
-                </label>
-                <label>
-                  <span>Update Title *</span>
-                  <input type="text" name="title" required placeholder="e.g. Sprint 3 Deployed to Staging">
-                </label>
-                <label>
-                  <span>Update Notes for Client *</span>
-                  <textarea name="notes" rows="4" required placeholder="Summary of changes delivered, testing instructions, and next steps..."></textarea>
-                </label>
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                  <input type="checkbox" name="needsApproval" value="true">
-                  <span>Requires Milestone Sign-off from Client</span>
-                </label>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Publish Update</button>
-                </div>
-              </form>
             </div>
           </div>
 
@@ -1609,103 +1715,6 @@
             <div class="pt-stat-card">
               <div class="pt-stat-label">Outstanding Balance</div>
               <div class="pt-stat-value ${pendingBalance > 0 ? 'pt-tx-warn' : ''}">${fmtCurrency(pendingBalance, 'INR')}</div>
-            </div>
-          </div>
-
-          <!-- Create Invoice Modal -->
-          <div id="pt-invoice-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Issue Client Invoice</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-create-invoice" class="pt-form">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Invoice Reference *</span>
-                    <input type="text" name="reference" required value="INV-2026-00${invoices.length + 1}">
-                  </label>
-                  <label>
-                    <span>Select Client *</span>
-                    <select name="userId" required>
-                      ${users.filter(u => u.role === 'client').map(u => `
-                        <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
-                      `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
-                    </select>
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px">
-                  <label>
-                    <span>Amount *</span>
-                    <input type="number" name="amount" required placeholder="85000">
-                  </label>
-                  <label>
-                    <span>Currency</span>
-                    <select name="currency">
-                      <option value="INR" selected>INR (₹)</option>
-                      <option value="USD">USD ($)</option>
-                    </select>
-                  </label>
-                  <label>
-                    <span>Due Date</span>
-                    <input type="date" name="dueDate">
-                  </label>
-                </div>
-                <label>
-                  <span>Description / Scope *</span>
-                  <input type="text" name="description" required placeholder="Milestone 2 — Architecture & Frontend Engineering">
-                </label>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Issue Invoice</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Record Payment Modal -->
-          <div id="pt-payment-modal" class="pt-modal" style="display:none">
-            <div class="pt-modal-dialog">
-              <div class="pt-modal-head">
-                <h3>Record Manual Payment Verification</h3>
-                <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
-              </div>
-              <form id="pt-form-record-payment" class="pt-form">
-                <input type="hidden" name="invoiceId" id="pt-pay-inv-id">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Paid Amount *</span>
-                    <input type="number" name="paidAmount" id="pt-pay-amount" required>
-                  </label>
-                  <label>
-                    <span>Payment Date *</span>
-                    <input type="date" name="paymentDate" required value="${new Date().toISOString().slice(0, 10)}">
-                  </label>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                  <label>
-                    <span>Payment Method</span>
-                    <select name="paymentMethod">
-                      <option value="Bank Transfer (IMPS/NEFT)">Bank Transfer (IMPS/NEFT)</option>
-                      <option value="UPI">UPI Transfer</option>
-                      <option value="Wire (International)">Wire Transfer</option>
-                      <option value="Cheque">Cheque</option>
-                    </select>
-                  </label>
-                  <label>
-                    <span>Transaction Reference</span>
-                    <input type="text" name="transactionRef" placeholder="e.g. IMPS/AXIS/918237">
-                  </label>
-                </div>
-                <label>
-                  <span>Verification Notes</span>
-                  <textarea name="notes" rows="2" placeholder="Bank credit confirmed by finance partner..."></textarea>
-                </label>
-                <div style="display:flex;justify-content:flex-end;gap:10px">
-                  <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
-                  <button class="btn solid" type="submit">Confirm & Record</button>
-                </div>
-              </form>
             </div>
           </div>
 
