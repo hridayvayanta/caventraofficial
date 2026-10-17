@@ -264,12 +264,14 @@ test('Favicon: Square assets exist, meet Google requirements, maintain root/publ
   assert.ok(indexHtml.includes('<link rel="icon" type="image/svg+xml" href="/favicon.svg">'), 'Missing /favicon.svg tag');
   assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">'), 'Missing 48x48 favicon tag');
   assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">'), 'Missing 96x96 favicon tag');
+  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">'), 'Missing /favicon.png tag');
   assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">'), 'Missing 192x192 favicon tag');
   assert.ok(indexHtml.includes('<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">'), 'Missing apple-touch-icon tag');
 
   const faviconAssets = [
     'favicon.ico',
     'favicon.svg',
+    'favicon.png',
     'favicon-16x16.png',
     'favicon-32x32.png',
     'favicon-48x48.png',
