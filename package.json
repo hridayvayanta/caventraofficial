@@ -13,6 +13,6 @@
     "build:static": "node scripts/build-static.js",
     "test": "node --no-warnings test/smoke.js",
     "test:portal": "node test/portal-auth.test.js",
-    "test:all": "npm test && node test/master-improvements.test.js && node test/blog-interaction.test.js && node test/portal-auth.test.js"
+    "test:all": "npm test && node test/master-improvements.test.js && node test/blog-interaction.test.js && node test/portal-auth.test.js && node test/project-submission.test.js && node test/estimator.test.js && node test/founder-and-lead.test.js"
   }
 }

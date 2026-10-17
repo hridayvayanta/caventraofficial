@@ -1833,6 +1833,55 @@
       return db.leads || [];
     },
 
+    recordPublicLead: function (leadData) {
+      if (!leadData || typeof leadData !== 'object') return null;
+      try {
+        const db = loadDatabase();
+        if (!Array.isArray(db.leads)) db.leads = [];
+        const leadId = 'lead_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
+        const contactName = (leadData.name || '').trim() || 'Anonymous Client';
+        const companyName = (leadData.company || '').trim() || (contactName + ' Project');
+        const email = (leadData.email || '').trim();
+        const phone = (leadData.phone || leadData.whatsapp || '').trim();
+        const source = leadData.leadSource || leadData.source || 'Start a Project Form';
+        const budget = (leadData.budget || '').trim() || '—';
+        const notesParts = [];
+        if (leadData.type) notesParts.push('[' + leadData.type.trim() + ']');
+        if (leadData.timeline) notesParts.push('Timeline: ' + leadData.timeline.trim());
+        if (leadData.message) notesParts.push(leadData.message.trim());
+        const notes = notesParts.join(' | ');
+
+        const newLead = {
+          id: leadId,
+          companyName: companyName,
+          contactName: contactName,
+          email: email,
+          phone: phone,
+          source: source,
+          stage: 'New',
+          budget: budget,
+          notes: notes,
+          owner: 'Founders (Unassigned)',
+          createdAt: new Date().toISOString()
+        };
+
+        db.leads.unshift(newLead);
+        if (!Array.isArray(db.activityLogs)) db.activityLogs = [];
+        db.activityLogs.unshift({
+          id: 'act_' + Date.now(),
+          action: 'PUBLIC_LEAD_RECEIVED',
+          performedBy: email || 'Website Visitor',
+          details: 'New client enquiry from ' + contactName + (phone ? ' (Tel: ' + phone + ')' : '') + (companyName ? ' — ' + companyName : ''),
+          timestamp: new Date().toISOString()
+        });
+        saveDatabase(db);
+        return newLead;
+      } catch (err) {
+        console.warn('[CaventraStore] recordPublicLead notice:', err);
+        return null;
+      }
+    },
+
     createLead: function (leadData, user) {
       if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
         throw new Error('Permission denied: Only authorized team members can create CRM leads.');

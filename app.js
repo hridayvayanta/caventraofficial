@@ -219,6 +219,7 @@ async function submitProjectEnquiry(formData) {
   const payload = {
     name: (formData.name || '').trim(),
     email: (formData.email || '').trim(),
+    phone: (formData.phone || '').trim(),
     company: (formData.company || '').trim(),
     type: (formData.type || '').trim(),
     budget: (formData.budget || '').trim(),
@@ -228,6 +229,26 @@ async function submitProjectEnquiry(formData) {
     leadSource: (estimatorPrefillData ? 'Website Cost Estimator' : 'Website Contact Form (caventraofficial.in)'),
     timestamp: new Date().toISOString()
   };
+
+  // Seamlessly sync inquiry into the Founder Portal CRM leads pipeline
+  if (typeof CaventraStore !== 'undefined' && typeof CaventraStore.recordPublicLead === 'function') {
+    try {
+      CaventraStore.recordPublicLead(payload);
+    } catch (portalSyncErr) {
+      console.warn('[Caventra] Portal lead sync notice:', portalSyncErr);
+    }
+  }
+
+  // Non-blocking background dispatch to local Node /api/contact if available
+  if (typeof fetch !== 'undefined') {
+    try {
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'caventra' },
+        body: JSON.stringify(payload)
+      }).catch(function () {});
+    } catch (localApiErr) {}
+  }
 
   // Testable integration layer if endpoint is a placeholder
   if (isPlaceholderEndpoint(endpoint)) {
@@ -326,6 +347,7 @@ function renderContactSuccess(container, f, result) {
         <div class="meta-item"><span class="meta-label">Enquiry Ref</span><span class="meta-val ref-id">${esc(refId)}</span></div>
         <div class="meta-item"><span class="meta-label">Client Name</span><span class="meta-val">${esc(f.name)}</span></div>
         <div class="meta-item"><span class="meta-label">Contact Email</span><span class="meta-val">${esc(f.email)}</span></div>
+        ${f.phone ? `<div class="meta-item"><span class="meta-label">Mobile Phone</span><span class="meta-val">${esc(f.phone)}</span></div>` : ''}
         ${f.company ? `<div class="meta-item"><span class="meta-label">Company</span><span class="meta-val">${esc(f.company)}</span></div>` : ''}
         ${f.type ? `<div class="meta-item"><span class="meta-label">Service</span><span class="meta-val">${esc(f.type)}</span></div>` : ''}
         ${f.budget ? `<div class="meta-item"><span class="meta-label">Budget</span><span class="meta-val">${esc(f.budget)}</span></div>` : ''}
@@ -1485,9 +1507,19 @@ about:()=>{
           <span class="founder-role">Head of Growth</span>
           <p class="founder-bio">Leads commercial growth, client partnerships, digital advertising, marketing campaigns, social media management, and recruitment operations at Caventra.</p>
           <span class="founder-focus">Growth &amp; Sales · Marketing &amp; Ads · Talent &amp; Operations</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:caventraofficial@gmail.com" title="Email Hriday Vayanta">caventraofficial@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+918866790989" title="Call Hriday Vayanta">+91 88667 90989</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:caventraofficial@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:caventraofficial@gmail.com" title="Email Hriday Vayanta">Email Hriday ↗</a>
           </div>
         </div>
         <div class="founder-card">
@@ -1498,9 +1530,19 @@ about:()=>{
           <span class="founder-role">Head of Design</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:vednimbark08@gmail.com" title="Email Ved Nimbark">vednimbark08@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+918849186747" title="Call Ved Nimbark">+91 88491 86747</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:vednimbark08@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:vednimbark08@gmail.com" title="Email Ved Nimbark">Email Ved ↗</a>
           </div>
         </div>
         <div class="founder-card">
@@ -1511,9 +1553,19 @@ about:()=>{
           <span class="founder-role">Head of Technology</span>
           <p class="founder-bio">Architects the end-to-end technical ecosystem at Caventra, engineering frontend and backend systems, database infrastructures, and cloud deployment pipelines.</p>
           <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">sauranahmed12345678@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+917990652097" title="Call Sauranahmed Mansuri">+91 79906 52097</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">Email Sauran ↗</a>
           </div>
         </div>
       </div>
@@ -1558,9 +1610,19 @@ founders:()=>{
           <span class="founder-role">Founder &amp; Head of Growth</span>
           <p class="founder-bio">Leads commercial growth, client partnerships, digital advertising, marketing campaigns, social media management, and recruitment operations at Caventra. He works directly with founders and business leaders to scale brand visibility and conversion performance.</p>
           <span class="founder-focus">Growth &amp; Sales · Marketing &amp; Ads · Talent &amp; Operations</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:caventraofficial@gmail.com" title="Email Hriday Vayanta">caventraofficial@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+918866790989" title="Call Hriday Vayanta">+91 88667 90989</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:caventraofficial@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:caventraofficial@gmail.com" title="Email Hriday Vayanta">Email Hriday ↗</a>
           </div>
         </div>
 
@@ -1572,9 +1634,19 @@ founders:()=>{
           <span class="founder-role">Founder &amp; Head of Design</span>
           <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces. He ensures every Caventra client receives a distinctive, high-polish visual experience crafted without generic templates.</p>
           <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:vednimbark08@gmail.com" title="Email Ved Nimbark">vednimbark08@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+918849186747" title="Call Ved Nimbark">+91 88491 86747</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:vednimbark08@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:vednimbark08@gmail.com" title="Email Ved Nimbark">Email Ved ↗</a>
           </div>
         </div>
 
@@ -1586,9 +1658,19 @@ founders:()=>{
           <span class="founder-role">Founder &amp; Head of Technology</span>
           <p class="founder-bio">Architects the end-to-end technical ecosystem at Caventra, engineering frontend and backend systems, database infrastructures, and cloud deployment pipelines. He specializes in sub-second page performance, robust API architectures, and bulletproof security.</p>
           <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+          <div class="founder-contact-meta">
+            <div class="meta-row">
+              <span class="meta-label">Email:</span>
+              <a class="meta-val meta-email" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">sauranahmed12345678@gmail.com</a>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Direct:</span>
+              <a class="meta-val" href="tel:+917990652097" title="Call Sauranahmed Mansuri">+91 79906 52097</a>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com">Email ↗</a>
+            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">Email Sauran ↗</a>
           </div>
         </div>
       </div>
@@ -1846,11 +1928,14 @@ contact:()=>{
     <form id="cf">
       <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px">
       <div class="two">
-        <label>Name<input name="name" required autocomplete="name"></label>
-        <label>Email<input name="email" type="email" required autocomplete="email"></label>
+        <label>Your Name *<input name="name" required autocomplete="name" placeholder="Full name (letters only)" pattern="^[A-Za-z\s.'-]+$" title="Please enter letters only"></label>
+        <label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
       </div>
       <div class="two">
-        <label>Company<input name="company" autocomplete="organization"></label>
+        <label>Mobile Phone Number *<input name="phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210" pattern="[+]?[0-9\s\-()]{7,18}" title="Please enter a valid mobile phone number (7 to 15 digits)"></label>
+        <label>Company / Organization<input name="company" autocomplete="organization" placeholder="Company or project name"></label>
+      </div>
+      <div class="two">
         <label>Request type
           <select name="type">
             <option ${p ? 'selected' : ''}>Web Development</option>
@@ -1862,9 +1947,9 @@ contact:()=>{
             <option>Other</option>
           </select>
         </label>
+        <label>Budget<input name="budget" value="${esc(p ? p.budgetSummary : '')}" placeholder="e.g. ₹50,000 - ₹1,00,000"></label>
       </div>
       <div class="two">
-        <label>Budget<input name="budget" value="${esc(p ? p.budgetSummary : '')}" placeholder="e.g. ₹50,000 - ₹1,00,000"></label>
         <label>Timeline<input name="timeline" placeholder="e.g. 4-6 weeks"></label>
       </div>
       <label>Message
@@ -2016,6 +2101,41 @@ function render(keepScroll = false){const [r,s]=getRouteParts();
     }
 
     const f = Object.fromEntries(new FormData(cf));
+
+    // Form field validations
+    const nameVal = (f.name || '').trim();
+    if (!nameVal || !/^[A-Za-z\s.'-]+$/.test(nameVal)) {
+      const nameInput = cf.querySelector('input[name="name"]');
+      if (nameInput) {
+        nameInput.setCustomValidity('Please enter letters only (no numbers or special symbols).');
+        nameInput.reportValidity();
+        nameInput.oninput = () => nameInput.setCustomValidity('');
+      }
+      return;
+    }
+
+    const emailVal = (f.email || '').trim().toLowerCase();
+    if (typeof CaventraAuth !== 'undefined' && CaventraAuth.isDemoEmail && CaventraAuth.isDemoEmail(emailVal)) {
+      const emailInput = cf.querySelector('input[name="email"]');
+      if (emailInput) {
+        emailInput.setCustomValidity('Demo or disposable email addresses are not permitted. Please use your official business or personal email.');
+        emailInput.reportValidity();
+        emailInput.oninput = () => emailInput.setCustomValidity('');
+      }
+      return;
+    }
+
+    const phoneDigits = (f.phone || '').replace(/\D/g, '');
+    if (!phoneDigits || phoneDigits.length < 7 || phoneDigits.length > 15) {
+      const phoneInput = cf.querySelector('input[name="phone"]');
+      if (phoneInput) {
+        phoneInput.setCustomValidity('Please enter a valid mobile phone number (7 to 15 digits).');
+        phoneInput.reportValidity();
+        phoneInput.oninput = () => phoneInput.setCustomValidity('');
+      }
+      return;
+    }
+
     const bt = cf.querySelector('button');
 
     isSubmitting = true;

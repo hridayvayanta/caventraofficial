@@ -3129,6 +3129,49 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   display: block;
 }
 
+/* --- Founder Direct Contact Meta Box --- */
+.founder-contact-meta {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(201, 184, 160, 0.08);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.founder-contact-meta .meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.founder-contact-meta .meta-label {
+  color: var(--mut);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.founder-contact-meta .meta-val {
+  color: var(--tx);
+  font-family: var(--mo);
+  font-size: 12.5px;
+  word-break: break-all;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.founder-contact-meta .meta-val:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+.founder-contact-meta .meta-val.meta-email {
+  color: var(--gold);
+  font-weight: 600;
+}
+
 /* --- Accessibility Focus Outlines --- */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--gold) !important;
@@ -3194,6 +3237,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 [data-theme="light"] .founder-photo-wrap {
   background: #DFDCD2;
   border-color: rgba(30, 34, 38, 0.14);
+}
+[data-theme="light"] .founder-contact-meta {
+  background: rgba(90, 67, 30, 0.06);
+  border-color: rgba(30, 34, 38, 0.16);
+}
+[data-theme="light"] .founder-contact-meta .meta-label {
+  color: #565C63;
+}
+[data-theme="light"] .founder-contact-meta .meta-val {
+  color: #1E2226;
+}
+[data-theme="light"] .founder-contact-meta .meta-val.meta-email {
+  color: #5A431E;
 }
 
 

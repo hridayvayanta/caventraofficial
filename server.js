@@ -28,7 +28,8 @@ const db = new Database(path.join(DATA, 'caventra.db'));
 db.pragma('journal_mode = WAL');
 db.exec(`
 CREATE TABLE IF NOT EXISTS kv(key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS inquiries(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, company TEXT, type TEXT, budget TEXT, timeline TEXT, message TEXT, ip TEXT, created_at INTEGER NOT NULL);`);
+CREATE TABLE IF NOT EXISTS inquiries(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, company TEXT, type TEXT, budget TEXT, timeline TEXT, message TEXT, ip TEXT, created_at INTEGER NOT NULL);`);
+try { db.exec('ALTER TABLE inquiries ADD COLUMN phone TEXT;'); } catch (e) {}
 const getSite = () => { const r = db.prepare('SELECT value FROM kv WHERE key=?').get('site'); return r ? JSON.parse(r.value) : {}; };
 const setSite = o => db.prepare('INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at').run('site', JSON.stringify(o), Date.now());
 
@@ -94,7 +95,7 @@ async function notify(q) {
   try {
     const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + E.RESEND_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: E.MAIL_FROM || 'CAVENTRA <security@caventraofficial.in>', to: [NOTIFY_TO], reply_to: q.email, subject: 'New project inquiry from ' + q.name,
-        text: `Name: ${q.name}\nEmail: ${q.email}\nCompany: ${q.company}\nProject type: ${q.type}\nBudget: ${q.budget}\nTimeline: ${q.timeline}\n\n${q.message}` }) });
+        text: `Name: ${q.name}\nEmail: ${q.email}${q.phone ? '\nPhone: ' + q.phone : ''}\nCompany: ${q.company}\nProject type: ${q.type}\nBudget: ${q.budget}\nTimeline: ${q.timeline}\n\n${q.message}` }) });
     if (!r.ok) console.error('Email notification failed:', r.status, await r.text());
   } catch (e) { console.error('Email notification error:', e.message); }
 }
@@ -169,10 +170,10 @@ async function api(req, res, u) {
   if (p === '/api/contact' && m === 'POST') {
     if (limited('c' + ip, 5, 36e5)) return send(res, 429, { error: 'Too many messages. Please try again later.' });
     const b = await readJSON(req, 2e4); if (b.website) return send(res, 200, { ok: true }); // honeypot
-    const q = { name: str(b.name, 120), email: str(b.email, 200), company: str(b.company, 200), type: str(b.type, 100), budget: str(b.budget, 100), timeline: str(b.timeline, 100), message: str(b.message, 5000) };
+    const q = { name: str(b.name, 120), email: str(b.email, 200), phone: str(b.phone || '', 50), company: str(b.company, 200), type: str(b.type, 100), budget: str(b.budget, 100), timeline: str(b.timeline, 100), message: str(b.message, 5000) };
     if (!q.name || !q.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(q.email)) return send(res, 400, { error: 'Please fill in name, a valid email and a message.' });
     const ipHash = crypto.createHash('sha256').update(ip + (SECRET || 'caventra')).digest('hex').slice(0, 16);
-    db.prepare('INSERT INTO inquiries(name,email,company,type,budget,timeline,message,ip,created_at) VALUES(?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.company, q.type, q.budget, q.timeline, q.message, ipHash, Date.now());
+    db.prepare('INSERT INTO inquiries(name,email,phone,company,type,budget,timeline,message,ip,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.phone, q.company, q.type, q.budget, q.timeline, q.message, ipHash, Date.now());
     notify(q); return send(res, 200, { ok: true });
   }
   if (p === '/api/admin/me' && m === 'GET') return send(res, 200, { admin: isAdmin(req) }, { 'Cache-Control': 'no-store' });
