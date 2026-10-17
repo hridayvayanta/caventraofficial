@@ -131,6 +131,14 @@
 
           <form id="pt-form-register" class="pt-form">
             <label>
+              <span>I am registering as *</span>
+              <select name="accountType" id="pt-reg-account-type" required style="font-weight:600;color:var(--tx);background:var(--bg2);">
+                <option value="client" selected>Client / Organization (View Projects, Milestones & Invoices)</option>
+                <option value="team">Caventra Team Member / Employee (Corporate Tasks, Projects & Tickets)</option>
+              </select>
+            </label>
+
+            <label>
               <span>Full Name *</span>
               <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name">
             </label>

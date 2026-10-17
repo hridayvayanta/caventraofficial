@@ -791,6 +791,124 @@ const Portal = sandbox.CaventraPortal;
     assert.strictEqual(typeof Store.pullFromCloud, 'function');
   });
 
+  // 29. TEAM MEMBER REGISTRATION & PORTAL ROUTING
+  await asyncTest('Team Member Registration: Registering as team member grants team role, bypasses client CRM, and routes to team portal', async () => {
+    await Auth.logout();
+
+    // Register with accountType 'team'
+    const regRes = await Auth.register(
+      'employee.rahul@caventra.com',
+      'DevPass456!',
+      'Rahul Sharma',
+      'CAVENTRA',
+      '+91 9123456789',
+      'DevPass456!',
+      true,
+      'team'
+    );
+
+    assert.strictEqual(regRes.pendingVerification, true);
+    assert.strictEqual(regRes.email, 'employee.rahul@caventra.com');
+
+    // Retrieve pending OTP code from localStorage challenge
+    const challengeKey = 'caventra_dev_pending_reg_otp_employee.rahul@caventra.com';
+    const challenge = JSON.parse(sandbox.localStorage.getItem(challengeKey));
+    assert.ok(challenge && challenge.code, 'Pending registration verification OTP must exist');
+
+    // Verify registration OTP
+    await Auth.verifyRegistrationOtp('employee.rahul@caventra.com', challenge.code);
+
+    // Verify user record in db
+    const db = Store.getDb();
+    const userInDb = db.users.find(u => u.email === 'employee.rahul@caventra.com');
+    assert.ok(userInDb, 'User record must exist in DB');
+    assert.strictEqual(userInDb.role, 'team', 'User role must be team');
+    assert.strictEqual(userInDb.company, 'CAVENTRA');
+    assert.strictEqual(userInDb.title, 'Team Member');
+
+    // Verify that team members are not added to CRM clients list
+    const clientRecord = db.clients.find(c => c.email === 'employee.rahul@caventra.com');
+    assert.strictEqual(clientRecord, undefined, 'Team member must not be created as CRM client');
+
+    // Complete login
+    const loginChallenge = await Auth.login('employee.rahul@caventra.com', 'DevPass456!');
+    const teamUser = await Auth.verifyLoginOtp('employee.rahul@caventra.com', loginChallenge.code);
+
+    assert.strictEqual(Auth.isTeamMember(teamUser), true, 'User must be recognized as team member');
+    assert.strictEqual(Auth.isFounder(teamUser), false, 'Team member must not be founder');
+    assert.strictEqual(Auth.isClient(teamUser), false, 'Team member must not be client');
+
+    // Verify portal view renders Team Member Portal header
+    sandbox.CaventraAuth.getCurrentUser = () => teamUser;
+    const teamDashboardHtml = Portal.renderFounderDashboard();
+    assert.ok(teamDashboardHtml.includes('CAVENTRA TEAM PORTAL'), 'Dashboard should display CAVENTRA TEAM PORTAL');
+
+    // Verify registration form has accountType dropdown
+    const regHtml = Portal.renderRegister();
+    assert.ok(regHtml.includes('id="pt-reg-account-type"'), 'Registration form must have account type dropdown');
+    assert.ok(regHtml.includes('Caventra Team Member / Employee'), 'Registration form must include team option');
+
+    await Auth.logout();
+  });
+
+  // 30. CORPORATE & CROSS-FOUNDER TICKETING SYSTEM
+  await asyncTest('Corporate Ticketing: Founders and team members can create internal tasks, reassign, comment, and resolve in real time', async () => {
+    const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder', displayName: 'Hriday Vayanta' };
+    const sauran = { uid: 'founder_sauran', email: 'sauranahmed12345678@gmail.com', role: 'founder', displayName: 'Sauranahmed Mansuri' };
+    const clientUser = { uid: 'client_external', email: 'externalclient@acme.com', role: 'client', displayName: 'External Client' };
+
+    // 1. Create corporate ticket (Hriday assigning to Sauran)
+    const corpTicket = Store.createSupportTicket({
+      subject: 'API Gateway Redis Cache Architecture',
+      description: 'Implement distributed Redis sentinel for sub-millisecond route caching',
+      priority: 'high',
+      category: 'Infrastructure',
+      ticketType: 'internal',
+      assignedFounder: 'Sauranahmed Mansuri',
+      assignedToEmail: 'sauranahmed12345678@gmail.com',
+      dueDate: '2026-10-25'
+    }, hriday);
+
+    assert.ok(corpTicket.id, 'Ticket must have unique ID');
+    assert.strictEqual(corpTicket.ticketType, 'internal');
+    assert.strictEqual(corpTicket.assignedFounder, 'Sauranahmed Mansuri');
+    assert.strictEqual(corpTicket.assignedToEmail, 'sauranahmed12345678@gmail.com');
+    assert.strictEqual(corpTicket.status, 'Open');
+    assert.strictEqual(corpTicket.comments.length, 0);
+
+    // 2. Add discussion comment from Sauran
+    const comment = Store.addTicketComment(
+      corpTicket.id,
+      'Configured Redis Sentinel cluster with 3 read replicas and automatic failover.',
+      sauran
+    );
+    assert.strictEqual(comment.author, 'Sauranahmed Mansuri');
+    assert.strictEqual(comment.role, 'founder');
+
+    // Fetch refreshed ticket from store
+    const refreshedTicket = Store.getSupportTickets(hriday).find(t => t.id === corpTicket.id);
+    assert.strictEqual(refreshedTicket.comments.length, 1);
+    assert.strictEqual(refreshedTicket.comments[0].text, 'Configured Redis Sentinel cluster with 3 read replicas and automatic failover.');
+
+    // 3. Update ticket status to In Progress
+    const updated = Store.updateSupportTicket(corpTicket.id, { status: 'In Progress' }, sauran);
+    assert.strictEqual(updated.status, 'In Progress');
+
+    // 4. Verify client isolation: clientUser cannot see internal corporate tickets
+    const clientTickets = Store.getSupportTickets(clientUser);
+    const hasCorpTicket = clientTickets.some(t => t.id === corpTicket.id);
+    assert.strictEqual(hasCorpTicket, false, 'External clients must NEVER access internal corporate tickets');
+
+    // 5. Verify Founder / Staff dashboard rendering of Corporate Operations Desk
+    sandbox.CaventraAuth.getCurrentUser = () => hriday;
+    Portal.setFounderActiveTab('support');
+    const founderDeskHtml = Portal.renderFounderDashboard();
+    assert.ok(founderDeskHtml.includes('Support Desk & Corporate Operations'), 'Must render Support & Corporate desk');
+    assert.ok(founderDeskHtml.includes('API Gateway Redis Cache Architecture'), 'Must display corporate ticket subject');
+    assert.ok(founderDeskHtml.includes('CORPORATE'), 'Must display CORPORATE badge');
+    assert.ok(founderDeskHtml.includes('Sauranahmed Mansuri'), 'Must display assigned founder name');
+  });
+
   console.log('\n========================================');
   console.log(`PORTAL TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
   console.log('========================================\n');

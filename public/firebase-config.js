@@ -662,12 +662,19 @@
       return getFounderEmails().indexOf((u.email || '').toLowerCase()) !== -1;
     },
 
-    isClient: function (user) {
+    isTeamMember: function (user) {
       const u = user || getCurrentSession();
-      return !!u && !this.isFounder(u);
+      if (!u) return false;
+      if (u.role === 'team' || u.role === 'employee') return true;
+      return this.isFounder(u);
     },
 
-    register: async function (email, password, displayName, company, phone, confirmPassword, termsAccepted) {
+    isClient: function (user) {
+      const u = user || getCurrentSession();
+      return !!u && !this.isFounder(u) && !this.isTeamMember(u);
+    },
+
+    register: async function (email, password, displayName, company, phone, confirmPassword, termsAccepted, accountType) {
       if (!displayName || !displayName.trim()) {
         throw new Error('Please enter your full name.');
       }
@@ -701,15 +708,17 @@
         throw new Error('An account with this email address already exists. Please log in.');
       }
 
-      // CRITICAL RULE: Public registration creates ONLY 'client' accounts
+      const isTeam = (accountType === 'team' || accountType === 'employee');
+      const role = isTeam ? 'team' : 'client';
       const uid = 'usr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
       const newUser = {
         uid: uid,
         email: cleanEmail,
         passwordHash: password, // For dev mock
         displayName: displayName.trim(),
-        role: 'client', // NEVER founder
-        company: (company || '').trim(),
+        role: role,
+        title: isTeam ? 'Team Member' : '',
+        company: (company || (isTeam ? 'CAVENTRA' : '')).trim(),
         phone: (phone || '').trim(),
         emailVerified: false,
         createdAt: new Date().toISOString()
@@ -717,27 +726,29 @@
 
       db.users.push(newUser);
 
-      // Create client record in CRM
-      const newClientRecord = {
-        id: 'cli_' + uid,
-        userId: uid,
-        companyName: newUser.company || newUser.displayName,
-        contactName: newUser.displayName,
-        email: cleanEmail,
-        phone: newUser.phone,
-        address: '',
-        status: 'active',
-        assignedFounder: 'Unassigned',
-        createdAt: new Date().toISOString()
-      };
-      db.clients.push(newClientRecord);
+      // Create client record in CRM if registering as client
+      if (!isTeam) {
+        const newClientRecord = {
+          id: 'cli_' + uid,
+          userId: uid,
+          companyName: newUser.company || newUser.displayName,
+          contactName: newUser.displayName,
+          email: cleanEmail,
+          phone: newUser.phone,
+          address: '',
+          status: 'active',
+          assignedFounder: 'Unassigned',
+          createdAt: new Date().toISOString()
+        };
+        db.clients.push(newClientRecord);
+      }
 
       // Audit log
       db.activityLogs.unshift({
         id: 'act_' + Date.now(),
-        action: 'CLIENT_REGISTRATION_PENDING',
+        action: isTeam ? 'TEAM_REGISTRATION_PENDING' : 'CLIENT_REGISTRATION_PENDING',
         performedBy: cleanEmail,
-        details: 'New client registration initiated; verification challenge dispatched to ' + cleanEmail,
+        details: (isTeam ? 'New team member registration initiated: ' : 'New client registration initiated; verification challenge dispatched to ') + cleanEmail,
         timestamp: new Date().toISOString()
       });
 
@@ -1058,7 +1069,7 @@
       if (getFounderEmails().indexOf(cleanEmail) !== -1) {
         role = 'founder';
       }
-      if (!role || (role !== 'founder' && role !== 'client')) {
+      if (!role || (role !== 'founder' && role !== 'client' && role !== 'team' && role !== 'employee')) {
         throw new Error('Access denied: Missing or invalid account role.');
       }
 
@@ -1500,7 +1511,7 @@
     getProjects: function (user) {
       if (!user) throw new Error('Unauthenticated access blocked');
       const db = loadDatabase();
-      if (CaventraAuth.isFounder(user)) {
+      if (CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user)) {
         return db.projects || [];
       }
       // Client isolation: only projects mapped to client's uid or email
@@ -1510,8 +1521,8 @@
     },
 
     createProject: function (projectData, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can create projects.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only founders and team members can create projects.');
       }
       if (!projectData || !projectData.name || projectData.name.trim().length < 3) {
         throw new Error('Project name must be at least 3 characters.');
@@ -1526,7 +1537,7 @@
         progress: 0,
         startDate: new Date().toISOString().slice(0, 10),
         estimatedCompletion: '',
-        assignedContact: user.displayName + ' (' + (user.title || 'Founder') + ')',
+        assignedContact: user.displayName + ' (' + (user.title || user.role || 'Team') + ')',
         milestones: [
           { name: '1. Discovery & Planning', status: 'In Progress', targetDate: '' },
           { name: '2. Design & Architecture', status: 'Pending', targetDate: '' },
@@ -1549,8 +1560,8 @@
     },
 
     updateProject: function (projectId, updates, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can update project details.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only founders and team members can update project details.');
       }
       const db = loadDatabase();
       const prj = db.projects.find(function (p) { return p.id === projectId; });
@@ -1571,7 +1582,7 @@
     getProjectUpdates: function (projectId, user) {
       if (!user) throw new Error('Unauthenticated access blocked');
       const db = loadDatabase();
-      if (CaventraAuth.isFounder(user)) {
+      if (CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user)) {
         return (db.projectUpdates || []).filter(function (u) { return !projectId || u.projectId === projectId; });
       }
       // Check client authorization for this project
@@ -1584,15 +1595,15 @@
     },
 
     addProjectUpdate: function (updateData, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can publish project updates.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only team members can publish project updates.');
       }
       const db = loadDatabase();
       const id = 'upd_' + Date.now().toString(36);
       const newUpd = Object.assign({
         id: id,
         author: user.displayName,
-        authorRole: user.title || 'Founder',
+        authorRole: user.title || user.role || 'Team Member',
         needsApproval: false,
         approved: false,
         approvedAt: null,
@@ -1611,9 +1622,9 @@
       const upd = db.projectUpdates.find(function (u) { return u.id === updateId; });
       if (!upd) throw new Error('Update record not found');
 
-      // Client or founder can approve milestone
+      // Client or founder/team can approve milestone
       const clientProjects = this.getProjects(user);
-      const isAllowed = CaventraAuth.isFounder(user) || clientProjects.some(function (p) { return p.id === upd.projectId; });
+      const isAllowed = CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user) || clientProjects.some(function (p) { return p.id === upd.projectId; });
       if (!isAllowed) {
         throw new Error('Permission denied: Not assigned to this project.');
       }
@@ -1633,18 +1644,18 @@
       return upd;
     },
 
-    // --- Leads (Founder Only) ---
+    // --- Leads (Founder & Team) ---
     getLeads: function (user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Leads are accessible to authorized founders only.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Leads are accessible to authorized team members only.');
       }
       const db = loadDatabase();
       return db.leads || [];
     },
 
     createLead: function (leadData, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can create CRM leads.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can create CRM leads.');
       }
       const db = loadDatabase();
       const id = 'lead_' + Date.now().toString(36);
@@ -1667,8 +1678,8 @@
     },
 
     updateLead: function (leadId, updates, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can update leads.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can update leads.');
       }
       const db = loadDatabase();
       const lead = db.leads.find(function (l) { return l.id === leadId; });
@@ -1678,18 +1689,18 @@
       return lead;
     },
 
-    // --- Clients (Founder Only) ---
+    // --- Clients (Founder & Team) ---
     getClients: function (user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can list client accounts.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can list client accounts.');
       }
       const db = loadDatabase();
       return db.clients || [];
     },
 
     createClient: function (clientData, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can register client accounts.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can register client accounts.');
       }
       const db = loadDatabase();
       const id = 'cli_' + Date.now().toString(36);
@@ -1705,8 +1716,8 @@
     },
 
     updateClient: function (clientId, updates, user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: Only founders can modify client records.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can modify client records.');
       }
       const db = loadDatabase();
       const client = db.clients.find(function (c) { return c.id === clientId; });
@@ -1802,11 +1813,11 @@
       return inv;
     },
 
-    // --- Support Tickets ---
+    // --- Support & Corporate Tickets ---
     getSupportTickets: function (user) {
       if (!user) throw new Error('Unauthenticated access blocked');
       const db = loadDatabase();
-      if (CaventraAuth.isFounder(user)) {
+      if (CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user)) {
         return db.supportTickets || [];
       }
       // Client isolation
@@ -1821,31 +1832,40 @@
         throw new Error('Support ticket requires a subject with at least 3 characters.');
       }
       if (!ticketData.description || ticketData.description.trim().length < 5) {
-        throw new Error('Please provide a description of your issue.');
+        throw new Error('Please provide a description of your issue or requirements.');
       }
       const db = loadDatabase();
       const id = 'tkt_' + Date.now().toString(36);
+      const isInternal = CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user);
+      const ticketType = ticketData.ticketType || (isInternal ? 'internal' : 'client');
+
       const newTicket = {
         id: id,
         userId: user.uid,
         clientEmail: user.email,
-        clientName: user.displayName,
-        subject: ticketData.subject,
-        category: ticketData.category || 'General Inquiry',
+        clientName: user.displayName || user.email,
+        creatorRole: user.role || (CaventraAuth.isFounder(user) ? 'founder' : 'client'),
+        ticketType: ticketType, // 'client' or 'internal'
+        subject: ticketData.subject.trim(),
+        category: ticketData.category || (ticketType === 'internal' ? 'Technical / Backend' : 'General Inquiry'),
         priority: ticketData.priority || 'Medium',
-        status: 'Open',
-        description: ticketData.description,
-        assignedFounder: 'Unassigned',
-        resolutionNotes: '',
+        status: ticketData.status || 'Open',
+        description: ticketData.description.trim(),
+        assignedFounder: ticketData.assignedFounder || ticketData.assignedTo || 'Unassigned',
+        assignedToEmail: ticketData.assignedToEmail || '',
+        dueDate: ticketData.dueDate || '',
+        resolutionNotes: ticketData.resolutionNotes || '',
+        comments: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
+
       db.supportTickets.unshift(newTicket);
       db.activityLogs.unshift({
         id: 'act_' + Date.now(),
-        action: 'TICKET_CREATED',
+        action: ticketType === 'internal' ? 'CORPORATE_TICKET_CREATED' : 'TICKET_CREATED',
         performedBy: user.email,
-        details: 'Support ticket opened: ' + newTicket.subject,
+        details: (ticketType === 'internal' ? 'Corporate task raised: ' : 'Support ticket opened: ') + newTicket.subject + (newTicket.assignedFounder !== 'Unassigned' ? ' [Assigned: ' + newTicket.assignedFounder + ']' : ''),
         timestamp: new Date().toISOString()
       });
       saveDatabase(db);
@@ -1858,7 +1878,7 @@
       const ticket = db.supportTickets.find(function (t) { return t.id === ticketId; });
       if (!ticket) throw new Error('Ticket not found');
 
-      if (!CaventraAuth.isFounder(user)) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
         // Client can only add notes to their own ticket
         if (ticket.userId !== user.uid && ticket.clientEmail !== user.email) {
           throw new Error('Permission denied: You cannot modify this support ticket.');
@@ -1868,13 +1888,13 @@
           ticket.updatedAt = new Date().toISOString();
         }
       } else {
-        // Founder can update status, assignedFounder, resolutionNotes
+        // Founder / Team Member can update status, assignedFounder, priority, resolutionNotes, dueDate
         Object.assign(ticket, updates, { updatedAt: new Date().toISOString() });
         db.activityLogs.unshift({
           id: 'act_' + Date.now(),
           action: 'TICKET_UPDATED',
           performedBy: user.email,
-          details: 'Updated ticket status for: ' + ticket.subject + ' (' + ticket.status + ')',
+          details: 'Updated ticket status for: ' + ticket.subject + ' (' + ticket.status + (ticket.assignedFounder ? ' / ' + ticket.assignedFounder : '') + ')',
           timestamp: new Date().toISOString()
         });
       }
@@ -1882,10 +1902,51 @@
       return ticket;
     },
 
+    addTicketComment: function (ticketId, commentText, user) {
+      if (!user) throw new Error('Unauthenticated access blocked');
+      if (!commentText || !commentText.trim()) throw new Error('Comment text is required.');
+      const db = loadDatabase();
+      const ticket = db.supportTickets.find(function (t) { return t.id === ticketId; });
+      if (!ticket) throw new Error('Ticket not found');
+
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        if (ticket.userId !== user.uid && ticket.clientEmail !== user.email) {
+          throw new Error('Permission denied: You cannot comment on this ticket.');
+        }
+      }
+
+      if (!Array.isArray(ticket.comments)) {
+        ticket.comments = [];
+      }
+
+      const comment = {
+        id: 'cm_' + Date.now().toString(36),
+        author: user.displayName || user.email,
+        authorEmail: user.email,
+        role: user.role || (CaventraAuth.isFounder(user) ? 'founder' : 'client'),
+        text: commentText.trim(),
+        timestamp: new Date().toISOString()
+      };
+
+      ticket.comments.push(comment);
+      ticket.updatedAt = new Date().toISOString();
+
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'TICKET_COMMENT_ADDED',
+        performedBy: user.email,
+        details: 'Comment posted on ' + ticket.subject + ' by ' + (user.displayName || user.email),
+        timestamp: new Date().toISOString()
+      });
+
+      saveDatabase(db);
+      return comment;
+    },
+
     // --- Administration & RBAC ---
     getUsers: function (user) {
-      if (!CaventraAuth.isFounder(user)) {
-        throw new Error('Permission denied: User administration is restricted to authorized founders.');
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: User administration is restricted to authorized team members.');
       }
       const db = loadDatabase();
       return (db.users || []).map(function (u) {
@@ -1907,7 +1968,7 @@
       if (!CaventraAuth.isFounder(user)) {
         throw new Error('Permission denied: Only authorized founders can modify user roles.');
       }
-      if (newRole !== 'client' && newRole !== 'founder') {
+      if (newRole !== 'client' && newRole !== 'founder' && newRole !== 'team' && newRole !== 'employee') {
         throw new Error('Invalid role specified.');
       }
       const db = loadDatabase();

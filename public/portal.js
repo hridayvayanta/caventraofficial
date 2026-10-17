@@ -230,15 +230,15 @@
     const user = global.CaventraAuth ? global.CaventraAuth.getCurrentUser() : null;
     if (user) {
       // Already logged in -> redirect appropriately
-      const isFounder = global.CaventraAuth.isFounder(user);
-      const target = isFounder ? '/founder-dashboard/' : '/client-dashboard/';
+      const isStaff = global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user);
+      const target = isStaff ? '/founder-dashboard/' : '/client-dashboard/';
       return `
         <div class="wrap pt-page" style="padding:100px 16px;text-align:center;max-width:640px;margin:0 auto">
           <div class="pt-badge-pill" style="margin-bottom:20px"><span class="dot"></span> ACTIVE SESSION</div>
           <h2 style="font-size:32px;margin-bottom:14px">Already Authenticated</h2>
           <p style="color:var(--tx-sub);margin-bottom:28px">You are signed in as <strong>${esc(user.email)}</strong> (${esc(user.role)}).</p>
           <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-            <a class="btn solid" href="${target}">Go to ${isFounder ? 'Founder Dashboard' : 'Client Dashboard'}</a>
+            <a class="btn solid" href="${target}">Go to ${isStaff ? 'Operations / Founder Portal' : 'Client Dashboard'}</a>
             <button class="btn" data-pt-action="logout" type="button">Sign Out</button>
           </div>
         </div>
@@ -320,6 +320,14 @@
           ${msg ? `<div class="pt-alert ${msg.type === 'error' ? 'pt-alert-err' : 'pt-alert-ok'}">${esc(msg.text)}</div>` : ''}
 
           <form id="pt-form-register" class="pt-form">
+            <label>
+              <span>I am registering as *</span>
+              <select name="accountType" id="pt-reg-account-type" required style="font-weight:600;color:var(--tx);background:var(--bg2);">
+                <option value="client" selected>Client / Organization (View Projects, Milestones & Invoices)</option>
+                <option value="team">Caventra Team Member / Employee (Corporate Tasks, Projects & Tickets)</option>
+              </select>
+            </label>
+
             <label>
               <span>Full Name *</span>
               <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name">
@@ -528,6 +536,7 @@
             </div>
           </div>
         </div>
+        ${renderTicketThreadModal(false)}
       </div>
     `;
   }
@@ -943,6 +952,7 @@
                     <th>Status</th>
                     <th>Submitted</th>
                     <th>Resolution Notes</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -958,6 +968,9 @@
                       <td>${fmtDate(t.createdAt)}</td>
                       <td>
                         ${t.resolutionNotes ? `<span style="color:var(--gold)">${esc(t.resolutionNotes)}</span>` : '<span style="color:var(--tx-sub)">Pending review</span>'}
+                      </td>
+                      <td>
+                        <button class="btn sm" data-pt-action="open-ticket-thread" data-tkt-id="${esc(t.id)}">Discussion (${(t.comments || []).length})</button>
                       </td>
                     </tr>
                   `).join('')}
@@ -1043,10 +1056,65 @@
     return '';
   }
 
-  function renderFounderModals(users, projects, invoices) {
+  function renderTicketThreadModal(isStaff) {
+    return `
+      <!-- Ticket Discussion Thread Modal -->
+      <div id="pt-ticket-thread-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog" style="max-width:680px">
+          <div class="pt-modal-head">
+            <div>
+              <h3 id="pt-thread-title">Ticket Discussion</h3>
+              <div id="pt-thread-meta" style="font-size:12px;color:var(--tx-sub);margin-top:2px"></div>
+            </div>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <div style="padding:16px 20px;max-height:68vh;overflow-y:auto">
+            <div style="background:var(--bg2);padding:14px;border-radius:6px;border:1px solid var(--line);margin-bottom:16px">
+              <div style="font-size:11px;font-weight:600;color:var(--tx-sub);margin-bottom:4px">ISSUE DESCRIPTION & CONTEXT:</div>
+              <div id="pt-thread-desc" style="font-size:13px;white-space:pre-wrap;color:var(--tx)"></div>
+            </div>
+
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--tx-sub)">ACTIVITY & COMMENTS THREAD:</div>
+            <div id="pt-thread-comments-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+
+            <form id="pt-form-ticket-reply" class="pt-form">
+              <input type="hidden" name="ticketId" id="pt-thread-ticket-id">
+              <label>
+                <span>Add Comment / Status Update *</span>
+                <textarea name="comment" rows="3" required placeholder="Type your comment, update, or testing results..."></textarea>
+              </label>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                ${isStaff ? `
+                  <button class="btn sm" type="button" id="pt-btn-quick-resolve" data-pt-action="quick-resolve-ticket" style="border-color:var(--gold);color:var(--gold)">Mark as Resolved</button>
+                ` : `<div></div>`}
+                <div style="display:flex;gap:10px;margin-left:auto">
+                  <button class="btn" type="button" data-pt-action="close-modal">Close</button>
+                  <button class="btn solid" type="submit">Post Comment</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderFounderModals(users, projects, invoices, tickets) {
     const clientUsers = (users || []).filter(u => u.role === 'client');
     const invoiceCount = (invoices || []).length;
     const projectList = projects || [];
+
+    const internalTeam = (users || []).filter(u => u.role === 'founder' || u.role === 'team' || u.role === 'employee');
+    const coreFounders = [
+      { displayName: 'Hriday Vayanta', title: 'Head of Growth', email: 'hridayvayanta7@gmail.com' },
+      { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauranahmed12345678@gmail.com' },
+      { displayName: 'Ved Nimbaark', title: 'Head of Design', email: 'vednimbark08@gmail.com' }
+    ];
+    coreFounders.forEach(cf => {
+      if (!internalTeam.some(u => u.email && u.email.toLowerCase() === cf.email.toLowerCase())) {
+        internalTeam.push(cf);
+      }
+    });
 
     return `
       <!-- Create Lead Modal -->
@@ -1353,6 +1421,74 @@
           </form>
         </div>
       </div>
+
+      <!-- Raise Corporate Ticket Modal -->
+      <div id="pt-corp-ticket-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog" style="max-width:580px">
+          <div class="pt-modal-head">
+            <div>
+              <h3>Raise Corporate Ticket / Task</h3>
+              <p style="font-size:12px;color:var(--tx-sub);margin-top:2px">Assign a corporate task or technical blocker to another founder or team member.</p>
+            </div>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-corp-ticket" class="pt-form">
+            <label>
+              <span>Task / Ticket Subject *</span>
+              <input type="text" name="subject" required placeholder="e.g. Implement Webhook listener for payment gateway">
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Assign To Team Member *</span>
+                <select name="assignedFounder" required>
+                  <option value="" disabled selected>Select Assignee...</option>
+                  ${internalTeam.map(tm => `
+                    <option value="${esc(tm.displayName)}" data-email="${esc(tm.email)}">${esc(tm.displayName)} (${esc(tm.title || tm.role || 'Team')})</option>
+                  `).join('')}
+                </select>
+              </label>
+              <label>
+                <span>Department / Category *</span>
+                <select name="category" required>
+                  <option value="Technical / Backend" selected>Technical / Backend</option>
+                  <option value="Frontend / UI">Frontend / UI</option>
+                  <option value="Design / UX">Design / UX</option>
+                  <option value="Client Milestone Delivery">Client Milestone Delivery</option>
+                  <option value="Infrastructure / DevOps">Infrastructure / DevOps</option>
+                  <option value="Marketing & Sales">Marketing & Sales</option>
+                  <option value="Executive / Operations">Executive / Operations</option>
+                  <option value="Bug / Critical Blocker">Bug / Critical Blocker</option>
+                </select>
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Priority *</span>
+                <select name="priority" required>
+                  <option value="Medium" selected>Medium Priority</option>
+                  <option value="Low">Low Priority</option>
+                  <option value="High">High Priority</option>
+                  <option value="Urgent">Urgent / Critical Blocker</option>
+                </select>
+              </label>
+              <label>
+                <span>Target Due Date</span>
+                <input type="date" name="dueDate">
+              </label>
+            </div>
+            <label>
+              <span>Detailed Requirements & Acceptance Criteria *</span>
+              <textarea name="description" rows="4" required placeholder="Context, files to touch, steps to reproduce, or milestone deliverables..."></textarea>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Publish Corporate Ticket</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      ${renderTicketThreadModal(true)}
     `;
   }
 
@@ -1363,12 +1499,14 @@
       return renderLogin({ type: 'error', text: 'Authentication required. Founder sign-in required.' });
     }
 
-    if (!global.CaventraAuth.isFounder(user)) {
+    const isFounder = global.CaventraAuth.isFounder(user);
+    const isTeam = global.CaventraAuth.isTeamMember(user);
+    if (!isFounder && !isTeam) {
       return `
         <div class="wrap pt-page" style="padding:100px 16px;text-align:center;max-width:640px;margin:0 auto">
           <div class="pt-badge-pill" style="margin-bottom:20px;background:rgba(234,67,53,0.15);color:#EA4335"><span class="dot" style="background:#EA4335"></span> ACCESS DENIED</div>
-          <h2 style="font-size:32px;margin-bottom:14px">Founder Access Required</h2>
-          <p style="color:var(--tx-sub);margin-bottom:28px">Your authenticated account (<strong>${esc(user.email)}</strong>) holds the <strong>${esc(user.role)}</strong> role. Administrative founder dashboards are restricted to authorized CAVENTRA partners.</p>
+          <h2 style="font-size:32px;margin-bottom:14px">Internal Access Required</h2>
+          <p style="color:var(--tx-sub);margin-bottom:28px">Your authenticated account (<strong>${esc(user.email)}</strong>) holds the <strong>${esc(user.role)}</strong> role. Administrative dashboards are restricted to authorized CAVENTRA team members.</p>
           <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
             <a class="btn solid" href="/client-dashboard/">Go to Client Dashboard</a>
             <button class="btn" data-pt-action="logout" type="button">Sign Out</button>
@@ -1384,7 +1522,7 @@
     const invoices = store.getInvoices(user);
     const tickets = store.getSupportTickets(user);
     const users = store.getUsers(user);
-    const logs = store.getActivityLogs(user);
+    const logs = isFounder ? store.getActivityLogs(user) : [];
 
     // High Level Metrics
     const totalInvoiced = invoices.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
@@ -1394,13 +1532,13 @@
 
     return `
       <div class="pt-dash-container">
-        <!-- Founder Command Header -->
+        <!-- Founder / Team Command Header -->
         <header class="pt-dash-header pt-founder-header">
           <div class="wrap pt-dash-header-wrap">
             <div class="pt-dash-brand">
-              <span class="pt-badge-pill" style="border-color:var(--gold);color:var(--gold)"><span class="dot" style="background:var(--gold)"></span> FOUNDER COMMAND</span>
+              <span class="pt-badge-pill" style="border-color:${isFounder ? 'var(--gold)' : 'var(--accent)'};color:${isFounder ? 'var(--gold)' : 'var(--accent)'}"><span class="dot" style="background:${isFounder ? 'var(--gold)' : 'var(--accent)'}"></span> ${isFounder ? 'FOUNDER COMMAND' : 'CAVENTRA TEAM PORTAL'}</span>
               <h1>${esc(user.displayName)}</h1>
-              <p>${esc(user.title || 'Founder')} · CAVENTRA Executive Suite</p>
+              <p>${esc(user.title || (isFounder ? 'Founder' : 'Team Member'))} · CAVENTRA Corporate Suite</p>
             </div>
 
             <div class="pt-header-actions">
@@ -1411,7 +1549,7 @@
             </div>
           </div>
 
-          <!-- Founder Tab Bar -->
+          <!-- Founder / Team Tab Bar -->
           <div class="wrap pt-tabs-wrap">
             <nav class="pt-nav-tabs">
               <button class="pt-tab-btn ${founderActiveTab === 'overview' ? 'active' : ''}" data-pt-ftab="overview">Overview</button>
@@ -1419,7 +1557,7 @@
               <button class="pt-tab-btn ${founderActiveTab === 'clients' ? 'active' : ''}" data-pt-ftab="clients">Clients (${clients.length})</button>
               <button class="pt-tab-btn ${founderActiveTab === 'projects' ? 'active' : ''}" data-pt-ftab="projects">Projects (${projects.length})</button>
               <button class="pt-tab-btn ${founderActiveTab === 'invoices' ? 'active' : ''}" data-pt-ftab="invoices">Invoices & Payments</button>
-              <button class="pt-tab-btn ${founderActiveTab === 'support' ? 'active' : ''}" data-pt-ftab="support">Support (${tickets.filter(t => t.status !== 'Resolved').length})</button>
+              <button class="pt-tab-btn ${founderActiveTab === 'support' ? 'active' : ''}" data-pt-ftab="support">Tickets & Operations (${tickets.filter(t => t.status !== 'Resolved').length})</button>
               <button class="pt-tab-btn ${founderActiveTab === 'admin' ? 'active' : ''}" data-pt-ftab="admin">Administration (${users.length})</button>
             </nav>
           </div>
@@ -1429,7 +1567,7 @@
         <main class="wrap pt-dash-content">
           ${renderFounderTabContent(founderActiveTab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount)}
         </main>
-        ${renderFounderModals(users, projects, invoices)}
+        ${renderFounderModals(users, projects, invoices, tickets)}
       </div>
     `;
   }
@@ -1485,6 +1623,7 @@
             <button class="btn solid sm" data-pt-action="open-create-lead">＋ New Lead</button>
             <button class="btn solid sm" data-pt-action="open-create-project">＋ New Project</button>
             <button class="btn solid sm" data-pt-action="open-create-invoice">＋ Issue Invoice</button>
+            <button class="btn solid sm" data-pt-action="open-corp-ticket" style="background:#1d2939;border-color:var(--accent)">＋ Corporate Ticket</button>
           </div>
 
           <!-- Two Column View: Recent Activity & Leads Spotlight -->
@@ -1760,47 +1899,127 @@
     }
 
     if (tab === 'support') {
+      const internalTickets = tickets.filter(t => t.ticketType === 'internal');
+      const clientTickets = tickets.filter(t => t.ticketType !== 'internal');
+      const myTickets = tickets.filter(t => (t.assignedFounder && t.assignedFounder.toLowerCase().includes(user.displayName.toLowerCase())) || (t.assignedToEmail && t.assignedToEmail.toLowerCase() === user.email.toLowerCase()));
+      const urgentCount = tickets.filter(t => (t.priority === 'Urgent' || t.priority === 'High') && t.status !== 'Resolved').length;
+
+      const internalTeamList = (users || []).filter(u => u.role === 'founder' || u.role === 'team' || u.role === 'employee');
+      const coreFounders = [
+        { displayName: 'Hriday Vayanta', title: 'Head of Growth', email: 'hridayvayanta7@gmail.com' },
+        { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauranahmed12345678@gmail.com' },
+        { displayName: 'Ved Nimbaark', title: 'Head of Design', email: 'vednimbark08@gmail.com' }
+      ];
+      coreFounders.forEach(cf => {
+        if (!internalTeamList.some(u => u.email && u.email.toLowerCase() === cf.email.toLowerCase())) {
+          internalTeamList.push(cf);
+        }
+      });
+
       return `
         <div class="pt-tab-pane">
           <div class="pt-panel-head">
-            <h2>Support Desk Management</h2>
+            <div>
+              <h2>Support Desk & Corporate Operations</h2>
+              <p style="color:var(--tx-sub);font-size:13px;margin-top:4px">Unified management for client service requests and internal founder-to-founder corporate tasks.</p>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn solid sm" data-pt-action="open-corp-ticket" style="background:var(--accent);border-color:var(--accent)">＋ Raise Corporate Ticket</button>
+            </div>
           </div>
+
+          <!-- Ticket Stats Strip -->
+          <div class="pt-stats-grid pt-founder-stats" style="margin-bottom:24px">
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Total Active</div>
+              <div class="pt-stat-value">${tickets.filter(t => t.status !== 'Resolved').length}</div>
+              <div class="pt-stat-sub">Across team & clients</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Client Inquiries</div>
+              <div class="pt-stat-value pt-tx-ok">${clientTickets.filter(t => t.status !== 'Resolved').length}</div>
+              <div class="pt-stat-sub">External support requests</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Corporate Tasks</div>
+              <div class="pt-stat-value pt-tx-gold">${internalTickets.filter(t => t.status !== 'Resolved').length}</div>
+              <div class="pt-stat-sub">Internal founder/team tasks</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Assigned to You</div>
+              <div class="pt-stat-value">${myTickets.filter(t => t.status !== 'Resolved').length}</div>
+              <div class="pt-stat-sub">Requires your action</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Critical / Urgent</div>
+              <div class="pt-stat-value ${urgentCount > 0 ? 'pt-tx-warn' : ''}">${urgentCount}</div>
+              <div class="pt-stat-sub">High priority blockers</div>
+            </div>
+          </div>
+
+          <!-- Unified Tickets Table -->
           <div class="pt-table-wrap">
             <table class="pt-table">
               <thead>
                 <tr>
+                  <th>Scope</th>
                   <th>Ticket Subject</th>
-                  <th>Client Name</th>
+                  <th>Raised By</th>
+                  <th>Category</th>
                   <th>Priority</th>
                   <th>Status</th>
-                  <th>Assigned Founder</th>
-                  <th>Submitted</th>
+                  <th>Assigned To</th>
+                  <th>Created</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                ${tickets.map(t => `
-                  <tr>
-                    <td>
-                      <strong>${esc(t.subject)}</strong>
-                      <div style="font-size:12px;color:var(--tx-sub)">${esc(t.description)}</div>
-                    </td>
-                    <td>${esc(t.clientName)} (${esc(t.clientEmail)})</td>
-                    <td><span class="pt-prio pt-prio-${esc(t.priority.toLowerCase())}">${esc(t.priority)}</span></td>
-                    <td>
-                      <select class="pt-stage-select" data-pt-action="change-ticket-status" data-tkt-id="${esc(t.id)}">
-                        ${['Open', 'In Progress', 'Awaiting Client', 'Resolved'].map(st => `
-                          <option value="${st}" ${t.status === st ? 'selected' : ''}>${st}</option>
-                        `).join('')}
-                      </select>
-                    </td>
-                    <td>${esc(t.assignedFounder || 'Unassigned')}</td>
-                    <td>${fmtDate(t.createdAt)}</td>
-                    <td>
-                      <button class="btn sm" data-pt-action="respond-ticket" data-tkt-id="${esc(t.id)}">Reply</button>
-                    </td>
-                  </tr>
-                `).join('') || '<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--tx-sub);font-size:13px">No support tickets submitted yet. Client requests will appear here.</td></tr>'}
+                ${tickets.map(t => {
+                  const isInternal = t.ticketType === 'internal';
+                  return `
+                    <tr>
+                      <td>
+                        <span class="pt-status-pill ${isInternal ? 'pt-status-founder' : 'pt-status-client'}" style="font-size:10px;padding:3px 8px">
+                          ${isInternal ? 'CORPORATE' : 'CLIENT'}
+                        </span>
+                      </td>
+                      <td>
+                        <strong>${esc(t.subject)}</strong>
+                        <div style="font-size:12px;color:var(--tx-sub);margin-top:2px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                          ${esc(t.description)}
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-size:13px;font-weight:600">${esc(t.clientName || 'User')}</div>
+                        <div style="font-size:11px;color:var(--tx-sub)">${esc(t.clientEmail || '')}</div>
+                      </td>
+                      <td>${esc(t.category)}</td>
+                      <td><span class="pt-prio pt-prio-${esc((t.priority || 'medium').toLowerCase())}">${esc(t.priority || 'Medium')}</span></td>
+                      <td>
+                        <select class="pt-stage-select" data-pt-action="change-ticket-status" data-tkt-id="${esc(t.id)}">
+                          ${['Open', 'In Progress', 'Awaiting Client', 'Resolved'].map(st => `
+                            <option value="${st}" ${t.status === st ? 'selected' : ''}>${st}</option>
+                          `).join('')}
+                        </select>
+                      </td>
+                      <td>
+                        <select class="pt-stage-select" data-pt-action="change-ticket-assignee" data-tkt-id="${esc(t.id)}">
+                          <option value="Unassigned" ${!t.assignedFounder || t.assignedFounder === 'Unassigned' ? 'selected' : ''}>Unassigned</option>
+                          ${internalTeamList.map(tm => `
+                            <option value="${esc(tm.displayName)}" ${t.assignedFounder === tm.displayName ? 'selected' : ''}>${esc(tm.displayName)}</option>
+                          `).join('')}
+                        </select>
+                      </td>
+                      <td>${fmtDate(t.createdAt)}</td>
+                      <td>
+                        <button class="btn sm" data-pt-action="open-ticket-thread" data-tkt-id="${esc(t.id)}" style="display:flex;align-items:center;gap:4px">
+                          <span>Discussion</span>
+                          <span class="pt-badge-pill" style="padding:1px 6px;font-size:10px">${(t.comments || []).length}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  `;
+                }).join('') || '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--tx-sub);font-size:13px">No tickets or corporate tasks recorded yet. Click <strong>＋ Raise Corporate Ticket</strong> above to assign a task.</td></tr>'}
               </tbody>
             </table>
           </div>
@@ -1899,7 +2118,7 @@
     if (!user) {
       return renderLogin();
     }
-    if (global.CaventraAuth.isFounder(user)) {
+    if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
       return renderFounderDashboard();
     }
     return renderClientDashboard();
@@ -2101,7 +2320,7 @@
           }
 
           // Fallback if session returned directly
-          if (global.CaventraAuth.isFounder(res)) {
+          if (global.CaventraAuth.isFounder(res) || global.CaventraAuth.isTeamMember(res)) {
             window.location.hash = '#/founder-dashboard';
           } else {
             window.location.hash = '#/client-dashboard';
@@ -2137,7 +2356,7 @@
           const user = await global.CaventraAuth.verifyLoginOtp(currentPendingLoginEmail, code);
           const modal = root.querySelector('#pt-login-otp-modal');
           if (modal) modal.style.display = 'none';
-          if (global.CaventraAuth.isFounder(user)) {
+          if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
             window.location.hash = '#/founder-dashboard';
           } else {
             window.location.hash = '#/client-dashboard';
@@ -2210,7 +2429,7 @@
           const user = await global.CaventraAuth.verifyLogin2FA(code);
           const modal = root.querySelector('#pt-2fa-modal');
           if (modal) modal.style.display = 'none';
-          if (global.CaventraAuth.isFounder(user)) {
+          if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
             window.location.hash = '#/founder-dashboard';
           } else {
             window.location.hash = '#/client-dashboard';
@@ -2294,7 +2513,7 @@
           });
           const modal = root.querySelector('#pt-google-modal');
           if (modal) modal.style.display = 'none';
-          if (global.CaventraAuth.isFounder(user)) {
+          if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
             window.location.hash = '#/founder-dashboard';
           } else {
             window.location.hash = '#/client-dashboard';
@@ -2357,7 +2576,8 @@
         }
 
         try {
-          const res = await global.CaventraAuth.register(email, password, name, company, phone, confirmPassword, true);
+          const accountType = (regForm.querySelector('[name="accountType"]') || {}).value || 'client';
+          const res = await global.CaventraAuth.register(email, password, name, company, phone, confirmPassword, true, accountType);
           // Mandatory email verification gate (Flowchart C8 -> C13)
           if (res && res.pendingVerification) {
             currentPendingRegEmail = res.email;
@@ -2573,6 +2793,65 @@
       };
     }
 
+    // Corporate Ticket Form (Founder & Team)
+    const corpTicketForm = root.querySelector('#pt-form-corp-ticket');
+    if (corpTicketForm) {
+      corpTicketForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user) return;
+        const f = Object.fromEntries(new FormData(corpTicketForm));
+        const sel = corpTicketForm.querySelector('[name="assignedFounder"]');
+        const selectedOpt = sel ? sel.options[sel.selectedIndex] : null;
+        if (selectedOpt && selectedOpt.hasAttribute('data-email')) {
+          f.assignedToEmail = selectedOpt.getAttribute('data-email');
+        }
+        f.ticketType = 'internal';
+        global.CaventraStore.createSupportTicket(f, user);
+        alert('Corporate ticket published and assigned to ' + f.assignedFounder + '.');
+        const modal = root.querySelector('#pt-corp-ticket-modal');
+        if (modal) modal.style.display = 'none';
+        if (typeof render === 'function') render(true);
+      };
+    }
+
+    // Ticket Discussion Reply Form
+    const ticketReplyForm = root.querySelector('#pt-form-ticket-reply');
+    if (ticketReplyForm) {
+      ticketReplyForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user) return;
+        const ticketId = ticketReplyForm.ticketId.value;
+        const comment = (ticketReplyForm.comment.value || '').trim();
+        if (!comment) return;
+
+        global.CaventraStore.addTicketComment(ticketId, comment, user);
+        ticketReplyForm.comment.value = '';
+
+        // Refresh thread inside modal
+        const tickets = global.CaventraStore.getSupportTickets(user);
+        const ticket = tickets.find(t => t.id === ticketId);
+        const commentsList = root.querySelector('#pt-thread-comments-list');
+        if (ticket && commentsList) {
+          commentsList.innerHTML = (ticket.comments || []).map(c => `
+            <div style="background:var(--bg2);padding:10px 14px;border-radius:6px;border:1px solid var(--line)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <div>
+                  <strong style="font-size:13px">${esc(c.author)}</strong>
+                  <span class="pt-status-pill ${c.role === 'founder' ? 'pt-status-founder' : 'pt-status-client'}" style="font-size:10px;padding:2px 6px;margin-left:6px">${esc((c.role || 'user').toUpperCase())}</span>
+                </div>
+                <span style="font-size:11px;color:var(--tx-sub)">${fmtDate(c.timestamp)}</span>
+              </div>
+              <div style="font-size:13px;white-space:pre-wrap;color:var(--tx)">${esc(c.text)}</div>
+            </div>
+          `).join('');
+        }
+
+        if (typeof render === 'function') render(true);
+      };
+    }
+
     // Generic Action Click Handler
     root.onclick = async function (e) {
       const btn = e.target.closest('[data-pt-action], [data-pt-tab], [data-pt-ftab], [data-pt-quick], [data-pt-gacc], #pt-btn-toggle-custom-google');
@@ -2585,7 +2864,7 @@
         const modal = root.querySelector('#pt-google-modal');
         if (modal) modal.style.display = 'none';
         const user = global.CaventraAuth.getCurrentUser();
-        if (global.CaventraAuth.isFounder(user)) {
+        if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
           window.location.hash = '#/founder-dashboard';
         } else {
           window.location.hash = '#/client-dashboard';
@@ -2632,7 +2911,7 @@
         const persona = btn.getAttribute('data-pt-quick');
         await global.CaventraAuth.loginWithGoogle(persona);
         const user = global.CaventraAuth.getCurrentUser();
-        if (global.CaventraAuth.isFounder(user)) {
+        if (global.CaventraAuth.isFounder(user) || global.CaventraAuth.isTeamMember(user)) {
           window.location.hash = '#/founder-dashboard';
         } else {
           window.location.hash = '#/client-dashboard';
@@ -2781,6 +3060,12 @@
         return;
       }
 
+      if (action === 'open-corp-ticket') {
+        const m = root.querySelector('#pt-corp-ticket-modal');
+        if (m) m.style.display = 'flex';
+        return;
+      }
+
       if (action === 'open-create-lead') {
         const m = root.querySelector('#pt-lead-modal');
         if (m) m.style.display = 'flex';
@@ -2863,9 +3148,76 @@
         }
         return;
       }
+
+      if (action === 'open-ticket-thread') {
+        const tktId = btn.getAttribute('data-tkt-id');
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user || !tktId) return;
+        const tickets = global.CaventraStore.getSupportTickets(user);
+        const ticket = tickets.find(t => t.id === tktId);
+        if (!ticket) return;
+
+        const modal = root.querySelector('#pt-ticket-thread-modal');
+        if (!modal) return;
+
+        const titleEl = modal.querySelector('#pt-thread-title');
+        const metaEl = modal.querySelector('#pt-thread-meta');
+        const descEl = modal.querySelector('#pt-thread-desc');
+        const idInput = modal.querySelector('#pt-thread-ticket-id');
+        const commentsList = modal.querySelector('#pt-thread-comments-list');
+        const quickResolveBtn = modal.querySelector('#pt-btn-quick-resolve');
+
+        if (titleEl) titleEl.textContent = ticket.subject;
+        if (metaEl) {
+          metaEl.textContent = `Scope: ${(ticket.ticketType || 'client').toUpperCase()} • Raised by: ${ticket.clientName || ticket.clientEmail} • Priority: ${ticket.priority} • Status: ${ticket.status} • Assigned: ${ticket.assignedFounder || 'Unassigned'}`;
+        }
+        if (descEl) descEl.textContent = ticket.description;
+        if (idInput) idInput.value = ticket.id;
+        if (quickResolveBtn) {
+          quickResolveBtn.setAttribute('data-tkt-id', ticket.id);
+          quickResolveBtn.style.display = ticket.status === 'Resolved' ? 'none' : 'inline-block';
+        }
+
+        if (commentsList) {
+          const comments = ticket.comments || [];
+          if (comments.length === 0) {
+            commentsList.innerHTML = '<div style="padding:14px;text-align:center;color:var(--tx-sub);font-size:12px;background:var(--bg2);border-radius:6px">No comments yet. Start the conversation below.</div>';
+          } else {
+            commentsList.innerHTML = comments.map(c => `
+              <div style="background:var(--bg2);padding:10px 14px;border-radius:6px;border:1px solid var(--line)">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                  <div>
+                    <strong style="font-size:13px">${esc(c.author)}</strong>
+                    <span class="pt-status-pill ${c.role === 'founder' ? 'pt-status-founder' : 'pt-status-client'}" style="font-size:10px;padding:2px 6px;margin-left:6px">${esc((c.role || 'user').toUpperCase())}</span>
+                  </div>
+                  <span style="font-size:11px;color:var(--tx-sub)">${fmtDate(c.timestamp)}</span>
+                </div>
+                <div style="font-size:13px;white-space:pre-wrap;color:var(--tx)">${esc(c.text)}</div>
+              </div>
+            `).join('');
+          }
+        }
+
+        modal.style.display = 'flex';
+        return;
+      }
+
+      if (action === 'quick-resolve-ticket') {
+        const tktId = btn.getAttribute('data-tkt-id');
+        const note = prompt('Enter resolution summary / closing notes:');
+        if (note !== null) {
+          const user = global.CaventraAuth.getCurrentUser();
+          global.CaventraStore.updateSupportTicket(tktId, { resolutionNotes: note || 'Resolved by engineering', status: 'Resolved' }, user);
+          alert('Ticket marked as Resolved and synchronized to Cloud Firestore.');
+          const modal = root.querySelector('#pt-ticket-thread-modal');
+          if (modal) modal.style.display = 'none';
+          if (typeof render === 'function') render(true);
+        }
+        return;
+      }
     };
 
-    // Stage dropdown changes
+    // Stage dropdown and selection changes
     root.onchange = function (e) {
       const select = e.target;
       if (select.getAttribute('data-pt-action') === 'change-lead-stage') {
@@ -2881,6 +3233,23 @@
         const newStatus = select.value;
         const user = global.CaventraAuth.getCurrentUser();
         global.CaventraStore.updateSupportTicket(tktId, { status: newStatus }, user);
+        return;
+      }
+
+      if (select.getAttribute('data-pt-action') === 'change-ticket-assignee') {
+        const tktId = select.getAttribute('data-tkt-id');
+        const newAssignee = select.value;
+        const user = global.CaventraAuth.getCurrentUser();
+        global.CaventraStore.updateSupportTicket(tktId, { assignedFounder: newAssignee }, user);
+        return;
+      }
+
+      if (select.id === 'pt-reg-account-type') {
+        const isTeam = select.value === 'team';
+        const orgLbl = root.querySelector('#pt-lbl-org');
+        if (orgLbl) orgLbl.textContent = isTeam ? 'Department / Team Specialization' : 'Company / Project Name';
+        const submitBtn = root.querySelector('#pt-btn-register');
+        if (submitBtn) submitBtn.textContent = isTeam ? 'Create Team Member Account' : 'Create Client Account';
         return;
       }
     };
