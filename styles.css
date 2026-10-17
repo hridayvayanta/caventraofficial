@@ -3068,6 +3068,7 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-top: 36px;
+  align-items: stretch;
 }
 .founder-card {
   background: var(--bg2);
@@ -3075,6 +3076,10 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   border-radius: var(--r);
   padding: 32px 24px;
   transition: border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
 }
 .founder-card:hover {
   border-color: var(--gold);
@@ -3091,6 +3096,7 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .founder-photo {
   width: 100%;
@@ -3106,6 +3112,7 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   font-size: 20px;
   margin: 0 0 4px;
   color: var(--tx);
+  flex-shrink: 0;
 }
 .founder-role {
   font-size: 13px;
@@ -3113,25 +3120,32 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   font-weight: 600;
   margin-bottom: 16px;
   display: block;
+  flex-shrink: 0;
 }
 .founder-bio {
   font-size: 14px;
   line-height: 1.6;
   color: var(--mut);
   margin-bottom: 20px;
+  flex: 1 1 auto;
 }
 .founder-focus {
   font-size: 12px;
+  line-height: 1.5;
   font-weight: 600;
   color: var(--gold);
   padding-top: 14px;
   border-top: 1px solid var(--line);
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* --- Founder Direct Contact Meta Box --- */
 .founder-contact-meta {
-  margin-top: 18px;
+  margin-top: 16px;
   padding: 14px 16px;
   background: rgba(201, 184, 160, 0.08);
   border: 1px solid var(--line);
@@ -3139,6 +3153,7 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex-shrink: 0;
 }
 .founder-contact-meta .meta-row {
   display: flex;
@@ -3158,7 +3173,7 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
 .founder-contact-meta .meta-val {
   color: var(--tx);
   font-family: var(--mo);
-  font-size: 12.5px;
+  font-size: 12px;
   word-break: break-all;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -3170,6 +3185,17 @@ footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
 .founder-contact-meta .meta-val.meta-email {
   color: var(--gold);
   font-weight: 600;
+}
+
+/* --- Founder Action Buttons --- */
+.founder-actions {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 /* --- Accessibility Focus Outlines --- */
@@ -3250,6 +3276,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 [data-theme="light"] .founder-contact-meta .meta-val.meta-email {
   color: #5A431E;
+}
+[data-theme="light"] .founder-actions {
+  border-top-color: rgba(30, 34, 38, 0.12);
 }
 
 

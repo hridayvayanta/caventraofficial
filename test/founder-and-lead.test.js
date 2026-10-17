@@ -36,7 +36,7 @@ const fbPub = fs.readFileSync(path.join(__dirname, '..', 'public', 'firebase-con
 ok(fbRoot === fbPub, 'firebase-config.js and public/firebase-config.js are 100% byte-for-byte identical');
 
 // 2. Visible Founder Emails & Direct Phone Lines
-ok(appRoot.includes('caventraofficial@gmail.com'), 'app.js contains Hriday Vayanta email');
+ok(appRoot.includes('hridayvayanta7@gmail.com'), 'app.js contains Hriday Vayanta email');
 ok(appRoot.includes('vednimbark08@gmail.com'), 'app.js contains Ved Nimbark email');
 ok(appRoot.includes('sauranahmed12345678@gmail.com'), 'app.js contains Sauranahmed Mansuri email');
 
@@ -47,11 +47,11 @@ ok(appRoot.includes('+91 79906 52097'), 'app.js contains Sauranahmed phone numbe
 
 // Check static HTML files for pre-rendered founder contact info
 const foundersHtml = fs.readFileSync(path.join(__dirname, '..', 'public', 'founders', 'index.html'), 'utf8');
-ok(foundersHtml.includes('caventraofficial@gmail.com') && foundersHtml.includes('vednimbark08@gmail.com') && foundersHtml.includes('sauranahmed12345678@gmail.com'), 'founders/index.html pre-renders all 3 founder emails visibly');
+ok(foundersHtml.includes('hridayvayanta7@gmail.com') && foundersHtml.includes('vednimbark08@gmail.com') && foundersHtml.includes('sauranahmed12345678@gmail.com'), 'founders/index.html pre-renders all 3 founder emails visibly');
 ok(foundersHtml.includes('founder-contact-meta'), 'founders/index.html includes founder-contact-meta');
 
 const aboutHtml = fs.readFileSync(path.join(__dirname, '..', 'public', 'about', 'index.html'), 'utf8');
-ok(aboutHtml.includes('caventraofficial@gmail.com') && aboutHtml.includes('vednimbark08@gmail.com') && aboutHtml.includes('sauranahmed12345678@gmail.com'), 'about/index.html pre-renders all 3 founder emails visibly');
+ok(aboutHtml.includes('hridayvayanta7@gmail.com') && aboutHtml.includes('vednimbark08@gmail.com') && aboutHtml.includes('sauranahmed12345678@gmail.com'), 'about/index.html pre-renders all 3 founder emails visibly');
 
 // 3. Contact Form Phone Field & Validation
 const contactHtml = fs.readFileSync(path.join(__dirname, '..', 'public', 'contact', 'index.html'), 'utf8');
