@@ -128,6 +128,8 @@
           phone: '+91 88667 90989',
           company: 'CAVENTRA',
           emailVerified: true,
+          isApproved: true,
+          approvalStatus: 'approved',
           createdAt: '2026-09-01T10:00:00.000Z'
         },
         {
@@ -140,6 +142,8 @@
           phone: '+91 79906 52097',
           company: 'CAVENTRA',
           emailVerified: true,
+          isApproved: true,
+          approvalStatus: 'approved',
           createdAt: '2026-09-01T10:00:00.000Z'
         },
         {
@@ -152,6 +156,8 @@
           phone: '+91 88491 86747',
           company: 'CAVENTRA',
           emailVerified: true,
+          isApproved: true,
+          approvalStatus: 'approved',
           createdAt: '2026-09-01T10:00:00.000Z'
         }
       ],
@@ -371,15 +377,17 @@
                (sf.uid === 'founder_ved' && (u.email === 'ved@caventra.com' || u.uid === 'founder_ved'));
       });
       if (existing) {
-        if (existing.email !== sf.email || existing.passwordHash !== sf.passwordHash || existing.role !== 'founder') {
+        if (existing.email !== sf.email || existing.passwordHash !== sf.passwordHash || existing.role !== 'founder' || !existing.isApproved || existing.approvalStatus !== 'approved') {
           existing.email = sf.email;
           existing.passwordHash = sf.passwordHash;
           existing.role = 'founder';
           existing.emailVerified = true;
+          existing.isApproved = true;
+          existing.approvalStatus = 'approved';
           modified = true;
         }
       } else {
-        db.users.push(Object.assign({ createdAt: '2026-09-01T10:00:00.000Z' }, sf));
+        db.users.push(Object.assign({ createdAt: '2026-09-01T10:00:00.000Z', isApproved: true, approvalStatus: 'approved' }, sf));
         modified = true;
       }
     });
@@ -721,7 +729,11 @@
         company: (company || (isTeam ? 'CAVENTRA' : '')).trim(),
         phone: (phone || '').trim(),
         emailVerified: false,
-        createdAt: new Date().toISOString()
+        isApproved: !isTeam,
+        approvalStatus: isTeam ? 'pending' : 'approved',
+        requestedAt: isTeam ? new Date().toISOString() : null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       db.users.push(newUser);
@@ -813,9 +825,18 @@
       storage.removeItem(key);
       const db = loadDatabase();
       const u = db.users.find(function (x) { return x.email.toLowerCase() === cleanEmail; });
+      const isTeam = u && (u.role === 'team' || u.role === 'employee');
       if (u) {
         u.emailVerified = true;
         u.status = 'active';
+        u.updatedAt = new Date().toISOString();
+        if (isTeam) {
+          u.isApproved = false;
+          u.approvalStatus = 'pending';
+        } else {
+          u.isApproved = true;
+          u.approvalStatus = 'approved';
+        }
       }
       const cRecord = db.clients.find(function (c) { return c.email.toLowerCase() === cleanEmail; });
       if (cRecord) {
@@ -823,9 +844,11 @@
       }
       db.activityLogs.unshift({
         id: 'act_' + Date.now(),
-        action: 'EMAIL_VERIFIED_REGISTRATION',
+        action: isTeam ? 'TEAM_APPROVAL_REQUESTED' : 'EMAIL_VERIFIED_REGISTRATION',
         performedBy: cleanEmail,
-        details: 'Email verified for registered client: ' + cleanEmail,
+        details: isTeam
+          ? 'Team member email verified. Founder approval requested for ' + (u ? u.displayName : cleanEmail) + ' (' + cleanEmail + ')'
+          : 'Email verified for registered client: ' + cleanEmail,
         timestamp: new Date().toISOString()
       });
       saveDatabase(db);
@@ -835,7 +858,11 @@
       return {
         ok: true,
         email: cleanEmail,
-        message: 'Registration complete and email verified! Please sign in with your credentials.'
+        isTeam: isTeam,
+        approvalStatus: isTeam ? 'pending' : 'approved',
+        message: isTeam
+          ? 'Email verified! Your Caventra Team Member access request has been sent to Founder Administration. A founding partner (Hriday, Sauranahmed, or Ved) must approve your profile before you can log in for the first time.'
+          : 'Registration complete and email verified! Please sign in with your credentials.'
       };
     },
 
@@ -985,6 +1012,33 @@
         throw new Error('Account access restricted. Please contact CAVENTRA support at caventraofficial@gmail.com.');
       }
 
+      // Check Founder Approval for Team Members
+      const isTeamUser = (user.role === 'team' || user.role === 'employee');
+      const isFounderUser = this.isFounder(user);
+      if (isTeamUser && !isFounderUser) {
+        // Real-time check: if local status is not approved, check cloud in case a founder approved remotely
+        if (user.approvalStatus !== 'approved' || !user.isApproved) {
+          try {
+            if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+              await global.CaventraStore.syncWithCloud();
+              const freshDb = loadDatabase();
+              const freshUser = freshDb.users.find(function (u) { return u.uid === user.uid; });
+              if (freshUser) {
+                user = freshUser;
+              }
+            }
+          } catch (e) {}
+        }
+
+        if (user.approvalStatus === 'pending' || !user.isApproved) {
+          throw new Error('Access Pending: Your Caventra Team Member account has not been approved by Founder Administration yet. Once a founding partner (Hriday, Sauranahmed, or Ved) approves your access, you will be able to log in.');
+        }
+
+        if (user.approvalStatus === 'rejected') {
+          throw new Error('Access Declined: Your Caventra Team Member registration request was declined by Founder Administration. Please contact leadership for assistance.');
+        }
+      }
+
       // Testing bypass for headless store unit tests when explicitly requested
       if (directSessionForTesting) {
         const sessionUser = {
@@ -1071,6 +1125,14 @@
       }
       if (!role || (role !== 'founder' && role !== 'client' && role !== 'team' && role !== 'employee')) {
         throw new Error('Access denied: Missing or invalid account role.');
+      }
+
+      const isTeamUser = (role === 'team' || role === 'employee');
+      const isFounderUser = (getFounderEmails().indexOf(cleanEmail) !== -1);
+      if (isTeamUser && !isFounderUser) {
+        if (user.approvalStatus !== 'approved' || !user.isApproved) {
+          throw new Error('Access Pending: Your Caventra Team Member account requires Founder Administration approval before your first sign-in.');
+        }
       }
 
       // Issue secure authenticated session (D20 -> D21)
@@ -1959,9 +2021,79 @@
           company: u.company || '',
           phone: u.phone || '',
           emailVerified: !!u.emailVerified,
-          createdAt: u.createdAt
+          isApproved: u.isApproved !== false,
+          approvalStatus: u.approvalStatus || (u.role === 'founder' || u.role === 'client' ? 'approved' : 'pending'),
+          approvedBy: u.approvedBy || '',
+          approvedAt: u.approvedAt || '',
+          createdAt: u.createdAt,
+          updatedAt: u.updatedAt || u.createdAt
         };
       });
+    },
+
+    getPendingTeamMembers: function (user) {
+      if (!CaventraAuth.isFounder(user)) {
+        throw new Error('Permission denied: Only founders can review pending team member requests.');
+      }
+      const db = loadDatabase();
+      return (db.users || []).filter(function (u) {
+        return (u.role === 'team' || u.role === 'employee') && (u.approvalStatus === 'pending' || !u.isApproved);
+      });
+    },
+
+    approveTeamMember: function (targetUid, founderUser) {
+      if (!CaventraAuth.isFounder(founderUser)) {
+        throw new Error('Permission denied: Only founders can approve team members.');
+      }
+      const db = loadDatabase();
+      const target = db.users.find(function (u) { return u.uid === targetUid; });
+      if (!target) throw new Error('User record not found.');
+
+      target.isApproved = true;
+      target.approvalStatus = 'approved';
+      target.approvedBy = founderUser.displayName || founderUser.email;
+      target.approvedByEmail = founderUser.email;
+      target.approvedAt = new Date().toISOString();
+      target.updatedAt = new Date().toISOString();
+
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'TEAM_MEMBER_APPROVED',
+        performedBy: founderUser.email,
+        details: 'Founder ' + (founderUser.displayName || founderUser.email) + ' approved team member account for ' + target.displayName + ' (' + target.email + ')',
+        timestamp: new Date().toISOString()
+      });
+
+      saveDatabase(db);
+      return target;
+    },
+
+    rejectTeamMember: function (targetUid, founderUser, reason) {
+      if (!CaventraAuth.isFounder(founderUser)) {
+        throw new Error('Permission denied: Only founders can reject team members.');
+      }
+      const db = loadDatabase();
+      const target = db.users.find(function (u) { return u.uid === targetUid; });
+      if (!target) throw new Error('User record not found.');
+
+      target.isApproved = false;
+      target.approvalStatus = 'rejected';
+      target.rejectedBy = founderUser.displayName || founderUser.email;
+      target.rejectedByEmail = founderUser.email;
+      target.rejectedAt = new Date().toISOString();
+      target.rejectionReason = reason || 'Declined by Founder Administration';
+      target.updatedAt = new Date().toISOString();
+
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'TEAM_MEMBER_REJECTED',
+        performedBy: founderUser.email,
+        details: 'Founder ' + (founderUser.displayName || founderUser.email) + ' rejected team member account for ' + target.displayName + ' (' + target.email + ')',
+        timestamp: new Date().toISOString()
+      });
+
+      saveDatabase(db);
+      return target;
     },
 
     updateUserRole: function (targetUid, newRole, user) {

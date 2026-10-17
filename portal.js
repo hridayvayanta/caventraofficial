@@ -328,6 +328,11 @@
               </select>
             </label>
 
+            <div id="pt-team-security-notice" class="pt-notice-box" style="display:none;background:rgba(212,175,55,0.08);border-color:rgba(212,175,55,0.3);color:var(--tx);margin:8px 0 14px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span><strong>Team Access Security Notice:</strong> After email verification via OTP, your profile request will be submitted to Founder Administration. A founding partner (Hriday, Sauranahmed, or Ved) must approve your account before your first sign-in.</span>
+            </div>
+
             <label>
               <span>Full Name *</span>
               <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name">
@@ -1523,6 +1528,7 @@
     const tickets = store.getSupportTickets(user);
     const users = store.getUsers(user);
     const logs = isFounder ? store.getActivityLogs(user) : [];
+    const pendingTeamMembers = (isFounder && store.getPendingTeamMembers) ? store.getPendingTeamMembers(user) : [];
 
     // High Level Metrics
     const totalInvoiced = invoices.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
@@ -1558,26 +1564,52 @@
               <button class="pt-tab-btn ${founderActiveTab === 'projects' ? 'active' : ''}" data-pt-ftab="projects">Projects (${projects.length})</button>
               <button class="pt-tab-btn ${founderActiveTab === 'invoices' ? 'active' : ''}" data-pt-ftab="invoices">Invoices & Payments</button>
               <button class="pt-tab-btn ${founderActiveTab === 'support' ? 'active' : ''}" data-pt-ftab="support">Tickets & Operations (${tickets.filter(t => t.status !== 'Resolved').length})</button>
-              <button class="pt-tab-btn ${founderActiveTab === 'admin' ? 'active' : ''}" data-pt-ftab="admin">Administration (${users.length})</button>
+              <button class="pt-tab-btn ${founderActiveTab === 'admin' ? 'active' : ''}" data-pt-ftab="admin">Administration (${users.length})${pendingTeamMembers.length > 0 ? ` <span class="pt-badge-pill" style="background:#ea4335;color:#fff;border-color:#ea4335;padding:1px 6px;font-size:10px;margin-left:4px">${pendingTeamMembers.length}</span>` : ''}</button>
             </nav>
           </div>
         </header>
 
         <!-- Main Content Area -->
         <main class="wrap pt-dash-content">
-          ${renderFounderTabContent(founderActiveTab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount)}
+          ${renderFounderTabContent(founderActiveTab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount, pendingTeamMembers)}
         </main>
         ${renderFounderModals(users, projects, invoices, tickets)}
       </div>
     `;
   }
 
-  function renderFounderTabContent(tab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount) {
+  function renderFounderTabContent(tab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount, pendingTeamMembers = []) {
     const store = global.CaventraStore;
 
     if (tab === 'overview') {
       return `
         <div class="pt-tab-pane">
+          <!-- Pending Team Member Approvals (Founder Administration) -->
+          ${pendingTeamMembers.length > 0 ? `
+            <div class="pt-action-card" style="border-color:var(--gold);background:rgba(212,175,55,0.08);margin-bottom:24px">
+              <div class="pt-action-icon" style="background:rgba(212,175,55,0.2);color:var(--gold)">🛡️</div>
+              <div class="pt-action-body">
+                <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase">Action Required · Founder Administration</div>
+                <h3 style="margin:4px 0 6px">Pending Team Member Access Requests (${pendingTeamMembers.length})</h3>
+                <p style="color:var(--tx-sub);font-size:13px">The following candidate(s) verified their email and requested internal Caventra Team access. Approving grants access to the internal operations portal:</p>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+                  ${pendingTeamMembers.map(ptm => `
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg2);padding:10px 14px;border-radius:6px;border:1px solid var(--line);flex-wrap:wrap;gap:10px">
+                      <div>
+                        <strong>${esc(ptm.displayName)}</strong> · <span style="color:var(--tx-sub);font-size:12px">${esc(ptm.email)}</span> ${ptm.phone ? `· <span style="color:var(--mut);font-size:12px">${esc(ptm.phone)}</span>` : ''}
+                        <div style="font-size:11px;color:var(--gold);margin-top:2px">Requested: ${esc(ptm.title || 'Team Member')} · ${fmtDate(ptm.createdAt)}</div>
+                      </div>
+                      <div style="display:flex;gap:8px">
+                        <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(ptm.uid)}" style="background:#238636;border-color:#2ea043;color:#fff">✓ Approve Access</button>
+                        <button class="btn sm" data-pt-action="reject-team-member" data-uid="${esc(ptm.uid)}" style="color:#f85149;border-color:rgba(248,81,73,0.4)">✕ Reject</button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          ` : ''}
+
           <!-- Founder Executive Stats Grid -->
           <div class="pt-stats-grid pt-founder-stats">
             <div class="pt-stat-card">
@@ -2034,9 +2066,52 @@
             <h2>Role-Based Access Control (RBAC) & Users</h2>
           </div>
 
+          <!-- Pending Team Member Requests Panel -->
+          ${pendingTeamMembers.length > 0 ? `
+            <div class="pt-panel" style="margin-bottom:24px;border-color:var(--gold);background:rgba(212,175,55,0.05)">
+              <div class="pt-panel-head">
+                <div>
+                  <h3 style="color:var(--gold)">🛡️ Pending Team Member Access Requests (${pendingTeamMembers.length})</h3>
+                  <p style="color:var(--tx-sub);font-size:13px;margin-top:2px">These staff members verified their email and requested internal Caventra access. Founder approval is required for their first sign-in.</p>
+                </div>
+              </div>
+              <div class="pt-table-wrap" style="margin-top:12px">
+                <table class="pt-table">
+                  <thead>
+                    <tr>
+                      <th>Candidate Name</th>
+                      <th>Work Email</th>
+                      <th>Contact</th>
+                      <th>Requested Role</th>
+                      <th>Date Requested</th>
+                      <th>Founder Decision</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${pendingTeamMembers.map(ptm => `
+                      <tr>
+                        <td><strong>${esc(ptm.displayName)}</strong></td>
+                        <td>${esc(ptm.email)}</td>
+                        <td>${esc(ptm.phone || '—')}</td>
+                        <td><span class="pt-badge-pill" style="border-color:var(--gold);color:var(--gold)">Team Member</span></td>
+                        <td>${fmtDate(ptm.createdAt)}</td>
+                        <td>
+                          <div style="display:flex;gap:6px">
+                            <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(ptm.uid)}" style="background:#238636;border-color:#2ea043;color:#fff;font-size:12px">✓ Approve Access</button>
+                            <button class="btn sm" data-pt-action="reject-team-member" data-uid="${esc(ptm.uid)}" style="color:#f85149;border-color:rgba(248,81,73,0.4);font-size:12px">✕ Reject</button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="pt-panel" style="margin-bottom:24px">
             <h3>Registered User Accounts</h3>
-            <p style="color:var(--tx-sub);font-size:13px;margin-bottom:16px">Public signups default strictly to <strong>client</strong>. Founders can manage privileges and client associations here.</p>
+            <p style="color:var(--tx-sub);font-size:13px;margin-bottom:16px">Public signups default strictly to <strong>client</strong>. Staff signups require Founder approval before first sign-in.</p>
             <div class="pt-table-wrap">
               <table class="pt-table">
                 <thead>
@@ -2044,6 +2119,7 @@
                     <th>Display Name</th>
                     <th>Email Address</th>
                     <th>Role</th>
+                    <th>Approval Status</th>
                     <th>Company</th>
                     <th>Verified</th>
                     <th>Joined</th>
@@ -2056,9 +2132,28 @@
                       <td><strong>${esc(u.displayName)}</strong></td>
                       <td>${esc(u.email)}</td>
                       <td>
-                        <span class="pt-status-pill ${u.role === 'founder' ? 'pt-status-founder' : 'pt-status-client'}">
+                        <span class="pt-status-pill ${u.role === 'founder' ? 'pt-status-founder' : (u.role === 'team' || u.role === 'employee' ? 'pt-status-dev' : 'pt-status-client')}">
                           ${esc(u.role.toUpperCase())}
                         </span>
+                      </td>
+                      <td>
+                        ${(u.role === 'team' || u.role === 'employee') ? `
+                          ${u.approvalStatus === 'approved' ? `
+                            <span class="pt-status-pill pt-status-ok" style="font-size:11px">✓ Approved</span>
+                          ` : u.approvalStatus === 'rejected' ? `
+                            <span class="pt-status-pill pt-status-warn" style="color:#f85149;font-size:11px">✕ Declined</span>
+                          ` : `
+                            <div style="display:flex;align-items:center;gap:4px">
+                              <span class="pt-status-pill pt-status-warn" style="font-size:11px">⏳ Pending</span>
+                              <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(u.uid)}" style="padding:2px 6px;font-size:10px;background:#238636;border-color:#2ea043;color:#fff">Approve</button>
+                              <button class="btn sm" data-pt-action="reject-team-member" data-uid="${esc(u.uid)}" style="padding:2px 6px;font-size:10px;color:#f85149">Reject</button>
+                            </div>
+                          `}
+                        ` : `
+                          <span class="pt-status-pill ${u.role === 'founder' ? 'pt-status-founder' : 'pt-status-client'}" style="font-size:11px">
+                            ${u.role === 'founder' ? 'Founder' : 'Verified'}
+                          </span>
+                        `}
                       </td>
                       <td>${esc(u.company || '—')}</td>
                       <td>${u.emailVerified ? '✓ Verified' : '⚠️ Pending'}</td>
@@ -2328,6 +2423,9 @@
           if (typeof render === 'function') render();
         } catch (err) {
           alert(err.message);
+          if (typeof render === 'function') {
+            render({ type: 'error', text: err.message });
+          }
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Sign In';
@@ -3126,6 +3224,38 @@
         return;
       }
 
+      if (action === 'approve-team-member') {
+        const uid = btn.getAttribute('data-uid');
+        const user = global.CaventraAuth.getCurrentUser();
+        try {
+          btn.disabled = true;
+          const target = global.CaventraStore.approveTeamMember(uid, user);
+          alert('✓ Approved ' + (target.displayName || target.email) + ' as a Caventra Team Member. They can now log in immediately.');
+          if (typeof render === 'function') render(true);
+        } catch (err) {
+          btn.disabled = false;
+          alert('Error approving team member: ' + (err.message || err));
+        }
+        return;
+      }
+
+      if (action === 'reject-team-member') {
+        const uid = btn.getAttribute('data-uid');
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm('Are you sure you want to decline this team member registration request?')) {
+          try {
+            btn.disabled = true;
+            global.CaventraStore.rejectTeamMember(uid, user);
+            alert('Team member registration request declined.');
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            btn.disabled = false;
+            alert('Error declining request: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
       if (action === 'update-progress') {
         const prjId = btn.getAttribute('data-prj-id');
         const newProg = prompt('Enter new progress percentage (0 - 100):', '75');
@@ -3249,7 +3379,9 @@
         const orgLbl = root.querySelector('#pt-lbl-org');
         if (orgLbl) orgLbl.textContent = isTeam ? 'Department / Team Specialization' : 'Company / Project Name';
         const submitBtn = root.querySelector('#pt-btn-register');
-        if (submitBtn) submitBtn.textContent = isTeam ? 'Create Team Member Account' : 'Create Client Account';
+        if (submitBtn) submitBtn.textContent = isTeam ? 'Register as Team Member' : 'Create Client Account';
+        const notice = root.querySelector('#pt-team-security-notice');
+        if (notice) notice.style.display = isTeam ? 'flex' : 'none';
         return;
       }
     };

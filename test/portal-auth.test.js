@@ -791,11 +791,11 @@ const Portal = sandbox.CaventraPortal;
     assert.strictEqual(typeof Store.pullFromCloud, 'function');
   });
 
-  // 29. TEAM MEMBER REGISTRATION & PORTAL ROUTING
-  await asyncTest('Team Member Registration: Registering as team member grants team role, bypasses client CRM, and routes to team portal', async () => {
+  // 29. TEAM MEMBER REGISTRATION & FOUNDER APPROVAL WORKFLOW
+  await asyncTest('Team Member Registration: Team member requires founder approval before first login; client follows direct flow', async () => {
     await Auth.logout();
 
-    // Register with accountType 'team'
+    // 1. Register as team member
     const regRes = await Auth.register(
       'employee.rahul@caventra.com',
       'DevPass456!',
@@ -810,43 +810,82 @@ const Portal = sandbox.CaventraPortal;
     assert.strictEqual(regRes.pendingVerification, true);
     assert.strictEqual(regRes.email, 'employee.rahul@caventra.com');
 
-    // Retrieve pending OTP code from localStorage challenge
+    // 2. Retrieve pending OTP code from localStorage challenge
     const challengeKey = 'caventra_dev_pending_reg_otp_employee.rahul@caventra.com';
     const challenge = JSON.parse(sandbox.localStorage.getItem(challengeKey));
     assert.ok(challenge && challenge.code, 'Pending registration verification OTP must exist');
 
-    // Verify registration OTP
-    await Auth.verifyRegistrationOtp('employee.rahul@caventra.com', challenge.code);
+    // 3. Verify registration OTP (proves email ownership)
+    const verifyRes = await Auth.verifyRegistrationOtp('employee.rahul@caventra.com', challenge.code);
+    assert.ok(verifyRes.message.includes('Founder Administration'), 'Verification message must notify user of pending founder approval');
 
-    // Verify user record in db
+    // 4. Verify user record in db is pending founder approval
     const db = Store.getDb();
     const userInDb = db.users.find(u => u.email === 'employee.rahul@caventra.com');
     assert.ok(userInDb, 'User record must exist in DB');
     assert.strictEqual(userInDb.role, 'team', 'User role must be team');
-    assert.strictEqual(userInDb.company, 'CAVENTRA');
-    assert.strictEqual(userInDb.title, 'Team Member');
+    assert.strictEqual(userInDb.isApproved, false, 'Team member must NOT be approved yet');
+    assert.strictEqual(userInDb.approvalStatus, 'pending', 'Approval status must be pending');
 
-    // Verify that team members are not added to CRM clients list
+    // 5. Verify that team members are not added to CRM clients list
     const clientRecord = db.clients.find(c => c.email === 'employee.rahul@caventra.com');
     assert.strictEqual(clientRecord, undefined, 'Team member must not be created as CRM client');
 
-    // Complete login
+    // 6. Non-approved team member login is BLOCKED before founder decision
+    let threwPending = false;
+    try {
+      await Auth.login('employee.rahul@caventra.com', 'DevPass456!');
+    } catch (e) {
+      threwPending = true;
+      assert.ok(e.message.includes('Access Pending'), 'Should indicate access is pending');
+      assert.ok(e.message.includes('Founder Administration'), 'Should state Founder Administration approval is required');
+    }
+    assert.ok(threwPending, 'Unapproved team member must be strictly blocked from login');
+
+    // 7. Founder reviews pending team member access requests
+    const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder', displayName: 'Hriday Vayanta' };
+    const pendingList = Store.getPendingTeamMembers(hriday);
+    assert.strictEqual(pendingList.length, 1);
+    assert.strictEqual(pendingList[0].email, 'employee.rahul@caventra.com');
+    assert.strictEqual(pendingList[0].displayName, 'Rahul Sharma');
+
+    // 8. Founder Overview & Admin dashboard rendering shows action cards
+    sandbox.CaventraAuth.getCurrentUser = () => hriday;
+    Portal.setFounderActiveTab('overview');
+    const founderOverviewHtml = Portal.renderFounderDashboard();
+    assert.ok(founderOverviewHtml.includes('Pending Team Member Access Requests'), 'Overview must alert founders to pending staff');
+    assert.ok(founderOverviewHtml.includes('employee.rahul@caventra.com'), 'Must show pending staff email');
+
+    Portal.setFounderActiveTab('admin');
+    const founderAdminHtml = Portal.renderFounderDashboard();
+    assert.ok(founderAdminHtml.includes('Pending Team Member Access Requests'), 'Admin tab must show pending staff review panel');
+
+    // 9. Founder approves team member
+    const approvedUser = Store.approveTeamMember(userInDb.uid, hriday);
+    assert.strictEqual(approvedUser.isApproved, true);
+    assert.strictEqual(approvedUser.approvalStatus, 'approved');
+    assert.strictEqual(approvedUser.approvedBy, 'Hriday Vayanta');
+    assert.strictEqual(Store.getPendingTeamMembers(hriday).length, 0, 'Pending list must now be empty');
+
+    // 10. Approved team member can now successfully log in
     const loginChallenge = await Auth.login('employee.rahul@caventra.com', 'DevPass456!');
+    assert.strictEqual(loginChallenge.requiresLoginOtp, true);
     const teamUser = await Auth.verifyLoginOtp('employee.rahul@caventra.com', loginChallenge.code);
 
     assert.strictEqual(Auth.isTeamMember(teamUser), true, 'User must be recognized as team member');
     assert.strictEqual(Auth.isFounder(teamUser), false, 'Team member must not be founder');
     assert.strictEqual(Auth.isClient(teamUser), false, 'Team member must not be client');
 
-    // Verify portal view renders Team Member Portal header
+    // 11. Verify portal view renders Team Member Portal header
     sandbox.CaventraAuth.getCurrentUser = () => teamUser;
     const teamDashboardHtml = Portal.renderFounderDashboard();
     assert.ok(teamDashboardHtml.includes('CAVENTRA TEAM PORTAL'), 'Dashboard should display CAVENTRA TEAM PORTAL');
 
-    // Verify registration form has accountType dropdown
+    // 12. Verify registration form elements
     const regHtml = Portal.renderRegister();
     assert.ok(regHtml.includes('id="pt-reg-account-type"'), 'Registration form must have account type dropdown');
     assert.ok(regHtml.includes('Caventra Team Member / Employee'), 'Registration form must include team option');
+    assert.ok(regHtml.includes('Team Access Security Notice'), 'Registration form must include team security notice');
 
     await Auth.logout();
   });
