@@ -3,6 +3,12 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-Favicons
+Allow: /
+
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
