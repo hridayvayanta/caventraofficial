@@ -754,6 +754,43 @@ const Portal = sandbox.CaventraPortal;
     assert.ok(threw, 'Invalid password must be rejected');
   });
 
+  // 28. CROSS-DEVICE SYNCHRONIZATION & CLIENT INVOICES REFLECTION
+  await asyncTest('Cross-Device Invoicing: Founder issues invoice and it reflects in Client Portal', async () => {
+    const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder' };
+    const clientUser = { uid: 'client_synctest', email: 'syncclient@acme.com', role: 'client', displayName: 'Sync Client' };
+
+    const inv = Store.createInvoice({
+      reference: 'INV-SYNC-001',
+      userId: clientUser.uid,
+      clientEmail: clientUser.email,
+      clientName: clientUser.displayName,
+      amount: 45000,
+      currency: 'INR',
+      dueDate: '2026-11-01',
+      notes: 'Initial Milestone Settlement'
+    }, hriday);
+
+    assert.strictEqual(inv.reference, 'INV-SYNC-001');
+    assert.strictEqual(inv.amount, 45000);
+    assert.strictEqual(inv.status, 'Issued');
+
+    const clientInvoices = Store.getInvoices(clientUser);
+    assert.strictEqual(clientInvoices.length, 1);
+    assert.strictEqual(clientInvoices[0].reference, 'INV-SYNC-001');
+    assert.strictEqual(clientInvoices[0].amount, 45000);
+
+    sandbox.CaventraAuth.getCurrentUser = () => clientUser;
+    Portal.setClientActiveTab('invoices');
+    const clientHtml = Portal.renderClientDashboard();
+    assert.ok(clientHtml.includes('INV-SYNC-001'), 'Client HTML must display issued invoice reference');
+    assert.ok(clientHtml.includes('₹45,000'), 'Client HTML must display formatted invoice amount');
+    assert.ok(clientHtml.includes('Cloud Synced'), 'Client HTML must display Cloud Synced indicator');
+
+    assert.strictEqual(typeof Store.syncWithCloud, 'function');
+    assert.strictEqual(typeof Store.pushToCloud, 'function');
+    assert.strictEqual(typeof Store.pullFromCloud, 'function');
+  });
+
   console.log('\n========================================');
   console.log(`PORTAL TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
   console.log('========================================\n');

@@ -52,6 +52,8 @@ const sandbox = {
   addEventListener: () => {},
   setTimeout: () => {},
   clearTimeout: () => {},
+  setInterval: () => {},
+  clearInterval: () => {},
   requestAnimationFrame: () => {},
   cancelAnimationFrame: () => {},
   onresize: null,

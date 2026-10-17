@@ -462,6 +462,8 @@
             </div>
 
             <div class="pt-header-actions">
+              <span class="pt-badge-pill" style="border-color:rgba(52,168,83,0.3);color:#34A853" title="Real-time Cloud Firestore synchronization"><span class="dot" style="background:#34A853"></span> Cloud Synced</span>
+              <button class="btn sm" data-pt-action="manual-sync" type="button" title="Synchronize with Cloud Firestore" style="padding:6px 10px;font-size:12px">↻ Sync</button>
               ${!user.emailVerified ? `
                 <button class="btn sm pt-btn-warn" data-pt-action="request-email-otp" type="button" title="Verify your email with a 6-digit OTP code">
                   ⚠️ Verify Email (OTP)
@@ -482,6 +484,7 @@
               <button class="pt-tab-btn ${clientActiveTab === 'overview' ? 'active' : ''}" data-pt-tab="overview">Overview</button>
               <button class="pt-tab-btn ${clientActiveTab === 'projects' ? 'active' : ''}" data-pt-tab="projects">My Projects (${projects.length})</button>
               <button class="pt-tab-btn ${clientActiveTab === 'updates' ? 'active' : ''}" data-pt-tab="updates">Updates & Approvals ${pendingApprovalsCount ? `<span class="pt-counter-badge">${pendingApprovalsCount}</span>` : ''}</button>
+              <button class="pt-tab-btn ${clientActiveTab === 'invoices' ? 'active' : ''}" data-pt-tab="invoices">Invoices & Billing (${invoices.length})</button>
               <button class="pt-tab-btn ${clientActiveTab === 'documents' ? 'active' : ''}" data-pt-tab="documents">Documents</button>
               <button class="pt-tab-btn ${clientActiveTab === 'support' ? 'active' : ''}" data-pt-tab="support">Support (${openTicketsCount})</button>
               <button class="pt-tab-btn ${clientActiveTab === 'profile' ? 'active' : ''}" data-pt-tab="profile">Profile & Security</button>
@@ -494,11 +497,43 @@
           ${renderClientTabContent(clientActiveTab, user, projects, updates, tickets, invoices)}
         </main>
         ${renderEmailOtpModal()}
+        <div id="pt-client-payment-modal" class="pt-modal" style="display:none">
+          <div class="pt-modal-dialog" style="max-width:480px">
+            <div class="pt-modal-head">
+              <h3>CAVENTRA Official Settlement Instructions</h3>
+              <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+            </div>
+            <div style="padding:16px 0;font-size:13px;line-height:1.6">
+              <div class="pt-notice-box" style="margin-bottom:16px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>Payments can be settled directly via Bank NEFT / RTGS / IMPS or Official UPI. Once transferred, submit your transaction reference below or notify your assigned founding engineer.</span>
+              </div>
+              <div class="pt-meta-list" style="background:var(--bg2);padding:14px;border-radius:8px;border:1px solid var(--line);margin-bottom:16px">
+                <div class="pt-meta-row"><span>Account Name</span><strong>CAVENTRA INNOVATIONS</strong></div>
+                <div class="pt-meta-row"><span>Bank</span><strong>HDFC Bank / State Bank of India</strong></div>
+                <div class="pt-meta-row"><span>Official UPI ID</span><strong>caventraofficial@upi</strong></div>
+                <div class="pt-meta-row"><span>Support Hotline</span><strong>+91 88667 90989</strong></div>
+              </div>
+              <form id="pt-form-notify-payment" class="pt-form">
+                <input type="hidden" name="reference" id="pt-pay-modal-ref" value="">
+                <label>
+                  <span>Transaction ID / UTR / Reference Code *</span>
+                  <input type="text" name="transactionRef" placeholder="e.g. UTR1234567890" required>
+                </label>
+                <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px">
+                  <button class="btn" type="button" data-pt-action="close-modal">Close</button>
+                  <button class="btn solid" type="submit">Submit Reference</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }
 
   function renderClientTabContent(tab, user, projects, updates, tickets, invoices) {
+    const isFounder = global.CaventraAuth && global.CaventraAuth.isFounder(user);
     if (tab === 'overview') {
       const pendingApprovals = updates.filter(u => u.needsApproval && !u.approved);
       return `
@@ -514,6 +549,11 @@
               <div class="pt-stat-label">Pending Approvals</div>
               <div class="pt-stat-value ${pendingApprovals.length ? 'pt-tx-gold' : ''}">${pendingApprovals.length}</div>
               <div class="pt-stat-sub">${pendingApprovals.length ? 'Action required on milestones' : 'All deliverables approved'}</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Invoices & Billing</div>
+              <div class="pt-stat-value">${invoices.length}</div>
+              <div class="pt-stat-sub">${invoices.some(i => i.status !== 'Paid') ? 'Statements pending' : 'All accounts settled'}</div>
             </div>
             <div class="pt-stat-card">
               <div class="pt-stat-label">Support Tickets</div>
@@ -691,6 +731,101 @@
               ` : ''}
             </div>
           `).join('')}
+        </div>
+      `;
+    }
+
+    if (tab === 'invoices') {
+      const totalInv = invoices.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
+      const totalPaid = invoices.reduce((acc, i) => acc + (Number(i.paidAmount) || 0), 0);
+      const pendingDue = Math.max(0, totalInv - totalPaid);
+
+      return `
+        <div class="pt-tab-pane">
+          <div class="pt-panel-head">
+            <div>
+              <h2>Invoices & Billing Statements</h2>
+              <p style="font-size:13px;color:var(--tx-sub);margin-top:4px">Official billing statements, payment receipts, and settlement records issued by CAVENTRA.</p>
+            </div>
+            <button class="btn sm" data-pt-action="manual-sync" type="button" title="Synchronize with Cloud Firestore">↻ Sync Invoices</button>
+          </div>
+
+          <!-- Financial Snapshot -->
+          <div class="pt-stats-grid" style="margin-bottom:24px">
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Total Invoiced</div>
+              <div class="pt-stat-value">${fmtCurrency(totalInv, 'INR')}</div>
+              <div class="pt-stat-sub">Official statements issued</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Paid to Date</div>
+              <div class="pt-stat-value" style="color:#34A853">${fmtCurrency(totalPaid, 'INR')}</div>
+              <div class="pt-stat-sub">Settled and verified</div>
+            </div>
+            <div class="pt-stat-card">
+              <div class="pt-stat-label">Pending Due</div>
+              <div class="pt-stat-value ${pendingDue > 0 ? 'pt-tx-gold' : ''}">${fmtCurrency(pendingDue, 'INR')}</div>
+              <div class="pt-stat-sub">${pendingDue > 0 ? 'Awaiting settlement' : 'All accounts settled'}</div>
+            </div>
+          </div>
+
+          ${invoices.length === 0 ? `
+            <div class="pt-empty-state">
+              <h3>No Invoices Issued Yet</h3>
+              <p>When your CAVENTRA team issues milestone statements or project invoices, they will reflect here instantly with settlement instructions and digital receipts.</p>
+            </div>
+          ` : `
+            <div class="pt-table-wrap">
+              <table class="pt-table">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Settlement Info</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${invoices.map(inv => `
+                    <tr>
+                      <td>
+                        <strong>${esc(inv.reference)}</strong>
+                        <div style="font-size:11px;color:var(--tx-sub)">Issued ${fmtDate(inv.issuedDate || inv.createdAt)}</div>
+                      </td>
+                      <td>
+                        <strong>${esc(inv.projectName || inv.description || 'Engineering Milestone')}</strong>
+                        ${inv.notes ? `<div style="font-size:12px;color:var(--tx-sub);margin-top:2px">${esc(inv.notes)}</div>` : ''}
+                      </td>
+                      <td>
+                        <strong style="font-size:15px">${fmtCurrency(inv.amount, inv.currency)}</strong>
+                      </td>
+                      <td>${fmtDate(inv.dueDate)}</td>
+                      <td>
+                        <span class="pt-status-pill ${inv.status === 'Paid' ? 'pt-status-ok' : (inv.status === 'Partially Paid' ? 'pt-status-warn' : 'pt-status-dev')}">
+                          ${esc(inv.status)}
+                        </span>
+                      </td>
+                      <td>
+                        ${inv.status === 'Paid' ? `
+                          <div style="font-size:12px;color:#34A853">
+                            ✓ Paid in full (${fmtDate(inv.paymentDate)})
+                            ${inv.transactionRef ? `<div style="font-size:11px;color:var(--mut)">Ref: ${esc(inv.transactionRef)}</div>` : ''}
+                          </div>
+                        ` : `
+                          <div style="display:flex;gap:6px;align-items:center">
+                            <span style="font-size:12px;color:var(--gold)">Pending ₹${Number(inv.amount - (inv.paidAmount || 0)).toLocaleString('en-IN')}</span>
+                            <button class="btn solid sm" style="padding:4px 10px;font-size:11px" data-pt-action="view-payment-instructions" data-inv-ref="${esc(inv.reference)}" data-inv-amt="${esc(inv.amount)}">Pay / Settle</button>
+                          </div>
+                        `}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
         </div>
       `;
     }
@@ -956,6 +1091,8 @@
             </div>
 
             <div class="pt-header-actions">
+              <span class="pt-badge-pill" style="border-color:rgba(212,175,55,0.4);color:var(--gold)" title="Real-time Cloud Firestore synchronization"><span class="dot" style="background:var(--gold)"></span> Cloud Synced</span>
+              <button class="btn sm" data-pt-action="manual-sync" type="button" title="Synchronize with Cloud Firestore" style="padding:6px 10px;font-size:12px">↻ Sync</button>
               <a class="btn sm" href="/client-dashboard/" style="background:var(--bg3)">View Client Portal</a>
               <button class="btn sm" data-pt-action="logout" type="button">Sign Out</button>
             </div>
@@ -2405,6 +2542,28 @@
       };
     }
 
+    // Client Notify Payment Form
+    const notifyPayForm = root.querySelector('#pt-form-notify-payment');
+    if (notifyPayForm) {
+      notifyPayForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        const f = Object.fromEntries(new FormData(notifyPayForm));
+        alert('Payment reference (' + (f.transactionRef || '') + ') submitted. Your founding engineer will verify and update invoice status.');
+        const modal = root.querySelector('#pt-client-payment-modal');
+        if (modal) modal.style.display = 'none';
+        if (user && f.transactionRef) {
+          global.CaventraStore.createSupportTicket({
+            subject: 'Payment Submitted: ' + (f.reference || 'Invoice Settlement'),
+            category: 'Billing',
+            priority: 'High',
+            description: 'Client reported settlement for ' + (f.reference || 'invoice') + ' with transaction reference / UTR: ' + f.transactionRef
+          }, user);
+        }
+        if (typeof render === 'function') render(true);
+      };
+    }
+
     // Generic Action Click Handler
     root.onclick = async function (e) {
       const btn = e.target.closest('[data-pt-action], [data-pt-tab], [data-pt-ftab], [data-pt-quick], [data-pt-gacc], #pt-btn-toggle-custom-google');
@@ -2439,6 +2598,11 @@
       if (btn.hasAttribute('data-pt-tab')) {
         clientActiveTab = btn.getAttribute('data-pt-tab');
         if (typeof render === 'function') render(true);
+        if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+          global.CaventraStore.syncWithCloud().then(function (res) {
+            if (res && res.updated && typeof render === 'function') render(true);
+          }).catch(function () {});
+        }
         return;
       }
 
@@ -2446,6 +2610,11 @@
       if (btn.hasAttribute('data-pt-ftab')) {
         founderActiveTab = btn.getAttribute('data-pt-ftab');
         if (typeof render === 'function') render(true);
+        if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+          global.CaventraStore.syncWithCloud().then(function (res) {
+            if (res && res.updated && typeof render === 'function') render(true);
+          }).catch(function () {});
+        }
         return;
       }
 
@@ -2464,6 +2633,32 @@
       }
 
       const action = btn.getAttribute('data-pt-action');
+
+      if (action === 'manual-sync') {
+        const syncBtns = root.querySelectorAll('[data-pt-action="manual-sync"]');
+        syncBtns.forEach(function (b) { b.textContent = 'Syncing...'; b.disabled = true; });
+        if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+          global.CaventraStore.syncWithCloud().then(function (res) {
+            syncBtns.forEach(function (b) { b.textContent = '✓ Synced'; });
+            setTimeout(function () {
+              syncBtns.forEach(function (b) { b.textContent = '↻ Sync'; b.disabled = false; });
+            }, 1200);
+            if (typeof render === 'function') render(true);
+          }).catch(function () {
+            syncBtns.forEach(function (b) { b.textContent = '↻ Sync'; b.disabled = false; });
+          });
+        }
+        return;
+      }
+
+      if (action === 'view-payment-instructions') {
+        const invRef = btn.getAttribute('data-inv-ref') || '';
+        const modal = root.querySelector('#pt-client-payment-modal');
+        const refInput = root.querySelector('#pt-pay-modal-ref');
+        if (refInput) refInput.value = invRef;
+        if (modal) modal.style.display = 'flex';
+        return;
+      }
 
       if (action === 'logout') {
         await global.CaventraAuth.logout();
@@ -2680,6 +2875,34 @@
         return;
       }
     };
+
+    // Automatic Cloud Firestore background synchronization
+    if (typeof window !== 'undefined' && !window.__caventra_sync_bound) {
+      window.__caventra_sync_bound = true;
+      window.addEventListener('caventra-cloud-sync', function (e) {
+        if (e.detail && e.detail.updated && typeof render === 'function') {
+          render(true);
+        }
+      });
+      window.addEventListener('focus', function () {
+        if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+          global.CaventraStore.syncWithCloud().then(function (res) {
+            if (res && res.updated && typeof render === 'function') render(true);
+          }).catch(function () {});
+        }
+      });
+      if (typeof setInterval === 'function') {
+        setInterval(function () {
+          if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+            if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+              global.CaventraStore.syncWithCloud().then(function (res) {
+                if (res && res.updated && typeof render === 'function') render(true);
+              }).catch(function () {});
+            }
+          }
+        }, 20000);
+      }
+    }
   }
 
   // Export

@@ -16,22 +16,22 @@
   const DEV_FIREBASE_CONFIG = {
     apiKey: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_API_KEY) ||
             (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.apiKey) ||
-            'AIzaSyCaventraDevKeyPlaceholder-LocalDevOnly',
+            'AIzaSyCSRD5u0z_BXyMs02ilokKppkFxU7V_aTI',
     authDomain: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_AUTH_DOMAIN) ||
                 (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.authDomain) ||
-                'caventra-dev.firebaseapp.com',
+                'caventra-bc523.firebaseapp.com',
     projectId: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_PROJECT_ID) ||
                (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.projectId) ||
-               'caventra-dev',
+               'caventra-bc523',
     storageBucket: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_STORAGE_BUCKET) ||
                    (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.storageBucket) ||
-                   'caventra-dev.firebasestorage.app',
+                   'caventra-bc523.firebasestorage.app',
     messagingSenderId: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_MESSAGING_SENDER_ID) ||
                        (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.messagingSenderId) ||
-                       '109876543210',
+                       '372321878559',
     appId: (typeof process !== 'undefined' && process.env && process.env.FIREBASE_APP_ID) ||
            (global.__FIREBASE_CONFIG__ && global.__FIREBASE_CONFIG__.appId) ||
-           '1:109876543210:web:devcaventraapp123'
+           '1:372321878559:web:ebabaff55316c25438cb2a'
   };
 
   const STORAGE_KEYS = {
@@ -435,8 +435,128 @@
     return db;
   }
 
+  // --- Google Cloud Firestore REST API Synchronization Layer ---
+  function getFirestoreStateUrl() {
+    if (!DEV_FIREBASE_CONFIG.projectId || !DEV_FIREBASE_CONFIG.apiKey) return null;
+    return 'https://firestore.googleapis.com/v1/projects/' +
+      DEV_FIREBASE_CONFIG.projectId +
+      '/databases/(default)/documents/caventra_store/state?key=' +
+      DEV_FIREBASE_CONFIG.apiKey;
+  }
+
+  function pushToCloudFirestore(db) {
+    if (typeof fetch === 'undefined') return Promise.resolve(null);
+    const url = getFirestoreStateUrl();
+    if (!url) return Promise.resolve(null);
+
+    let payloadStr;
+    try {
+      payloadStr = JSON.stringify(db);
+    } catch (e) {
+      return Promise.resolve(null);
+    }
+
+    return fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          updatedAt: { stringValue: new Date().toISOString() },
+          payload: { stringValue: payloadStr }
+        }
+      })
+    }).then(function (res) {
+      return res;
+    }).catch(function () {
+      return null;
+    });
+  }
+
+  function pullFromCloudFirestore() {
+    if (typeof fetch === 'undefined') return Promise.resolve(null);
+    const url = getFirestoreStateUrl();
+    if (!url) return Promise.resolve(null);
+
+    return fetch(url)
+      .then(function (res) {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data || !data.fields || !data.fields.payload || !data.fields.payload.stringValue) {
+          return null;
+        }
+        try {
+          return JSON.parse(data.fields.payload.stringValue);
+        } catch (e) {
+          return null;
+        }
+      })
+      .catch(function () {
+        return null;
+      });
+  }
+
+  function mergeEntityList(localList, remoteList, idKey) {
+    localList = Array.isArray(localList) ? localList : [];
+    remoteList = Array.isArray(remoteList) ? remoteList : [];
+    const key = idKey || 'id';
+    const map = {};
+
+    remoteList.forEach(function (item) {
+      if (item && item[key]) {
+        map[item[key]] = item;
+      }
+    });
+
+    localList.forEach(function (localItem) {
+      if (!localItem || !localItem[key]) return;
+      const remoteItem = map[localItem[key]];
+      if (!remoteItem) {
+        map[localItem[key]] = localItem;
+      } else {
+        const localTime = new Date(localItem.updatedAt || localItem.timestamp || localItem.createdAt || 0).getTime();
+        const remoteTime = new Date(remoteItem.updatedAt || remoteItem.timestamp || remoteItem.createdAt || 0).getTime();
+        if (localTime >= remoteTime) {
+          map[localItem[key]] = Object.assign({}, remoteItem, localItem);
+        } else {
+          map[localItem[key]] = Object.assign({}, localItem, remoteItem);
+        }
+      }
+    });
+
+    return Object.values ? Object.values(map) : Object.keys(map).map(function (k) { return map[k]; });
+  }
+
+  function mergeDatabases(localDb, remoteDb) {
+    if (!remoteDb) return localDb;
+    if (!localDb) return remoteDb;
+
+    const merged = {
+      users: mergeEntityList(localDb.users, remoteDb.users, 'uid'),
+      clients: mergeEntityList(localDb.clients, remoteDb.clients, 'id'),
+      leads: mergeEntityList(localDb.leads, remoteDb.leads, 'id'),
+      projects: mergeEntityList(localDb.projects, remoteDb.projects, 'id'),
+      projectUpdates: mergeEntityList(localDb.projectUpdates, remoteDb.projectUpdates, 'id'),
+      documents: mergeEntityList(localDb.documents, remoteDb.documents, 'id'),
+      invoices: mergeEntityList(localDb.invoices, remoteDb.invoices, 'id'),
+      supportTickets: mergeEntityList(localDb.supportTickets, remoteDb.supportTickets, 'id'),
+      activityLogs: mergeEntityList(localDb.activityLogs, remoteDb.activityLogs, 'id')
+    };
+
+    if (Array.isArray(merged.activityLogs)) {
+      merged.activityLogs.sort(function (a, b) {
+        return new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime();
+      });
+    }
+
+    syncFounderAccounts(merged);
+    return merged;
+  }
+
   function saveDatabase(db) {
     storage.setItem(STORAGE_KEYS.FIRESTORE_DB, JSON.stringify(db));
+    pushToCloudFirestore(db);
   }
 
   // --- Auth State ---
@@ -1308,6 +1428,41 @@
       return loadDatabase();
     },
 
+    // Cloud Firestore Synchronization
+    syncWithCloud: async function () {
+      try {
+        const remoteDb = await pullFromCloudFirestore();
+        if (!remoteDb) {
+          return { ok: false, updated: false, reason: 'offline_or_unavailable' };
+        }
+        const localDb = loadDatabase();
+        const localRaw = JSON.stringify(localDb);
+        const merged = mergeDatabases(localDb, remoteDb);
+        const mergedRaw = JSON.stringify(merged);
+        const updated = (localRaw !== mergedRaw);
+
+        if (updated) {
+          storage.setItem(STORAGE_KEYS.FIRESTORE_DB, mergedRaw);
+        }
+
+        const remoteRaw = JSON.stringify(remoteDb);
+        if (mergedRaw !== remoteRaw) {
+          pushToCloudFirestore(merged);
+        }
+
+        if (typeof window !== 'undefined' && window.dispatchEvent && typeof window.CustomEvent === 'function') {
+          window.dispatchEvent(new window.CustomEvent('caventra-cloud-sync', { detail: { db: merged, updated: updated } }));
+        }
+
+        return { ok: true, updated: updated, db: merged };
+      } catch (e) {
+        return { ok: false, updated: false, error: e.message };
+      }
+    },
+
+    pushToCloud: pushToCloudFirestore,
+    pullFromCloud: pullFromCloudFirestore,
+
     // Reset database to seed data
     resetToSeed: function () {
       const initial = getInitialSeedData();
@@ -1812,6 +1967,17 @@
   // Export to global scope
   global.CaventraAuth = CaventraAuth;
   global.CaventraStore = CaventraStore;
+
+  // Automatic Cloud Firestore background synchronization in browser environments
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (CaventraStore && typeof CaventraStore.syncWithCloud === 'function') {
+          CaventraStore.syncWithCloud().catch(function () {});
+        }
+      }, 300);
+    });
+  }
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { CaventraAuth: CaventraAuth, CaventraStore: CaventraStore };
