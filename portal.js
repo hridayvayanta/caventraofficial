@@ -2255,11 +2255,11 @@
                           ` : global.CaventraAuth.isFounder(u) ? `
                             <span class="pt-status-pill pt-status-founder" style="font-size:11px">Protected Founder</span>
                           ` : `
-                            <button class="btn sm" data-pt-action="toggle-role" data-uid="${esc(u.uid)}" data-current-role="${esc(u.role)}" style="font-size:11px;padding:3px 8px">
-                              ${u.role === 'founder' ? 'Demote to Client' : 'Promote to Founder'}
+                            <button class="btn sm" data-pt-action="promote-role" data-uid="${esc(u.uid)}" data-name="${esc(u.displayName || u.email)}" data-current-role="${esc(u.role)}" style="font-size:11px;padding:4px 10px;border-color:var(--gold);color:var(--gold)">
+                              Promote Role
                             </button>
-                            <button class="btn sm" data-pt-action="remove-user" data-uid="${esc(u.uid)}" data-name="${esc(u.displayName || u.email)}" style="color:#f85149;border-color:rgba(248,81,73,0.4);font-size:11px;padding:3px 8px" title="Permanently remove user">
-                              🗑 Remove
+                            <button class="btn sm" data-pt-action="remove-user" data-uid="${esc(u.uid)}" data-name="${esc(u.displayName || u.email)}" style="color:#f85149;border-color:rgba(248,81,73,0.5);font-size:11px;padding:4px 10px" title="Remove Employee">
+                              ${(u.role === 'team' || u.role === 'employee') ? 'Remove Employee' : 'Remove Account'}
                             </button>
                           `}
                         </div>
@@ -3401,14 +3401,40 @@
         return;
       }
 
-      if (action === 'toggle-role') {
+      if (action === 'promote-role' || action === 'toggle-role') {
         const uid = btn.getAttribute('data-uid');
-        const currentRole = btn.getAttribute('data-current-role');
-        const newRole = currentRole === 'founder' ? 'client' : 'founder';
+        const name = btn.getAttribute('data-name') || 'this user';
+        const currentRole = btn.getAttribute('data-current-role') || 'team';
         const user = global.CaventraAuth.getCurrentUser();
-        if (confirm(`Are you sure you want to change this user's role to ${newRole.toUpperCase()}?`)) {
+
+        const selection = prompt(
+          `Promote / Change Role for ${name} (Current: ${currentRole.toUpperCase()}):\n\n` +
+          `1. Promote to Founder (Full Executive Command & Dashboard Access)\n` +
+          `2. Caventra Team Member / Employee (Corporate Tasks, Projects & Tickets)\n` +
+          `3. Client / Organization (External Portal Only)\n\n` +
+          `Enter 1, 2, or 3:`,
+          currentRole === 'team' ? '1' : '2'
+        );
+
+        if (!selection) return;
+        const val = selection.trim().toLowerCase();
+        let newRole = '';
+        if (val === '1' || val === 'founder') newRole = 'founder';
+        else if (val === '2' || val === 'team' || val === 'employee') newRole = 'team';
+        else if (val === '3' || val === 'client') newRole = 'client';
+        else {
+          alert('Invalid role selection. Please choose 1, 2, or 3.');
+          return;
+        }
+
+        try {
+          btn.disabled = true;
           global.CaventraStore.updateUserRole(uid, newRole, user);
+          alert(`✓ Successfully updated role for ${name} to ${newRole.toUpperCase()}.`);
           if (typeof render === 'function') render(true);
+        } catch (err) {
+          btn.disabled = false;
+          alert('Error updating role: ' + (err.message || err));
         }
         return;
       }
