@@ -344,7 +344,7 @@
           <form id="pt-form-login" class="pt-form">
             <label>
               <span>Work Email</span>
-              <input type="email" name="email" required placeholder="client@company.com" autocomplete="email" autofocus>
+              <input type="email" name="email" required placeholder="client@company.com" autocomplete="email" value="${esc((typeof localStorage !== 'undefined' ? localStorage.getItem('caventra_remembered_email') : '') || '')}" autofocus>
             </label>
 
             <label>
@@ -354,6 +354,13 @@
               </div>
               <input type="password" name="password" required placeholder="••••••••" autocomplete="current-password">
             </label>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 12px">
+              <label class="pt-checkbox-label" style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-sub);cursor:pointer;user-select:none">
+                <input type="checkbox" id="pt-login-remember" name="rememberMe" ${(typeof localStorage !== 'undefined' && localStorage.getItem('caventra_remember_login') === 'false') ? '' : 'checked'} style="cursor:pointer">
+                <span>Remember me</span>
+              </label>
+            </div>
 
             <div class="pt-captcha-card" id="pt-captcha-card-login">
               <label class="pt-captcha-label">
@@ -419,8 +426,8 @@
             </div>
 
             <label>
-              <span>Full Name *</span>
-              <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name">
+              <span>Full Name (Letters only) *</span>
+              <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name" pattern="[A-Za-z\s.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
             </label>
 
             <label>
@@ -1189,10 +1196,41 @@
     `;
   }
 
-  function renderFounderModals(users, projects, invoices, tickets) {
+  function renderFounderModals(users, projects, invoices, tickets, clients = []) {
     const clientUsers = (users || []).filter(u => u.role === 'client');
     const invoiceCount = (invoices || []).length;
     const projectList = projects || [];
+    const clientList = clients || [];
+
+    // Unified client accounts list combining registered user accounts & CRM clients
+    const clientOptionMap = new Map();
+    clientUsers.forEach(u => {
+      if (u.email) {
+        clientOptionMap.set(u.email.toLowerCase(), {
+          email: u.email,
+          userId: u.uid,
+          clientId: '',
+          label: `${u.displayName || u.email} (${u.email}) [User Account]`
+        });
+      }
+    });
+    clientList.forEach(c => {
+      const em = (c.email || '').toLowerCase();
+      if (em) {
+        if (!clientOptionMap.has(em)) {
+          clientOptionMap.set(em, {
+            email: c.email,
+            userId: c.userId || '',
+            clientId: c.id,
+            label: `${c.companyName || c.contactName} (${c.email}) [CRM Client]`
+          });
+        } else {
+          const entry = clientOptionMap.get(em);
+          if (!entry.clientId) entry.clientId = c.id;
+        }
+      }
+    });
+    const clientOptionsArray = Array.from(clientOptionMap.values());
 
     const internalTeam = (users || []).filter(u => u.role === 'founder' || u.role === 'team' || u.role === 'employee');
     const coreFounders = [
@@ -1221,8 +1259,8 @@
                 <input type="text" name="companyName" required placeholder="Acme Technologies">
               </label>
               <label>
-                <span>Contact Name *</span>
-                <input type="text" name="contactName" required placeholder="Rohan Sharma">
+                <span>Contact Name (Letters only) *</span>
+                <input type="text" name="contactName" required placeholder="Rohan Sharma" pattern="[A-Za-z\\s.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
               </label>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -1287,6 +1325,87 @@
         </div>
       </div>
 
+      <!-- Edit Lead Modal -->
+      <div id="pt-edit-lead-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Edit Sales Lead</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-edit-lead" class="pt-form">
+            <input type="hidden" name="leadId">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Company Name *</span>
+                <input type="text" name="companyName" required placeholder="Acme Technologies">
+              </label>
+              <label>
+                <span>Contact Name (Letters only) *</span>
+                <input type="text" name="contactName" required placeholder="Rohan Sharma" pattern="[A-Za-z\\s.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Email Address *</span>
+                <input type="email" name="email" required placeholder="contact@acme.com">
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input type="tel" name="phone" placeholder="+91 98765 00000">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <label>
+                <span>Enquiry Source</span>
+                <select name="source">
+                  <option value="Website Estimator">Website Estimator</option>
+                  <option value="Start a Project Form">Start a Project Form</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Direct Outreach">Direct Outreach</option>
+                </select>
+              </label>
+              <label>
+                <span>Sales Stage</span>
+                <select name="stage">
+                  <option value="New">New</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Proposal Sent">Proposal Sent</option>
+                  <option value="Negotiation">Negotiation</option>
+                  <option value="Closed Won">Closed Won</option>
+                  <option value="Closed Lost">Closed Lost</option>
+                </select>
+              </label>
+              <label>
+                <span>Assigned Owner</span>
+                <select name="owner">
+                  <option value="Hriday Vayanta">Hriday Vayanta (Growth)</option>
+                  <option value="Sauranahmed Mansuri">Sauranahmed Mansuri (Tech)</option>
+                  <option value="Ved Nimbaark">Ved Nimbaark (Design)</option>
+                </select>
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Estimated Budget</span>
+                <input type="text" name="budget" placeholder="e.g. ₹1,50,000">
+              </label>
+              <label>
+                <span>Follow-up Date</span>
+                <input type="date" name="followUpDate">
+              </label>
+            </div>
+            <label>
+              <span>Internal Notes</span>
+              <textarea name="notes" rows="3" placeholder="Project requirements, scope considerations, notes..."></textarea>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Update Lead</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- Create Client Modal -->
       <div id="pt-client-modal" class="pt-modal" style="display:none">
         <div class="pt-modal-dialog">
@@ -1301,8 +1420,8 @@
                 <input type="text" name="companyName" required placeholder="Zenith Retail Ltd">
               </label>
               <label>
-                <span>Contact Name *</span>
-                <input type="text" name="contactName" required placeholder="Ananya Sharma">
+                <span>Contact Name (Letters only) *</span>
+                <input type="text" name="contactName" required placeholder="Ananya Sharma" pattern="[A-Za-z\\s.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
               </label>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -1332,6 +1451,70 @@
         </div>
       </div>
 
+      <!-- Edit Client Modal -->
+      <div id="pt-edit-client-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Manage Client Record</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-edit-client" class="pt-form">
+            <input type="hidden" name="clientId">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Company Name *</span>
+                <input type="text" name="companyName" required placeholder="Zenith Retail Ltd">
+              </label>
+              <label>
+                <span>Contact Name (Letters only) *</span>
+                <input type="text" name="contactName" required placeholder="Ananya Sharma" pattern="[A-Za-z\\s.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Email Address *</span>
+                <input type="email" name="email" required placeholder="ananya@zenith.com">
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input type="tel" name="phone" placeholder="+91 98220 00000">
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Status</span>
+                <select name="status">
+                  <option value="active">Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </label>
+              <label>
+                <span>Assigned Founder</span>
+                <select name="assignedFounder">
+                  <option value="Hriday Vayanta">Hriday Vayanta</option>
+                  <option value="Sauranahmed Mansuri">Sauranahmed Mansuri</option>
+                  <option value="Ved Nimbaark">Ved Nimbaark</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>Link to Authenticated User</span>
+              <select name="userId">
+                <option value="">None (Stand-alone record)</option>
+                ${clientUsers.map(u => `
+                  <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
+                `).join('')}
+              </select>
+            </label>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Update Client</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- Create Project Modal -->
       <div id="pt-project-modal" class="pt-modal" style="display:none">
         <div class="pt-modal-dialog">
@@ -1346,10 +1529,25 @@
             </label>
             <label>
               <span>Assign to Client Account *</span>
-              <select name="userId" required>
-                ${clientUsers.map(u => `
-                  <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)}) — ${esc(u.company || 'Client')}</option>
-                `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
+              <select name="clientSelect" required id="pt-prj-client-select">
+                ${clientOptionsArray.map(co => `
+                  <option value="${esc(co.email)}" data-uid="${esc(co.userId || '')}" data-cid="${esc(co.clientId || '')}">${esc(co.label)}</option>
+                `).join('')}
+                <option value="__custom__" ${clientOptionsArray.length === 0 ? 'selected' : ''}>+ Enter Client Email Directly...</option>
+              </select>
+            </label>
+            <div id="pt-prj-custom-email-group" style="${clientOptionsArray.length > 0 ? 'display:none;' : ''}margin-top:8px">
+              <label>
+                <span>Client Email Address *</span>
+                <input type="email" name="customEmail" placeholder="client@company.com" ${clientOptionsArray.length === 0 ? 'required' : ''}>
+              </label>
+            </div>
+            <label>
+              <span>Assigned Contact / Team Lead</span>
+              <select name="assignedContact">
+                <option value="Hriday Vayanta (Growth)">Hriday Vayanta (Growth)</option>
+                <option value="Sauranahmed Mansuri (Tech)">Sauranahmed Mansuri (Tech)</option>
+                <option value="Ved Nimbaark (Design)">Ved Nimbaark (Design)</option>
               </select>
             </label>
             <label>
@@ -1374,6 +1572,60 @@
             <div style="display:flex;justify-content:flex-end;gap:10px">
               <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
               <button class="btn solid" type="submit">Create Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit Project Modal -->
+      <div id="pt-edit-project-modal" class="pt-modal" style="display:none">
+        <div class="pt-modal-dialog">
+          <div class="pt-modal-head">
+            <h3>Edit Project Details</h3>
+            <button class="pt-modal-close" data-pt-action="close-modal">&times;</button>
+          </div>
+          <form id="pt-form-edit-project" class="pt-form">
+            <input type="hidden" name="projectId">
+            <label>
+              <span>Project Title *</span>
+              <input type="text" name="name" required placeholder="e.g. Apex Health Cloud Portal">
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span>Client Email *</span>
+                <input type="email" name="clientEmail" required placeholder="client@company.com">
+              </label>
+              <label>
+                <span>Assigned Contact</span>
+                <input type="text" name="assignedContact" placeholder="Hriday Vayanta (Growth)">
+              </label>
+            </div>
+            <label>
+              <span>Project Overview & Scope</span>
+              <textarea name="description" rows="3" placeholder="Full-stack engineering deliverables..."></textarea>
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <label>
+                <span>Delivery Stage</span>
+                <select name="status">
+                  <option value="Discovery">Discovery</option>
+                  <option value="In Development">In Development</option>
+                  <option value="Client Review">Client Review</option>
+                  <option value="Launched">Launched</option>
+                </select>
+              </label>
+              <label>
+                <span>Progress (%)</span>
+                <input type="number" name="progress" min="0" max="100" placeholder="0">
+              </label>
+              <label>
+                <span>Target Delivery</span>
+                <input type="date" name="estimatedCompletion">
+              </label>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:10px">
+              <button class="btn" type="button" data-pt-action="close-modal">Cancel</button>
+              <button class="btn solid" type="submit">Save Changes</button>
             </div>
           </form>
         </div>
@@ -1430,9 +1682,9 @@
               </label>
               <label>
                 <span>Select Client *</span>
-                <select name="userId" required>
-                  ${clientUsers.map(u => `
-                    <option value="${esc(u.uid)}">${esc(u.displayName)} (${esc(u.email)})</option>
+                <select name="clientSelect" required id="pt-inv-client-select">
+                  ${clientOptionsArray.map(co => `
+                    <option value="${esc(co.email)}" data-uid="${esc(co.userId || '')}">${esc(co.label)}</option>
                   `).join('') || '<option value="" disabled selected>No client accounts registered yet</option>'}
                 </select>
               </label>
@@ -1658,7 +1910,7 @@
         <main class="wrap pt-dash-content">
           ${renderFounderTabContent(founderActiveTab, user, leads, clients, projects, invoices, tickets, users, logs, totalInvoiced, totalReceived, pendingBalance, pendingApprovalsCount, pendingTeamMembers)}
         </main>
-        ${renderFounderModals(users, projects, invoices, tickets)}
+        ${renderFounderModals(users, projects, invoices, tickets, clients)}
       </div>
     `;
   }
@@ -1828,7 +2080,10 @@
                     <td>${esc(l.owner)}</td>
                     <td>${fmtDate(l.followUpDate)}</td>
                     <td>
-                      <button class="btn sm" data-pt-action="edit-lead" data-lead-id="${esc(l.id)}">Edit</button>
+                      <div style="display:flex;gap:6px">
+                        <button class="btn sm" data-pt-action="edit-lead" data-lead-id="${esc(l.id)}">Edit</button>
+                        <button class="btn sm pt-btn-danger" data-pt-action="delete-lead" data-lead-id="${esc(l.id)}" data-name="${esc(l.companyName || l.contactName)}">Delete</button>
+                      </div>
                     </td>
                   </tr>
                 `).join('') || '<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--tx-sub);font-size:13px">No sales leads in pipeline yet. Click <strong>＋ Add New Lead</strong> above to record an inquiry.</td></tr>'}
@@ -1883,7 +2138,10 @@
                       <td><span class="pt-status-pill pt-status-ok">${esc(c.status)}</span></td>
                       <td>${assignedProjects.length} active</td>
                       <td>
-                        <button class="btn sm" data-pt-action="manage-client-access" data-client-id="${esc(c.id)}">Manage</button>
+                        <div style="display:flex;gap:6px">
+                          <button class="btn sm" data-pt-action="manage-client-access" data-client-id="${esc(c.id)}">Manage</button>
+                          <button class="btn sm pt-btn-danger" data-pt-action="delete-client" data-client-id="${esc(c.id)}" data-name="${esc(c.companyName || c.contactName)}">Delete</button>
+                        </div>
                       </td>
                     </tr>
                   `;
@@ -1940,7 +2198,11 @@
                     <td>${fmtDate(p.estimatedCompletion)}</td>
                     <td>${esc(p.assignedContact)}</td>
                     <td>
-                      <button class="btn sm" data-pt-action="update-progress" data-prj-id="${esc(p.id)}">Update %</button>
+                      <div style="display:flex;gap:6px">
+                        <button class="btn sm" data-pt-action="edit-project" data-prj-id="${esc(p.id)}">Edit</button>
+                        <button class="btn sm" data-pt-action="update-progress" data-prj-id="${esc(p.id)}">Update %</button>
+                        <button class="btn sm pt-btn-danger" data-pt-action="delete-project" data-prj-id="${esc(p.id)}" data-name="${esc(p.name)}">Delete</button>
+                      </div>
                     </td>
                   </tr>
                 `).join('') || '<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--tx-sub);font-size:13px">No client projects active yet. Click <strong>＋ Create New Project</strong> above to launch one.</td></tr>'}
@@ -2001,11 +2263,14 @@
                     <td><span class="pt-status-pill pt-status-${esc(inv.status.toLowerCase().replace(/\s+/g,'-'))}">${esc(inv.status)}</span></td>
                     <td>${fmtDate(inv.dueDate)}</td>
                     <td>
-                      ${inv.status !== 'Paid' ? `
-                        <button class="btn sm solid" data-pt-action="open-record-payment" data-inv-id="${esc(inv.id)}" data-amount="${esc(inv.amount - (inv.paidAmount || 0))}">Record Payment</button>
-                      ` : `
-                        <span style="font-size:12px;color:var(--gold)">✓ Verified</span>
-                      `}
+                      <div style="display:flex;align-items:center;gap:6px">
+                        ${inv.status !== 'Paid' ? `
+                          <button class="btn sm solid" data-pt-action="open-record-payment" data-inv-id="${esc(inv.id)}" data-amount="${esc(inv.amount - (inv.paidAmount || 0))}">Record Payment</button>
+                        ` : `
+                          <span style="font-size:12px;color:var(--gold)">✓ Verified</span>
+                        `}
+                        <button class="btn sm pt-btn-danger" data-pt-action="delete-invoice" data-inv-id="${esc(inv.id)}" data-ref="${esc(inv.reference)}">Delete</button>
+                      </div>
                     </td>
                   </tr>
                 `).join('') || '<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--tx-sub);font-size:13px">No invoices issued yet. Click <strong>＋ Issue New Invoice</strong> above to create a billing invoice.</td></tr>'}
@@ -2130,10 +2395,13 @@
                       </td>
                       <td>${fmtDate(t.createdAt)}</td>
                       <td>
-                        <button class="btn sm" data-pt-action="open-ticket-thread" data-tkt-id="${esc(t.id)}" style="display:flex;align-items:center;gap:4px">
-                          <span>Discussion</span>
-                          <span class="pt-badge-pill" style="padding:1px 6px;font-size:10px">${(t.comments || []).length}</span>
-                        </button>
+                        <div style="display:flex;gap:6px">
+                          <button class="btn sm" data-pt-action="open-ticket-thread" data-tkt-id="${esc(t.id)}" style="display:flex;align-items:center;gap:4px">
+                            <span>Discussion</span>
+                            <span class="pt-badge-pill" style="padding:1px 6px;font-size:10px">${(t.comments || []).length}</span>
+                          </button>
+                          <button class="btn sm pt-btn-danger" data-pt-action="delete-ticket" data-tkt-id="${esc(t.id)}" data-name="${esc(t.subject)}">Delete</button>
+                        </div>
                       </td>
                     </tr>
                   `;
@@ -2438,6 +2706,17 @@
         if (!password) {
           alert('Please enter your account password.');
           return;
+        }
+
+        const rememberMeInput = loginForm.querySelector('#pt-login-remember');
+        if (typeof localStorage !== 'undefined') {
+          if (rememberMeInput && rememberMeInput.checked) {
+            localStorage.setItem('caventra_remembered_email', email);
+            localStorage.setItem('caventra_remember_login', 'true');
+          } else {
+            localStorage.removeItem('caventra_remembered_email');
+            localStorage.setItem('caventra_remember_login', 'false');
+          }
         }
 
         const submitBtn = loginForm.querySelector('#pt-btn-login');
@@ -2778,8 +3057,18 @@
           return;
         }
 
+        if (/\d/.test(name) || !/^[A-Za-z\s.'-]+$/.test(name)) {
+          alert('Full Name can only contain letters, spaces, hyphens, and apostrophes. Numbers are not permitted.');
+          return;
+        }
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           alert('Please enter a valid work email address.');
+          return;
+        }
+
+        if (global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(email)) {
+          alert('Registration with demo, disposable, or test email addresses is not permitted. Please provide a legitimate corporate or personal email.');
           return;
         }
 
@@ -2897,9 +3186,46 @@
         e.preventDefault();
         const user = global.CaventraAuth.getCurrentUser();
         const f = Object.fromEntries(new FormData(createLeadForm));
+
+        if (f.contactName && (/\d/.test(f.contactName) || !/^[A-Za-z\s.'-]+$/.test(f.contactName))) {
+          alert('Contact Name can only contain letters, spaces, hyphens, and apostrophes. Numbers are not permitted.');
+          return;
+        }
+
+        if (f.email && global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(f.email)) {
+          alert('Demo or disposable email addresses are not permitted. Please use a legitimate corporate or personal email.');
+          return;
+        }
+
         global.CaventraStore.createLead(f, user);
         alert('New lead added to pipeline.');
         const modal = root.querySelector('#pt-lead-modal');
+        if (modal) modal.style.display = 'none';
+        if (typeof render === 'function') render(true);
+      };
+    }
+
+    // Edit Lead Form (Founder)
+    const editLeadForm = root.querySelector('#pt-form-edit-lead');
+    if (editLeadForm) {
+      editLeadForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        const f = Object.fromEntries(new FormData(editLeadForm));
+
+        if (f.contactName && (/\d/.test(f.contactName) || !/^[A-Za-z\s.'-]+$/.test(f.contactName))) {
+          alert('Contact Name can only contain letters, spaces, hyphens, and apostrophes. Numbers are not permitted.');
+          return;
+        }
+
+        if (f.email && global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(f.email)) {
+          alert('Demo or disposable email addresses are not permitted. Please use a legitimate corporate or personal email.');
+          return;
+        }
+
+        global.CaventraStore.updateLead(f.leadId, f, user);
+        alert('Lead details updated successfully.');
+        const modal = root.querySelector('#pt-edit-lead-modal');
         if (modal) modal.style.display = 'none';
         if (typeof render === 'function') render(true);
       };
@@ -2912,9 +3238,46 @@
         e.preventDefault();
         const user = global.CaventraAuth.getCurrentUser();
         const f = Object.fromEntries(new FormData(createClientForm));
+
+        if (f.contactName && (/\d/.test(f.contactName) || !/^[A-Za-z\s.'-]+$/.test(f.contactName))) {
+          alert('Contact Name can only contain letters, spaces, hyphens, and apostrophes. Numbers are not permitted.');
+          return;
+        }
+
+        if (f.email && global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(f.email)) {
+          alert('Demo or disposable email addresses are not permitted. Please use a legitimate corporate or personal email.');
+          return;
+        }
+
         global.CaventraStore.createClient(f, user);
         alert('Client record created.');
         const modal = root.querySelector('#pt-client-modal');
+        if (modal) modal.style.display = 'none';
+        if (typeof render === 'function') render(true);
+      };
+    }
+
+    // Edit Client Form (Founder)
+    const editClientForm = root.querySelector('#pt-form-edit-client');
+    if (editClientForm) {
+      editClientForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        const f = Object.fromEntries(new FormData(editClientForm));
+
+        if (f.contactName && (/\d/.test(f.contactName) || !/^[A-Za-z\s.'-]+$/.test(f.contactName))) {
+          alert('Contact Name can only contain letters, spaces, hyphens, and apostrophes. Numbers are not permitted.');
+          return;
+        }
+
+        if (f.email && global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(f.email)) {
+          alert('Demo or disposable email addresses are not permitted. Please use a legitimate corporate or personal email.');
+          return;
+        }
+
+        global.CaventraStore.updateClient(f.clientId, f, user);
+        alert('Client details updated successfully.');
+        const modal = root.querySelector('#pt-edit-client-modal');
         if (modal) modal.style.display = 'none';
         if (typeof render === 'function') render(true);
       };
@@ -2927,13 +3290,97 @@
         e.preventDefault();
         const user = global.CaventraAuth.getCurrentUser();
         const f = Object.fromEntries(new FormData(createPrjForm));
-        const assignedUser = global.CaventraStore.getUsers(user).find(u => u.uid === f.userId);
-        if (assignedUser) {
-          f.clientEmail = assignedUser.email;
+
+        let clientEmail = '';
+        let userId = '';
+        let clientId = '';
+
+        if (f.clientSelect === '__custom__' || !f.clientSelect) {
+          clientEmail = (f.customEmail || '').trim().toLowerCase();
+        } else {
+          clientEmail = f.clientSelect.trim().toLowerCase();
+          const sel = createPrjForm.querySelector('#pt-prj-client-select');
+          const opt = sel ? sel.selectedOptions[0] : null;
+          if (opt) {
+            userId = opt.dataset.uid || '';
+            clientId = opt.dataset.cid || '';
+          }
         }
-        global.CaventraStore.createProject(f, user);
+
+        if (!clientEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) {
+          alert('Please select a valid client or enter a valid client email address.');
+          return;
+        }
+
+        if (global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(clientEmail)) {
+          alert('Demo or disposable email addresses are not permitted.');
+          return;
+        }
+
+        const allUsers = global.CaventraStore.getUsers(user) || [];
+        const matchedUser = allUsers.find(u => (u.email || '').toLowerCase() === clientEmail);
+        if (matchedUser) {
+          userId = matchedUser.uid;
+        }
+
+        const allClients = global.CaventraStore.getClients(user) || [];
+        const matchedClient = allClients.find(c => (c.email || '').toLowerCase() === clientEmail);
+        if (matchedClient) {
+          clientId = matchedClient.id;
+          if (!userId && matchedClient.userId) userId = matchedClient.userId;
+        }
+
+        const projectPayload = {
+          name: f.name.trim(),
+          description: f.description ? f.description.trim() : '',
+          status: f.status || 'In Development',
+          estimatedCompletion: f.estimatedCompletion || '',
+          clientEmail: clientEmail,
+          userId: userId || '',
+          clientId: clientId || '',
+          assignedContact: f.assignedContact || (user.displayName + ' (' + (user.title || user.role || 'Team') + ')')
+        };
+
+        global.CaventraStore.createProject(projectPayload, user);
         alert('New project assigned to client.');
         const modal = root.querySelector('#pt-project-modal');
+        if (modal) modal.style.display = 'none';
+        if (typeof render === 'function') render(true);
+      };
+    }
+
+    // Edit Project Form (Founder)
+    const editPrjForm = root.querySelector('#pt-form-edit-project');
+    if (editPrjForm) {
+      editPrjForm.onsubmit = function (e) {
+        e.preventDefault();
+        const user = global.CaventraAuth.getCurrentUser();
+        const f = Object.fromEntries(new FormData(editPrjForm));
+        const email = (f.clientEmail || '').trim().toLowerCase();
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          alert('Please enter a valid client email address.');
+          return;
+        }
+
+        if (global.CaventraAuth && global.CaventraAuth.isDemoEmail && global.CaventraAuth.isDemoEmail(email)) {
+          alert('Demo or disposable email addresses are not permitted.');
+          return;
+        }
+
+        const updates = {
+          name: f.name.trim(),
+          clientEmail: email,
+          assignedContact: f.assignedContact ? f.assignedContact.trim() : '',
+          description: f.description ? f.description.trim() : '',
+          status: f.status,
+          progress: Math.max(0, Math.min(100, parseInt(f.progress, 10) || 0)),
+          estimatedCompletion: f.estimatedCompletion || ''
+        };
+
+        global.CaventraStore.updateProject(f.projectId, updates, user);
+        alert('Project details updated successfully.');
+        const modal = root.querySelector('#pt-edit-project-modal');
         if (modal) modal.style.display = 'none';
         if (typeof render === 'function') render(true);
       };
@@ -2967,10 +3414,24 @@
         e.preventDefault();
         const user = global.CaventraAuth.getCurrentUser();
         const f = Object.fromEntries(new FormData(createInvForm));
-        const clientUser = global.CaventraStore.getUsers(user).find(u => u.uid === f.userId);
+        const selectedValue = (f.clientSelect || f.userId || '').trim();
+        const allUsers = global.CaventraStore.getUsers(user) || [];
+        const clientUser = allUsers.find(u => u.uid === selectedValue || (u.email && u.email.toLowerCase() === selectedValue.toLowerCase()));
         if (clientUser) {
+          f.userId = clientUser.uid;
           f.clientEmail = clientUser.email;
           f.clientName = clientUser.displayName;
+        } else {
+          const allClients = global.CaventraStore.getClients(user) || [];
+          const clientRec = allClients.find(c => c.id === selectedValue || (c.email && c.email.toLowerCase() === selectedValue.toLowerCase()));
+          if (clientRec) {
+            f.userId = clientRec.userId || '';
+            f.clientEmail = clientRec.email;
+            f.clientName = clientRec.companyName || clientRec.contactName;
+          } else {
+            f.clientEmail = selectedValue;
+            f.clientName = selectedValue;
+          }
         }
         global.CaventraStore.createInvoice(f, user);
         alert('Invoice issued.');
@@ -3582,11 +4043,184 @@
         }
         return;
       }
+
+      // Edit Sales Lead
+      if (action === 'edit-lead') {
+        const leadId = btn.getAttribute('data-lead-id');
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user || !leadId) return;
+        const leads = global.CaventraStore.getLeads(user) || [];
+        const lead = leads.find(l => l.id === leadId);
+        if (!lead) return;
+        const modal = root.querySelector('#pt-edit-lead-modal');
+        if (!modal) return;
+        const form = modal.querySelector('#pt-form-edit-lead');
+        if (form) {
+          form.leadId.value = lead.id || '';
+          if (form.companyName) form.companyName.value = lead.companyName || '';
+          if (form.contactName) form.contactName.value = lead.contactName || '';
+          if (form.email) form.email.value = lead.email || '';
+          if (form.phone) form.phone.value = lead.phone || '';
+          if (form.source) form.source.value = lead.source || 'Direct Outreach';
+          if (form.stage) form.stage.value = lead.stage || 'New';
+          if (form.owner) form.owner.value = lead.owner || 'Hriday Vayanta';
+          if (form.budget) form.budget.value = lead.budget || '';
+          if (form.followUpDate) form.followUpDate.value = lead.followUpDate || '';
+          if (form.notes) form.notes.value = lead.notes || '';
+        }
+        modal.style.display = 'flex';
+        return;
+      }
+
+      // Delete Sales Lead
+      if (action === 'delete-lead') {
+        const leadId = btn.getAttribute('data-lead-id');
+        const name = btn.getAttribute('data-name') || 'this lead';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to permanently delete lead "${name}"?`)) {
+          try {
+            global.CaventraStore.deleteLead(leadId, user);
+            alert(`✓ Lead "${name}" deleted successfully.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            alert('Error deleting lead: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
+      // Edit Project
+      if (action === 'edit-project') {
+        const prjId = btn.getAttribute('data-prj-id');
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user || !prjId) return;
+        const projects = global.CaventraStore.getProjects(user) || [];
+        const prj = projects.find(p => p.id === prjId);
+        if (!prj) return;
+        const modal = root.querySelector('#pt-edit-project-modal');
+        if (!modal) return;
+        const form = modal.querySelector('#pt-form-edit-project');
+        if (form) {
+          form.projectId.value = prj.id || '';
+          if (form.name) form.name.value = prj.name || '';
+          if (form.clientEmail) form.clientEmail.value = prj.clientEmail || '';
+          if (form.assignedContact) form.assignedContact.value = prj.assignedContact || '';
+          if (form.description) form.description.value = prj.description || '';
+          if (form.status) form.status.value = prj.status || 'In Development';
+          if (form.progress) form.progress.value = prj.progress != null ? prj.progress : 0;
+          if (form.estimatedCompletion) form.estimatedCompletion.value = prj.estimatedCompletion || '';
+        }
+        modal.style.display = 'flex';
+        return;
+      }
+
+      // Delete Project
+      if (action === 'delete-project') {
+        const prjId = btn.getAttribute('data-prj-id');
+        const name = btn.getAttribute('data-name') || 'this project';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to permanently delete project "${name}"? This will also remove associated milestones and client updates.`)) {
+          try {
+            global.CaventraStore.deleteProject(prjId, user);
+            alert(`✓ Project "${name}" deleted successfully.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            alert('Error deleting project: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
+      // Manage / Edit Client Record
+      if (action === 'manage-client-access') {
+        const clientId = btn.getAttribute('data-client-id');
+        const user = global.CaventraAuth.getCurrentUser();
+        if (!user || !clientId) return;
+        const clients = global.CaventraStore.getClients(user) || [];
+        const client = clients.find(c => c.id === clientId);
+        if (!client) return;
+        const modal = root.querySelector('#pt-edit-client-modal');
+        if (!modal) return;
+        const form = modal.querySelector('#pt-form-edit-client');
+        if (form) {
+          form.clientId.value = client.id || '';
+          if (form.companyName) form.companyName.value = client.companyName || '';
+          if (form.contactName) form.contactName.value = client.contactName || '';
+          if (form.email) form.email.value = client.email || '';
+          if (form.phone) form.phone.value = client.phone || '';
+          if (form.status) form.status.value = client.status || 'active';
+          if (form.assignedFounder) form.assignedFounder.value = client.assignedFounder || 'Hriday Vayanta';
+          if (form.userId) form.userId.value = client.userId || '';
+        }
+        modal.style.display = 'flex';
+        return;
+      }
+
+      // Delete Client Record
+      if (action === 'delete-client') {
+        const clientId = btn.getAttribute('data-client-id');
+        const name = btn.getAttribute('data-name') || 'this client record';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to delete client record "${name}"?`)) {
+          try {
+            global.CaventraStore.deleteClient(clientId, user);
+            alert(`✓ Client record "${name}" deleted successfully.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            alert('Error deleting client record: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
+      // Delete Invoice
+      if (action === 'delete-invoice') {
+        const invId = btn.getAttribute('data-inv-id');
+        const ref = btn.getAttribute('data-ref') || 'this invoice';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to delete invoice ${ref}?`)) {
+          try {
+            global.CaventraStore.deleteInvoice(invId, user);
+            alert(`✓ Invoice ${ref} deleted.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            alert('Error deleting invoice: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
+      // Delete Support Ticket
+      if (action === 'delete-ticket') {
+        const tktId = btn.getAttribute('data-tkt-id');
+        const name = btn.getAttribute('data-name') || 'this ticket';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to delete ticket "${name}"?`)) {
+          try {
+            global.CaventraStore.deleteSupportTicket(tktId, user);
+            alert(`✓ Ticket "${name}" deleted.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            alert('Error deleting ticket: ' + (err.message || err));
+          }
+        }
+        return;
+      }
     };
 
     // Stage dropdown and selection changes
     root.onchange = function (e) {
       const select = e.target;
+      if (select.id === 'pt-prj-client-select') {
+        const customWrap = root.querySelector('#pt-prj-custom-email-group');
+        const customInput = customWrap ? customWrap.querySelector('input') : null;
+        if (customWrap) {
+          const isCustom = select.value === '__custom__';
+          customWrap.style.display = isCustom ? 'block' : 'none';
+          if (customInput) customInput.required = isCustom;
+        }
+        return;
+      }
       if (select.getAttribute('data-pt-action') === 'change-lead-stage') {
         const leadId = select.getAttribute('data-lead-id');
         const newStage = select.value;

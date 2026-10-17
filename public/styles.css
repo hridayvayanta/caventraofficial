@@ -3389,6 +3389,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-color: var(--gold);
 }
 
+.pt-btn-danger {
+  color: #f85149 !important;
+  border-color: rgba(248, 81, 73, 0.4) !important;
+  background: rgba(248, 81, 73, 0.06) !important;
+  transition: all 0.2s ease !important;
+}
+
+.pt-btn-danger:hover {
+  background: rgba(248, 81, 73, 0.22) !important;
+  border-color: #f85149 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .pt-btn-danger {
+  color: #cf222e !important;
+  border-color: rgba(207, 34, 46, 0.4) !important;
+  background: rgba(207, 34, 46, 0.06) !important;
+}
+
+[data-theme="light"] .pt-btn-danger:hover {
+  background: rgba(207, 34, 46, 0.15) !important;
+  border-color: #cf222e !important;
+  color: #a40e26 !important;
+}
+
 .pt-notice-box {
   display: flex;
   align-items: flex-start;

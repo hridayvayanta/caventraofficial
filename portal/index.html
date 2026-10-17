@@ -155,7 +155,7 @@
           <form id="pt-form-login" class="pt-form">
             <label>
               <span>Work Email</span>
-              <input type="email" name="email" required placeholder="client@company.com" autocomplete="email" autofocus>
+              <input type="email" name="email" required placeholder="client@company.com" autocomplete="email" value="" autofocus>
             </label>
 
             <label>
@@ -165,6 +165,13 @@
               </div>
               <input type="password" name="password" required placeholder="••••••••" autocomplete="current-password">
             </label>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 12px">
+              <label class="pt-checkbox-label" style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-sub);cursor:pointer;user-select:none">
+                <input type="checkbox" id="pt-login-remember" name="rememberMe" checked style="cursor:pointer">
+                <span>Remember me</span>
+              </label>
+            </div>
 
             <div class="pt-captcha-card" id="pt-captcha-card-login">
               <label class="pt-captcha-label">

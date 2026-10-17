@@ -694,13 +694,66 @@
       return !!u && !this.isFounder(u) && !this.isTeamMember(u);
     },
 
+    isDemoEmail: function (email) {
+      if (!email || typeof email !== 'string') return true;
+      const clean = email.trim().toLowerCase();
+      const atIdx = clean.indexOf('@');
+      if (atIdx === -1 || atIdx === 0 || atIdx === clean.length - 1) return true;
+      const userPart = clean.slice(0, atIdx);
+      const domainPart = clean.slice(atIdx + 1);
+
+      const demoUsers = ['test', 'demo', 'sample', 'example', 'dummy', 'fake', 'temp', 'testing', 'noreply', 'no-reply', 'user', 'asdf', 'qwerty'];
+      if (demoUsers.indexOf(userPart) !== -1) return true;
+      if (/^(test|demo|dummy|sample|fake)\d*$/.test(userPart)) return true;
+      if (/^\d{3,}$/.test(userPart)) return true;
+
+      const demoDomains = [
+        'example.com', 'example.org', 'example.net',
+        'test.com', 'test.org', 'test.net', 'testing.com',
+        'demo.com', 'demo.org', 'demo.net',
+        'sample.com', 'sample.org', 'sample.net',
+        'dummy.com', 'dummy.org', 'dummy.net',
+        'fake.com', 'fakemail.com',
+        'tempmail.com', 'temp-mail.org', 'mailinator.com',
+        'trashmail.com', 'guerrillamail.com', 'yopmail.com',
+        'dispostable.com', 'sharklasers.com', '10minutemail.com',
+        'throwawaymail.com', 'getairmail.com',
+        'acme.com', 'foo.com', 'bar.com'
+      ];
+      if (demoDomains.indexOf(domainPart) !== -1) return true;
+      if (domainPart.endsWith('.test') || domainPart.endsWith('.example') || domainPart.endsWith('.invalid') || domainPart.endsWith('.localhost')) return true;
+
+      const dotIdx = domainPart.lastIndexOf('.');
+      if (dotIdx === -1 || domainPart.length - dotIdx - 1 < 2) return true;
+
+      return false;
+    },
+
+    validateName: function (name, fieldLabel) {
+      const label = fieldLabel || 'Name';
+      if (!name || typeof name !== 'string' || !name.trim()) {
+        throw new Error('Please enter ' + label.toLowerCase() + '.');
+      }
+      const clean = name.trim();
+      if (/\d/.test(clean)) {
+        throw new Error(label + ' must contain letters only. Numbers are not allowed.');
+      }
+      if (!/^[A-Za-z\s.'-]{2,}$/.test(clean)) {
+        throw new Error(label + ' must contain valid letters only (minimum 2 characters).');
+      }
+      return clean;
+    },
+
     register: async function (email, password, displayName, company, phone, confirmPassword, termsAccepted, accountType) {
       if (!displayName || !displayName.trim()) {
         throw new Error('Please enter your full name.');
       }
       const cleanName = displayName.trim();
-      if (cleanName.length < 2) {
-        throw new Error('Please enter a valid full name (at least 2 characters).');
+      if (/\d/.test(cleanName)) {
+        throw new Error('Name must contain letters only. Numbers are not allowed.');
+      }
+      if (!/^[A-Za-z\s.'-]{2,}$/.test(cleanName)) {
+        throw new Error('Name must contain valid letters only (minimum 2 characters).');
       }
       if (!email || !email.trim()) {
         throw new Error('Please enter your email address.');
@@ -708,6 +761,9 @@
       const cleanEmail = email.trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
         throw new Error('Please provide a valid email address.');
+      }
+      if (this.isDemoEmail(cleanEmail) && termsAccepted !== true) {
+        throw new Error('Demo, temporary, and test email addresses are not permitted. Please use your valid business or personal email address.');
       }
       if (!password) {
         throw new Error('Please enter a password.');
@@ -1610,9 +1666,17 @@
       if (CaventraAuth.isFounder(user) || CaventraAuth.isTeamMember(user)) {
         return db.projects || [];
       }
-      // Client isolation: only projects mapped to client's uid or email
+      // Client isolation: only projects mapped to client's uid, email, or client CRM record
       return (db.projects || []).filter(function (p) {
-        return p.userId === user.uid || (p.clientEmail && p.clientEmail.toLowerCase() === user.email.toLowerCase());
+        if (p.userId === user.uid) return true;
+        if (p.clientEmail && p.clientEmail.toLowerCase() === user.email.toLowerCase()) return true;
+        if (p.clientId && Array.isArray(db.clients)) {
+          const matchedCli = db.clients.find(function (c) { return c.id === p.clientId; });
+          if (matchedCli && (matchedCli.userId === user.uid || (matchedCli.email && matchedCli.email.toLowerCase() === user.email.toLowerCase()))) {
+            return true;
+          }
+        }
+        return false;
       });
     },
 
@@ -1672,6 +1736,26 @@
       });
       saveDatabase(db);
       return prj;
+    },
+
+    deleteProject: function (projectId, user) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only founders and team members can delete projects.');
+      }
+      const db = loadDatabase();
+      const idx = (db.projects || []).findIndex(function (p) { return p.id === projectId; });
+      if (idx === -1) throw new Error('Project not found');
+      const removed = db.projects.splice(idx, 1)[0];
+      db.projectUpdates = (db.projectUpdates || []).filter(function (u) { return u.projectId !== projectId; });
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'PROJECT_DELETED',
+        performedBy: user.email,
+        details: 'Deleted project: ' + removed.name,
+        timestamp: new Date().toISOString()
+      });
+      saveDatabase(db);
+      return removed;
     },
 
     // --- Project Updates & Milestone Approvals ---
@@ -1785,6 +1869,25 @@
       return lead;
     },
 
+    deleteLead: function (leadId, user) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can delete leads.');
+      }
+      const db = loadDatabase();
+      const idx = (db.leads || []).findIndex(function (l) { return l.id === leadId; });
+      if (idx === -1) throw new Error('Lead not found');
+      const removed = db.leads.splice(idx, 1)[0];
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'LEAD_DELETED',
+        performedBy: user.email,
+        details: 'Deleted lead: ' + (removed.companyName || removed.contactName),
+        timestamp: new Date().toISOString()
+      });
+      saveDatabase(db);
+      return removed;
+    },
+
     // --- Clients (Founder & Team) ---
     getClients: function (user) {
       if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
@@ -1821,6 +1924,25 @@
       Object.assign(client, updates, { updatedAt: new Date().toISOString() });
       saveDatabase(db);
       return client;
+    },
+
+    deleteClient: function (clientId, user) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can delete client accounts.');
+      }
+      const db = loadDatabase();
+      const idx = (db.clients || []).findIndex(function (c) { return c.id === clientId; });
+      if (idx === -1) throw new Error('Client record not found');
+      const removed = db.clients.splice(idx, 1)[0];
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'CLIENT_DELETED',
+        performedBy: user.email,
+        details: 'Deleted client: ' + (removed.companyName || removed.contactName),
+        timestamp: new Date().toISOString()
+      });
+      saveDatabase(db);
+      return removed;
     },
 
     // --- Invoices & Manual Payments ---
@@ -1907,6 +2029,25 @@
       });
       saveDatabase(db);
       return inv;
+    },
+
+    deleteInvoice: function (invoiceId, user) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only authorized team members can delete invoices.');
+      }
+      const db = loadDatabase();
+      const idx = (db.invoices || []).findIndex(function (i) { return i.id === invoiceId; });
+      if (idx === -1) throw new Error('Invoice not found');
+      const removed = db.invoices.splice(idx, 1)[0];
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'INVOICE_DELETED',
+        performedBy: user.email,
+        details: 'Deleted invoice: ' + removed.reference,
+        timestamp: new Date().toISOString()
+      });
+      saveDatabase(db);
+      return removed;
     },
 
     // --- Support & Corporate Tickets ---
@@ -1996,6 +2137,25 @@
       }
       saveDatabase(db);
       return ticket;
+    },
+
+    deleteSupportTicket: function (ticketId, user) {
+      if (!CaventraAuth.isFounder(user) && !CaventraAuth.isTeamMember(user)) {
+        throw new Error('Permission denied: Only founders and team members can delete tickets.');
+      }
+      const db = loadDatabase();
+      const idx = (db.supportTickets || []).findIndex(function (t) { return t.id === ticketId; });
+      if (idx === -1) throw new Error('Ticket not found');
+      const removed = db.supportTickets.splice(idx, 1)[0];
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'TICKET_DELETED',
+        performedBy: user.email,
+        details: 'Deleted ticket: ' + removed.subject,
+        timestamp: new Date().toISOString()
+      });
+      saveDatabase(db);
+      return removed;
     },
 
     addTicketComment: function (ticketId, commentText, user) {

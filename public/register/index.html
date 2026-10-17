@@ -167,8 +167,8 @@
             </div>
 
             <label>
-              <span>Full Name *</span>
-              <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name">
+              <span>Full Name (Letters only) *</span>
+              <input type="text" name="name" required placeholder="e.g. Vikram Patel" autocomplete="name" pattern="[A-Za-zs.'-]{2,}" title="Letters only, no numbers allowed" oninput="this.value=this.value.replace(/[0-9]/g,'')">
             </label>
 
             <label>
