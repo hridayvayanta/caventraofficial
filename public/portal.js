@@ -223,7 +223,72 @@
     `;
   }
 
-  // --- Views ---
+  // 1b. PENDING APPROVAL VIEW (Team Member Under Review by Founders)
+  function renderPendingApprovalView(user, customMsg) {
+    const u = user || {
+      displayName: 'Team Member',
+      email: 'team@caventra.com',
+      role: 'team',
+      title: 'Team Member',
+      company: 'CAVENTRA'
+    };
+
+    return `
+      <section class="pt-auth-wrap">
+        <div class="wrap pt-auth-card" style="max-width:540px;text-align:center;padding:36px 28px">
+          <div style="display:flex;justify-content:center;margin-bottom:16px">
+            <div style="width:68px;height:68px;border-radius:50%;background:rgba(212,175,55,0.12);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:30px">
+              ⏳
+            </div>
+          </div>
+
+          <span class="pt-badge-pill" style="border-color:var(--gold);color:var(--gold);margin-bottom:14px;padding:3px 12px">
+            <span class="dot" style="background:var(--gold)"></span> FOUNDER REVIEW IN PROGRESS
+          </span>
+
+          <h2 style="font-family:var(--hd);font-size:26px;margin:8px 0 10px;color:var(--tx)">
+            Founder Reviewing Your Profile
+          </h2>
+
+          <p style="color:var(--tx-sub);font-size:14px;line-height:1.6;margin-bottom:24px">
+            ${esc(customMsg || `Welcome to the team, ${u.displayName}! Your email is verified and your profile is currently under review by Founder Administration. Once approved, you will be able to log in to the Caventra Team Portal.`)}
+          </p>
+
+          <!-- Applicant Information Card -->
+          <div style="background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:16px 20px;text-align:left;margin-bottom:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:12px;color:var(--tx-sub);font-weight:600">APPLICANT PROFILE</span>
+              <span class="pt-status-pill pt-status-warn" style="font-size:11px">⏳ Pending Founder Approval</span>
+            </div>
+            <div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:2px">${esc(u.displayName || 'Team Member')}</div>
+            <div style="font-size:13px;color:var(--tx-sub);margin-bottom:8px">${esc(u.email)}</div>
+            <div style="font-size:12px;color:var(--gold);padding-top:8px;border-top:1px solid var(--line)">
+              Requested Role: <strong>Caventra Team Member / Employee</strong> · ${fmtDate(u.createdAt || new Date())}
+            </div>
+          </div>
+
+          <!-- Reviewing Leadership Banner -->
+          <div style="background:rgba(212,175,55,0.04);border:1px dashed rgba(212,175,55,0.3);border-radius:8px;padding:14px 18px;text-align:left;margin-bottom:24px">
+            <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Reviewing Founder Administration:</div>
+            <div style="font-size:12px;color:var(--tx);line-height:1.6">
+              <div>• <strong>Hriday Vayanta</strong> — Head of Growth</div>
+              <div>• <strong>Sauranahmed Mansuri</strong> — Head of Technology</div>
+              <div>• <strong>Ved Nimbaark</strong> — Head of Design</div>
+            </div>
+          </div>
+
+          <!-- Real-Time Actions -->
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn solid w-full" id="pt-btn-check-approval" data-email="${esc(u.email)}" type="button" style="background:var(--gold);color:#0f1316;font-weight:700">
+              ↻ Check Approval Status (Live Cloud Sync)
+            </button>
+            <div id="pt-check-status-msg" style="font-size:12px;color:var(--tx-sub);min-height:18px;margin-top:2px"></div>
+            <a class="btn w-full" href="/login/" style="margin-top:4px">Back to Sign In</a>
+          </div>
+        </div>
+      </section>
+    `;
+  }
 
   // 1. LOGIN VIEW
   function renderLogin(msg) {
@@ -2414,6 +2479,22 @@
             return;
           }
 
+          // Case 4: Pending Founder Approval for Team Member
+          if (res && res.requiresFounderApproval) {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Sign In';
+            }
+            const container = root.querySelector('.pt-auth-wrap');
+            if (container) {
+              container.outerHTML = renderPendingApprovalView(res.user, res.message);
+            } else {
+              root.innerHTML = renderPendingApprovalView(res.user, res.message);
+            }
+            bindEvents(root);
+            return;
+          }
+
           // Fallback if session returned directly
           if (global.CaventraAuth.isFounder(res) || global.CaventraAuth.isTeamMember(res)) {
             window.location.hash = '#/founder-dashboard';
@@ -2491,6 +2572,19 @@
           const verifyRes = await global.CaventraAuth.verifyRegistrationOtp(currentPendingRegEmail, code);
           const modal = root.querySelector('#pt-reg-otp-modal');
           if (modal) modal.style.display = 'none';
+
+          if (verifyRes && verifyRes.isTeam) {
+            const user = verifyRes.user || { email: currentPendingRegEmail, displayName: currentPendingRegEmail, role: 'team' };
+            const container = root.querySelector('.pt-auth-wrap');
+            if (container) {
+              container.outerHTML = renderPendingApprovalView(user, verifyRes.message);
+            } else {
+              root.innerHTML = renderPendingApprovalView(user, verifyRes.message);
+            }
+            bindEvents(root);
+            return;
+          }
+
           // Redirect to Sign-In Page (Flowchart C21 -> C22)
           window.location.hash = '#/login';
           if (typeof render === 'function') {
@@ -2980,6 +3074,69 @@
         return;
       }
 
+      // Check Approval Status (Live Cloud Sync) for team member awaiting founder review
+      if (btn.id === 'pt-btn-check-approval' || btn.closest('#pt-btn-check-approval')) {
+        const checkBtn = btn.id === 'pt-btn-check-approval' ? btn : btn.closest('#pt-btn-check-approval');
+        const email = checkBtn.getAttribute('data-email') || '';
+        const msgEl = root.querySelector('#pt-check-status-msg');
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Checking Cloud Status...';
+        if (msgEl) {
+          msgEl.style.color = 'var(--tx-sub)';
+          msgEl.textContent = 'Querying live Cloud Firestore status...';
+        }
+
+        try {
+          if (global.CaventraStore && typeof global.CaventraStore.syncWithCloud === 'function') {
+            await global.CaventraStore.syncWithCloud();
+          }
+          const db = (global.CaventraStore && typeof global.CaventraStore.getDb === 'function')
+            ? global.CaventraStore.getDb()
+            : { users: [] };
+          const users = db.users || [];
+          const matched = users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+
+          if (matched && matched.isApproved && matched.approvalStatus === 'approved') {
+            if (msgEl) {
+              msgEl.style.color = '#38bdf8';
+              msgEl.textContent = '🎉 Your profile has been approved by Founder Administration! Redirecting to sign in...';
+            }
+            setTimeout(function () {
+              window.location.hash = '#/login';
+              if (typeof render === 'function') {
+                render({ type: 'ok', text: 'Profile approved by leadership! Please sign in with your credentials.' });
+              }
+            }, 1200);
+            return;
+          }
+
+          if (matched && matched.approvalStatus === 'rejected') {
+            if (msgEl) {
+              msgEl.style.color = '#f87171';
+              msgEl.textContent = 'Your application was declined by Founder Administration.';
+            }
+            checkBtn.disabled = false;
+            checkBtn.textContent = '↻ Check Approval Status (Live Cloud Sync)';
+            return;
+          }
+
+          if (msgEl) {
+            msgEl.style.color = 'var(--gold)';
+            msgEl.textContent = 'Founder review still in progress by Hriday, Sauranahmed, and Ved. (Checked: ' + new Date().toLocaleTimeString() + ')';
+          }
+          checkBtn.disabled = false;
+          checkBtn.textContent = '↻ Check Approval Status (Live Cloud Sync)';
+        } catch (err) {
+          if (msgEl) {
+            msgEl.style.color = 'var(--gold)';
+            msgEl.textContent = 'Founder review still in progress. (Checked: ' + new Date().toLocaleTimeString() + ')';
+          }
+          checkBtn.disabled = false;
+          checkBtn.textContent = '↻ Check Approval Status (Live Cloud Sync)';
+        }
+        return;
+      }
+
       // Tab switcher - Client
       if (btn.hasAttribute('data-pt-tab')) {
         clientActiveTab = btn.getAttribute('data-pt-tab');
@@ -3420,6 +3577,7 @@
     renderLogin: renderLogin,
     renderRegister: renderRegister,
     renderResetPassword: renderResetPassword,
+    renderPendingApprovalView: renderPendingApprovalView,
     renderClientDashboard: renderClientDashboard,
     renderFounderDashboard: renderFounderDashboard,
     renderPortalGateway: renderPortalGateway,

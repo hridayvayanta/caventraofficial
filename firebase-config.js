@@ -860,8 +860,17 @@
         email: cleanEmail,
         isTeam: isTeam,
         approvalStatus: isTeam ? 'pending' : 'approved',
+        user: u ? {
+          uid: u.uid,
+          email: u.email,
+          displayName: u.displayName,
+          role: u.role,
+          title: u.title || 'Team Member',
+          company: u.company || 'CAVENTRA',
+          createdAt: u.createdAt
+        } : null,
         message: isTeam
-          ? 'Email verified! Your Caventra Team Member access request has been sent to Founder Administration. A founding partner (Hriday, Sauranahmed, or Ved) must approve your profile before you can log in for the first time.'
+          ? 'Founder reviewing your profile. Your Caventra Team Member access request has been sent to Founder Administration. A founding partner (Hriday, Sauranahmed, or Ved) must approve your profile before you can log in for the first time.'
           : 'Registration complete and email verified! Please sign in with your credentials.'
       };
     },
@@ -1030,12 +1039,25 @@
           } catch (e) {}
         }
 
-        if (user.approvalStatus === 'pending' || !user.isApproved) {
-          throw new Error('Access Pending: Your Caventra Team Member account has not been approved by Founder Administration yet. Once a founding partner (Hriday, Sauranahmed, or Ved) approves your access, you will be able to log in.');
-        }
-
         if (user.approvalStatus === 'rejected') {
           throw new Error('Access Declined: Your Caventra Team Member registration request was declined by Founder Administration. Please contact leadership for assistance.');
+        }
+
+        if (user.approvalStatus === 'pending' || !user.isApproved) {
+          return {
+            requiresFounderApproval: true,
+            email: cleanEmail,
+            user: {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              role: user.role,
+              title: user.title || 'Team Member',
+              company: user.company || 'CAVENTRA',
+              createdAt: user.createdAt
+            },
+            message: 'Founder reviewing your profile. Once Hriday, Sauranahmed, or Ved approves your account, you will receive full access to the Caventra Team Portal.'
+          };
         }
       }
 

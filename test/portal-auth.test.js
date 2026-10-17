@@ -831,16 +831,19 @@ const Portal = sandbox.CaventraPortal;
     const clientRecord = db.clients.find(c => c.email === 'employee.rahul@caventra.com');
     assert.strictEqual(clientRecord, undefined, 'Team member must not be created as CRM client');
 
-    // 6. Non-approved team member login is BLOCKED before founder decision
-    let threwPending = false;
-    try {
-      await Auth.login('employee.rahul@caventra.com', 'DevPass456!');
-    } catch (e) {
-      threwPending = true;
-      assert.ok(e.message.includes('Access Pending'), 'Should indicate access is pending');
-      assert.ok(e.message.includes('Founder Administration'), 'Should state Founder Administration approval is required');
-    }
-    assert.ok(threwPending, 'Unapproved team member must be strictly blocked from login');
+    // 6. Non-approved team member login returns requiresFounderApproval with dedicated review view
+    const pendingLoginRes = await Auth.login('employee.rahul@caventra.com', 'DevPass456!');
+    assert.strictEqual(pendingLoginRes.requiresFounderApproval, true, 'Unapproved team member login must indicate founder approval is required');
+    assert.ok(pendingLoginRes.message.includes('Founder reviewing your profile'), 'Must show Founder reviewing your profile message');
+    assert.strictEqual(pendingLoginRes.email, 'employee.rahul@caventra.com');
+    assert.ok(pendingLoginRes.user, 'Must return applicant user object for UI display');
+
+    // Verify UI view renders dedicated review screen
+    const pendingHtml = Portal.renderPendingApprovalView(pendingLoginRes.user, pendingLoginRes.message);
+    assert.ok(pendingHtml.includes('Founder Reviewing Your Profile'), 'View must include review title');
+    assert.ok(pendingHtml.includes('FOUNDER REVIEW IN PROGRESS'), 'View must include review badge');
+    assert.ok(pendingHtml.includes('Check Approval Status (Live Cloud Sync)'), 'View must include real-time sync button');
+    assert.ok(pendingHtml.includes('Hriday Vayanta'), 'View must list reviewing founders');
 
     // 7. Founder reviews pending team member access requests
     const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder', displayName: 'Hriday Vayanta' };
