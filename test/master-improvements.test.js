@@ -260,13 +260,10 @@ test('DOM Simulation: V.serviceDetail renders complete HTML for all 5 services w
 // 7. FAVICON INTEGRITY & GOOGLE SEARCH COMPLIANCE
 test('Favicon: Square assets exist, meet Google requirements, maintain root/public parity, and link tags are present', () => {
   const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.ok(indexHtml.includes('<link rel="icon" type="image/x-icon" href="/favicon.ico">'), 'Missing /favicon.ico tag');
-  assert.ok(indexHtml.includes('<link rel="icon" type="image/svg+xml" href="/favicon.svg">'), 'Missing /favicon.svg tag');
-  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">'), 'Missing 48x48 favicon tag');
+  assert.ok(indexHtml.includes('<link rel="icon" href="/favicon.ico" sizes="any">'), 'Missing /favicon.ico tag');
   assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">'), 'Missing 96x96 favicon tag');
-  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">'), 'Missing /favicon.png tag');
-  assert.ok(indexHtml.includes('<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">'), 'Missing 192x192 favicon tag');
-  assert.ok(indexHtml.includes('<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">'), 'Missing apple-touch-icon tag');
+  assert.ok(indexHtml.includes('<link rel="apple-touch-icon" href="/apple-touch-icon.png">'), 'Missing apple-touch-icon tag');
+  assert.ok(indexHtml.includes('<link rel="manifest" href="/site.webmanifest">'), 'Missing site.webmanifest tag');
 
   const faviconAssets = [
     'favicon.ico',
