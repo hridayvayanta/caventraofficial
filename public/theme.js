@@ -7,19 +7,17 @@
 (function() {
   'use strict';
 
-  const STORAGE_KEY = 'cv_theme';
+  const STORAGE_KEY = 'cv_theme_v2';
   const html = document.documentElement;
 
   // 1. Initial theme resolution (executes immediately to avoid FOUC)
+  // Light mode is PRIMARY; Dark mode is SECONDARY
   function getPreferredTheme() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === 'light' || saved === 'dark') return saved;
     } catch (e) {}
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-    return 'dark';
+    return 'light';
   }
 
   const initialTheme = getPreferredTheme();
@@ -77,7 +75,7 @@
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      updateThemeLogos(html.getAttribute('data-theme') || 'dark');
+      updateThemeLogos(html.getAttribute('data-theme') || 'light');
       preloadThemeLogos();
     });
   } else {
@@ -307,11 +305,11 @@
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
 
-    updateToggleState(html.getAttribute('data-theme') || 'dark');
+    updateToggleState(html.getAttribute('data-theme') || 'light');
 
     toggle.addEventListener('click', function(e) {
       if (isTransitioning) return;
-      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const currentTheme = html.getAttribute('data-theme') || 'light';
       const targetTheme = currentTheme === 'light' ? 'dark' : 'light';
 
       // Activation pulse on button
@@ -335,7 +333,7 @@
 
   // Expose global API
   window.CaventraTheme = {
-    get: () => html.getAttribute('data-theme') || 'dark',
+    get: () => html.getAttribute('data-theme') || 'light',
     set: (theme) => {
       const toggle = document.getElementById('theme-toggle');
       let ox = window.innerWidth - 60;

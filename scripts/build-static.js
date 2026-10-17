@@ -37,7 +37,7 @@ const dummyEl = () => ({
 const sandbox = {
   window: { BLOGS: [] },
   document: {
-    documentElement: { getAttribute: () => 'dark' },
+    documentElement: { getAttribute: () => 'light' },
     body: dummyEl(),
     querySelector: (s) => s === '#cv' ? null : dummyEl(),
     querySelectorAll: () => [],

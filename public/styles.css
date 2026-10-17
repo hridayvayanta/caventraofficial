@@ -1,54 +1,5 @@
-:root, [data-theme="dark"] {
-  --bg: #0f1316;
-  --bg2: #161b1f;
-  --bg3: #1f252a;
-  --line: #2a2f33;
-  --line2: #383f45;
-  --gold: #c9b8a0;
-  --gold2: #e3d3bc;
-  --gold-glow: rgba(201,184,160,0.18);
-  --tx: #ece6dc;
-  --tx-sub: #cec9bf;
-  --mut: #a8a49c;
-  --nav-bg: rgba(15,19,22,0.85);
-  --nav-border: rgba(42,47,51,0.85);
-  --nav-panel: rgba(15,19,22,0.97);
-  --card-bg: #161b1f;
-  --card-border: #2a2f33;
-  --input-bg: #161b1f;
-  --input-border: #2a2f33;
-  --tape-bg: #c9b8a0;
-  --tape-tx: #14181b;
-  --band-bg: #c9b8a0;
-  --band-tx: #14181b;
-  --cookie-bg: rgba(22,27,31,0.95);
-  --btn-solid-bg: #c9b8a0;
-  --btn-solid-tx: #14181b;
-  --btn-solid-hover: #e3d3bc;
-  --theme-toggle-bg: rgba(255,255,255,0.06);
-  --theme-toggle-border: rgba(201,184,160,0.3);
-  --theme-toggle-icon: #e3d3bc;
-  --scroll-track: #0f1316;
-  --scroll-thumb: rgba(201,184,160,0.25);
-  --ventra-bubble-bg: rgba(22,27,31,0.96);
-  --ventra-bubble-border: rgba(201,184,160,0.35);
-  --ventra-panel-bg: rgba(18,22,26,0.96);
-  --ventra-panel-border: rgba(201,184,160,0.28);
-  --ventra-btn-bg: rgba(201,184,160,0.07);
-  --ventra-btn-border: rgba(201,184,160,0.22);
-  --ventra-btn-tx: #ece6dc;
-  --ventra-btn-hover-bg: #c9b8a0;
-  --ventra-btn-hover-tx: #14181b;
-  --hd: 'Syne','Outfit',Arial,sans-serif;
-  --bd: 'Manrope','Helvetica Neue',Arial,sans-serif;
-  --r: 26px;
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top,0px);
-  padding-bottom: env(safe-area-inset-bottom,0px);
-}
-
-[data-theme="light"] {
-  --bg: #F1EFE8;            /* warm parchment main background */
+:root, [data-theme="light"] {
+  --bg: #F1EFE8;            /* warm parchment main background (Primary) */
   --bg2: #E7E4DA;           /* soft, warm stone for cards and panels */
   --bg3: #DDD9CE;           /* deeper warm stone hover surface */
   --surface-elevated: #F7F5EF; /* softly differentiated warm ivory */
@@ -90,6 +41,56 @@
   --ventra-btn-tx: #30343A;
   --ventra-btn-hover-bg: #DDD9CE;
   --ventra-btn-hover-tx: #1E2226;
+  --hd: 'Syne','Outfit',Arial,sans-serif;
+  --bd: 'Manrope','Helvetica Neue',Arial,sans-serif;
+  --r: 26px;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+
+[data-theme="dark"] {
+  --bg: #0f1316;
+  --bg2: #161b1f;
+  --bg3: #1f252a;
+  --line: #2a2f33;
+  --line2: #383f45;
+  --gold: #c9b8a0;
+  --gold2: #e3d3bc;
+  --gold-glow: rgba(201,184,160,0.18);
+  --tx: #ece6dc;
+  --tx-sub: #cec9bf;
+  --mut: #a8a49c;
+  --nav-bg: rgba(15,19,22,0.85);
+  --nav-border: rgba(42,47,51,0.85);
+  --nav-panel: rgba(15,19,22,0.97);
+  --card-bg: #161b1f;
+  --card-border: #2a2f33;
+  --card-hover-bg: #1f252a;
+  --input-bg: #161b1f;
+  --input-border: #2a2f33;
+  --tape-bg: #c9b8a0;
+  --tape-tx: #14181b;
+  --band-bg: #c9b8a0;
+  --band-tx: #14181b;
+  --cookie-bg: rgba(22,27,31,0.95);
+  --btn-solid-bg: #c9b8a0;
+  --btn-solid-tx: #14181b;
+  --btn-solid-hover: #e3d3bc;
+  --theme-toggle-bg: rgba(255,255,255,0.06);
+  --theme-toggle-border: rgba(201,184,160,0.3);
+  --theme-toggle-icon: #e3d3bc;
+  --scroll-track: #0f1316;
+  --scroll-thumb: rgba(201,184,160,0.25);
+  --ventra-bubble-bg: rgba(22,27,31,0.96);
+  --ventra-bubble-border: rgba(201,184,160,0.35);
+  --ventra-panel-bg: rgba(18,22,26,0.96);
+  --ventra-panel-border: rgba(201,184,160,0.28);
+  --ventra-btn-bg: rgba(201,184,160,0.07);
+  --ventra-btn-border: rgba(201,184,160,0.22);
+  --ventra-btn-tx: #ece6dc;
+  --ventra-btn-hover-bg: #c9b8a0;
+  --ventra-btn-hover-tx: #14181b;
 }
 
 /* View Transitions Progressive Nanotech Reveal */
@@ -225,6 +226,10 @@ nav{top:calc(env(safe-area-inset-top,0px) + 12px);margin:12px 18px 0;border:1px 
 [data-theme="light"] .b-card:first-child{background:radial-gradient(ellipse at 80% 0%,rgba(120,93,47,0.08),transparent 65%) var(--bg2)}
 [data-theme="light"] .b-card:hover{background:var(--bg3)}
 [data-theme="light"] .article-cta{background:radial-gradient(ellipse at 50% 0%,rgba(120,93,47,0.1),transparent 75%) var(--bg2);border-color:var(--gold)}
+[data-theme="light"] .hero::before{background:radial-gradient(55% 60% at 78% 45%,rgba(147,116,62,.07),transparent 70%)}
+[data-theme="light"] #cg{background:radial-gradient(circle,rgba(147,116,62,.06),transparent 65%)}
+[data-theme="light"] #cd.h{background:rgba(147,116,62,.15)}
+[data-theme="light"] .f-badge{border-color:rgba(147,116,62,.25)}
 .card .im,.empty,.adm{border-radius:var(--r)}input,select,textarea{border-radius:14px}.steps b{background:linear-gradient(100deg,#c9b8a0,#f8ecd8);-webkit-background-clip:text;background-clip:text;color:transparent}
 #cd{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:120;transition:transform .14s ease-out,width .25s,height .25s,margin .25s,background .25s}#cd.h{width:76px;height:76px;margin:-38px 0 0 -38px;background:rgba(201,184,160,.16)}
 @media(max-width:860px){.bento{grid-template-columns:1fr}.bc{grid-column:auto!important;min-height:190px}.hrow{grid-template-columns:1fr;gap:24px}.hl{justify-self:start;max-width:300px}nav{margin:10px 10px 0}.links{top:80px}}
