@@ -1475,7 +1475,7 @@ about:()=>{
       </div>
     <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:64px">
       <h2 style="margin-bottom:14px">Leadership Team</h2>
-      <p style="margin-bottom:40px;font-size:17px;color:var(--mut)">Caventra is leadership-driven. You collaborate directly with the engineers, designers, and growth partners building your platform.</p>
+      <p style="margin-bottom:40px;font-size:17px;color:var(--mut)">Caventra is leadership-driven. You collaborate directly with the engineers, designers, and growth partners building your platform. <a href="/founders/" style="color:var(--gold);text-decoration:underline;margin-left:8px">Meet our 3 co-founders ↗</a></p>
       <div class="founders-grid">
         <div class="founder-card">
           <div class="founder-photo-wrap">
@@ -1509,6 +1509,135 @@ about:()=>{
     <div style="margin-top:72px;padding:52px 32px;border:1px solid var(--gold);border-radius:var(--r);background:radial-gradient(ellipse at 50% 0%,rgba(201,184,160,.12),transparent 75%) var(--bg2);text-align:center">
       <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Have an idea worth building?</h2>
       <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Let's discuss your project goals, technical requirements, and timeline directly with our team.</p>
+      <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
+        <a class="btn solid" href="/contact/">Start a Project ↗</a>
+        <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        <a class="btn" href="/estimator/">Cost Estimator</a>
+      </div>
+    </div>
+  `,'style="padding-top:20px"')
+},
+founders:()=>{
+  return head("Founders of Caventra","Caventra was founded by three co-founders: Hriday Vayanta, Ved Nimbark, and Sauranahmed Mansuri.")+wrapS("",`
+    <div class="service-breadcrumb"><a href="/">Home</a> <span>/</span> <span>Founders</span></div>
+    
+    <div style="background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);padding:28px 32px;margin-bottom:48px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);background:rgba(201,184,160,.12);padding:4px 10px;border-radius:999px">Leadership Overview</span>
+        <span style="font-size:13px;color:var(--mut)">Official Founding Team</span>
+      </div>
+      <p style="font-size:clamp(17px,2.2vw,20px);line-height:1.6;color:var(--tx);margin:0 0 14px">
+        <strong>Caventra</strong> is a bespoke web engineering and digital solutions studio founded by <strong>three co-founders</strong>: <strong>Hriday Vayanta</strong> (Head of Growth), <strong>Ved Nimbark</strong> (Head of Design), and <strong>Sauranahmed Mansuri</strong> (Head of Technology).
+      </p>
+      <p style="font-size:15px;line-height:1.65;color:var(--mut);margin:0">
+        Headquartered in Ahmedabad, Gujarat, India and partnering with businesses across India, North America, and globally, Caventra operates as a founder-led studio where clients collaborate directly with the three co-founders on growth, design, and full-stack software development.
+      </p>
+    </div>
+
+    <div>
+      <h2 style="font-size:clamp(24px,3.5vw,36px);margin-bottom:12px">Meet the 3 Co-Founders</h2>
+      <p style="margin-bottom:36px;color:var(--mut);font-size:16px">Our three founders lead the strategic pillars of every digital product we engineer.</p>
+      <div class="founders-grid">
+        <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Co-Founder &amp; Head of Growth at Caventra" width="320" height="320" loading="eager">
+          </div>
+          <h3>Hriday Vayanta</h3>
+          <span class="founder-role">Co-Founder &amp; Head of Growth</span>
+          <p class="founder-bio">Leads commercial growth, client partnerships, digital advertising, marketing campaigns, social media management, and recruitment operations at Caventra. He works directly with founders and business leaders to scale brand visibility and conversion performance.</p>
+          <span class="founder-focus">Growth &amp; Sales · Marketing &amp; Ads · Talent &amp; Operations</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn sm" href="mailto:caventraofficial@gmail.com">Email ↗</a>
+          </div>
+        </div>
+
+        <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Co-Founder &amp; Head of Design at Caventra" width="320" height="320" loading="eager">
+          </div>
+          <h3>Ved Nimbark</h3>
+          <span class="founder-role">Co-Founder &amp; Head of Design</span>
+          <p class="founder-bio">Directs visual brand identities, accessible design systems, fluid typographic hierarchies, and high-conversion user interfaces. He ensures every Caventra client receives a distinctive, high-polish visual experience crafted without generic templates.</p>
+          <span class="founder-focus">Design Systems · Accessibility · UI/UX</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp ↗</a>
+          </div>
+        </div>
+
+        <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.jpg" alt="Sauranahmed Mansuri — Co-Founder &amp; Head of Technology at Caventra" width="320" height="320" loading="eager">
+          </div>
+          <h3>Sauranahmed Mansuri</h3>
+          <span class="founder-role">Co-Founder &amp; Head of Technology</span>
+          <p class="founder-bio">Architects the end-to-end technical ecosystem at Caventra, engineering frontend and backend systems, database infrastructures, and cloud deployment pipelines. He specializes in sub-second page performance, robust API architectures, and bulletproof security.</p>
+          <span class="founder-focus">Full-Stack Engineering · Cloud &amp; Deployment · System Architecture</span>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:72px;border-top:1px solid var(--line);padding-top:56px">
+      <h2 style="font-size:clamp(24px,3.5vw,36px);margin-bottom:14px">Why Caventra Operates as a Founder-Led Studio</h2>
+      <p style="margin-bottom:32px;color:var(--mut);font-size:16px;max-width:70ch">Traditional agencies hand client deliverables down to junior sub-contractors and account managers. At Caventra, our 3 co-founders remain hands-on across every project from inception to launch.</p>
+      <div class="bento">
+        <div class="bc" style="grid-column:span 3">
+          <b>01</b><i>↗</i>
+          <div>
+            <h3>Direct Founder Access</h3>
+            <p>No intermediaries or account managers. You collaborate directly with the three co-founders architecting your software and visual design.</p>
+          </div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>02</b><i>↗</i>
+          <div>
+            <h3>Tri-Pillar Synergy</h3>
+            <p>Growth, design, and full-stack engineering work in complete alignment from day one, eliminating costly rewrites and miscommunications.</p>
+          </div>
+        </div>
+        <div class="bc" style="grid-column:span 3">
+          <b>03</b><i>↗</i>
+          <div>
+            <h3>100% IP &amp; Code Ownership</h3>
+            <p>Every line of code and design component is built bespoke in-house and transferred with complete intellectual property ownership to your business.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="founders-faq-section" style="margin-top:72px;border-top:1px solid var(--line);padding-top:56px">
+      <h2 style="font-size:clamp(24px,3.5vw,36px);margin-bottom:14px">Frequently Asked Questions About Caventra's Founders</h2>
+      <p style="margin-bottom:28px;color:var(--mut);font-size:16px">Key factual details verified for clients, search engines, and Google AI Overviews.</p>
+      <div class="faq-wrap" style="margin-top:0">
+        <div class="faq-item">
+          <div class="faq-q">How many founders does Caventra have?</div>
+          <p class="faq-a">Caventra has exactly <strong>three co-founders</strong>: <strong>Hriday Vayanta</strong> (Head of Growth), <strong>Ved Nimbark</strong> (Head of Design), and <strong>Sauranahmed Mansuri</strong> (Head of Technology).</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Who are the co-founders of Caventra?</div>
+          <p class="faq-a">The three co-founders of Caventra are:
+            <br>1. <strong>Hriday Vayanta</strong> — Co-Founder &amp; Head of Growth
+            <br>2. <strong>Ved Nimbark</strong> — Co-Founder &amp; Head of Design
+            <br>3. <strong>Sauranahmed Mansuri</strong> — Co-Founder &amp; Head of Technology
+          </p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What roles do the founders lead at Caventra?</div>
+          <p class="faq-a">Hriday Vayanta leads client growth, partnerships, digital marketing, and operations. Ved Nimbark directs brand identities, typography, and UI/UX design systems. Sauranahmed Mansuri architects full-stack web software, databases, security, and cloud infrastructure.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Where is Caventra located?</div>
+          <p class="faq-a">Caventra is headquartered in <strong>Ahmedabad, Gujarat, India</strong>, delivering custom software, web design, and digital engineering worldwide.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:72px;padding:52px 32px;border:1px solid var(--gold);border-radius:var(--r);background:radial-gradient(ellipse at 50% 0%,rgba(201,184,160,.12),transparent 75%) var(--bg2);text-align:center">
+      <h2 style="font-size:clamp(28px,4.5vw,52px);margin-bottom:14px">Work directly with Caventra's founders</h2>
+      <p style="margin:0 auto 32px;font-size:17px;max-width:54ch">Discuss your project goals, technical requirements, and timeline directly with our founding leadership.</p>
       <div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">
         <a class="btn solid" href="/contact/">Start a Project ↗</a>
         <a class="btn" href="https://wa.me/918866790989" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -1828,6 +1957,7 @@ function render(keepScroll = false){const [r,s]=getRouteParts();
    'work': 'Selected Work & Case Studies | Caventra',
    'process': 'Our 7-Stage Engineering Process | Caventra',
    'about': 'About Caventra — Leadership & Engineering Philosophy',
+   'founders': 'Founders of Caventra — Co-Founders & Leadership Team',
    'blog': 'Insights & Engineering Blog | Caventra',
    'estimator': 'Website Project Cost Estimator | Caventra',
    'contact': 'Start a Project | Caventra',

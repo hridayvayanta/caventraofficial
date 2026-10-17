@@ -324,6 +324,115 @@ routes.push({
   }
 });
 
+// Dedicated Founders Page
+routes.push({
+  slug: 'founders',
+  urlPath: 'founders',
+  title: 'Founders of Caventra — Co-Founders & Leadership Team',
+  description: 'Caventra was founded by three co-founders: Hriday Vayanta (Growth), Ved Nimbark (Design), and Sauranahmed Mansuri (Technology). Meet our founding leadership team.',
+  activeNav: 'about',
+  changefreq: 'monthly',
+  priority: '0.9',
+  render: () => sandbox.V.founders(),
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Founders', 'item': `${BASE_URL}/founders/` }
+        ]
+      },
+      {
+        '@type': 'AboutPage',
+        '@id': `${BASE_URL}/founders/#webpage`,
+        'url': `${BASE_URL}/founders/`,
+        'name': 'Founders of Caventra — Co-Founders & Leadership Team',
+        'description': 'Caventra was founded by three co-founders: Hriday Vayanta, Ved Nimbark, and Sauranahmed Mansuri.',
+        'mainEntity': {
+          '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
+          'name': 'Caventra',
+          'url': `${BASE_URL}/`,
+          'logo': `${BASE_URL}/favicon-512x512.png`,
+          'image': `${BASE_URL}/assets/og-caventra.png`,
+          'founder': [
+            {
+              '@type': 'Person',
+              '@id': `${BASE_URL}/founders/#hriday-vayanta`,
+              'name': 'Hriday Vayanta',
+              'jobTitle': 'Co-Founder & Head of Growth',
+              'worksFor': { '@id': `${BASE_URL}/#organization` },
+              'image': `${BASE_URL}/assets/founders/hriday-vayanta.jpg`,
+              'description': 'Co-Founder and Head of Growth at Caventra, leading commercial strategy, client partnerships, marketing campaigns, and recruitment operations.',
+              'sameAs': [
+                'https://www.instagram.com/caventra__/'
+              ]
+            },
+            {
+              '@type': 'Person',
+              '@id': `${BASE_URL}/founders/#ved-nimbark`,
+              'name': 'Ved Nimbark',
+              'jobTitle': 'Co-Founder & Head of Design',
+              'worksFor': { '@id': `${BASE_URL}/#organization` },
+              'image': `${BASE_URL}/assets/founders/ved-nimbark.jpg`,
+              'description': 'Co-Founder and Head of Design at Caventra, directing brand identities, accessible design systems, typographic hierarchies, and high-conversion user interfaces.'
+            },
+            {
+              '@type': 'Person',
+              '@id': `${BASE_URL}/founders/#sauranahmed-mansuri`,
+              'name': 'Sauranahmed Mansuri',
+              'jobTitle': 'Co-Founder & Head of Technology',
+              'worksFor': { '@id': `${BASE_URL}/#organization` },
+              'image': `${BASE_URL}/assets/founders/sauranahmed-mansuri.jpg`,
+              'description': 'Co-Founder and Head of Technology at Caventra, architecting full-stack web software, database infrastructures, security protocols, and cloud deployment pipelines.'
+            }
+          ]
+        }
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${BASE_URL}/founders/#faq`,
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': 'How many founders does Caventra have?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Caventra has exactly three co-founders: Hriday Vayanta (Co-Founder & Head of Growth), Ved Nimbark (Co-Founder & Head of Design), and Sauranahmed Mansuri (Co-Founder & Head of Technology).'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'Who are the founders of Caventra?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Caventra was founded by three co-founders: 1. Hriday Vayanta (Head of Growth), 2. Ved Nimbark (Head of Design), and 3. Sauranahmed Mansuri (Head of Technology).'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'What are the roles of the founders at Caventra?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Hriday Vayanta leads business growth, client partnerships, digital advertising, and marketing. Ved Nimbark directs brand identities, design systems, and UI/UX design. Sauranahmed Mansuri architects full-stack web applications, database systems, security, and cloud infrastructure.'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'Where is Caventra based?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Caventra is headquartered in Ahmedabad, Gujarat, India, delivering bespoke software, web design, and digital engineering worldwide.'
+            }
+          }
+        ]
+      }
+    ]
+  }
+});
+
 // Process Page
 routes.push({
   slug: 'process',
