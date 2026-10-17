@@ -155,19 +155,19 @@ vm.runInContext(fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8'), sandbox);
 vm.runInContext('this.V = V; this.getB = getB; Object.defineProperty(this, "blogShowAll", { get: () => blogShowAll, set: v => blogShowAll = v, configurable: true }); Object.defineProperty(this, "blogFilter", { get: () => blogFilter, set: v => blogFilter = v, configurable: true }); Object.defineProperty(this, "blogPage", { get: () => blogPage, set: v => blogPage = v, configurable: true }); Object.defineProperty(this, "workFilter", { get: () => workFilter, set: v => workFilter = v, configurable: true }); Object.defineProperty(this, "blogQuery", { get: () => blogQuery, set: v => blogQuery = v, configurable: true });', sandbox);
 
 // 2. BLOG LISTING INITIAL STATE
-test('Initial Blog State: 34 articles loaded, initial visible count is 24, hasMore is true', () => {
+test('Initial Blog State: 39 articles loaded, initial visible count is 24, hasMore is true', () => {
   const blogs = sandbox.getB();
-  assert.strictEqual(blogs.length, 34, 'Expected 34 articles in window.BLOGS');
+  assert.strictEqual(blogs.length, 39, 'Expected 39 articles in window.BLOGS');
   
   const initialHtml = sandbox.V.blog();
-  assert.ok(initialHtml.includes('Showing 24 of 34 articles'), 'Must show initial 24 of 34');
+  assert.ok(initialHtml.includes('Showing 24 of 39 articles'), 'Must show initial 24 of 39');
   assert.ok(initialHtml.includes('id="b-showall"'), 'Must render bottom Show All button');
   assert.ok(initialHtml.includes('id="b-showall-top"'), 'Must render top Show All button');
   assert.ok(initialHtml.includes('id="b-more"'), 'Must render Load More button');
 });
 
 // 3. SHOW ALL BUTTON CLICK SIMULATION
-test('Clicking #b-showall sets blogShowAll=true and renders all 34 articles', () => {
+test('Clicking #b-showall sets blogShowAll=true and renders all 39 articles', () => {
   const clickHandlers = eventListeners['click'] || [];
   assert.ok(clickHandlers.length > 0, 'Must register click handler');
 
@@ -181,12 +181,12 @@ test('Clicking #b-showall sets blogShowAll=true and renders all 34 articles', ()
 
   assert.strictEqual(sandbox.blogShowAll, true, 'blogShowAll must be set to true');
   const allHtml = sandbox.V.blog();
-  assert.ok(allHtml.includes('Showing 34 of 34 articles'), 'Must show all 34 of 34 articles');
+  assert.ok(allHtml.includes('Showing 39 of 39 articles'), 'Must show all 39 of 39 articles');
   assert.ok(!allHtml.includes('id="b-more"'), 'Load More button must disappear');
   assert.ok(!allHtml.includes('id="b-showall-top"'), 'Top Show All button must disappear');
   // Check count of articles rendered
   const cardCount = (allHtml.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 34, 'Must render exactly 34 b-card elements');
+  assert.strictEqual(cardCount, 39, 'Must render exactly 39 b-card elements');
 });
 
 // 4. CATEGORY FILTER CLICK
@@ -204,9 +204,9 @@ test('Clicking category button resets blogShowAll and filters articles', () => {
   assert.strictEqual(sandbox.blogPage, 1);
 
   const filteredHtml = sandbox.V.blog();
-  assert.ok(filteredHtml.includes('Showing 4 of 4 articles'));
+  assert.ok(filteredHtml.includes('Showing 5 of 5 articles'));
   const cardCount = (filteredHtml.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 4);
+  assert.strictEqual(cardCount, 5);
 });
 
 // 5. LOAD MORE BUTTON
@@ -226,9 +226,9 @@ test('Clicking #b-more increments blogPage and loads remaining articles', () => 
 
   assert.strictEqual(sandbox.blogPage, 2);
   const page2Html = sandbox.V.blog();
-  assert.ok(page2Html.includes('Showing 34 of 34 articles'));
+  assert.ok(page2Html.includes('Showing 39 of 39 articles'));
   const cardCount = (page2Html.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 34);
+  assert.strictEqual(cardCount, 39);
 });
 
 // 6. WORK CATEGORY FILTER
@@ -245,7 +245,7 @@ test('Clicking [data-wcat] updates workFilter and does not error', () => {
 });
 
 // 7. TOP SHOW ALL BUTTON CLICK
-test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 34 articles', () => {
+test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 39 articles', () => {
   sandbox.blogFilter = 'All';
   sandbox.blogPage = 1;
   sandbox.blogShowAll = false;
@@ -260,9 +260,9 @@ test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 3
 
   assert.strictEqual(sandbox.blogShowAll, true);
   const allHtml = sandbox.V.blog();
-  assert.ok(allHtml.includes('Showing 34 of 34 articles'));
+  assert.ok(allHtml.includes('Showing 39 of 39 articles'));
   const cardCount = (allHtml.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 34);
+  assert.strictEqual(cardCount, 39);
 });
 
 // 8. SEARCH INPUT EVENT
@@ -288,8 +288,9 @@ test('Typing in #b-search updates blogQuery and filters articles dynamically', (
   }
 
   assert.strictEqual(sandbox.blogQuery, 'dental');
-  assert.ok(countEl.textContent.includes('Showing 1 of 1 articles'));
+  assert.ok(countEl.textContent.includes('Showing 2 of 2 articles'));
   assert.ok(gridEl.innerHTML.includes('dental-website-not-getting-patients'));
+  assert.ok(gridEl.innerHTML.includes('dentist-website-design'));
 });
 
 console.log('\n========================================');

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1316">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Do you actually own your website? Learn how code ownership, domains, and hosting accounts work and how to avoid vendor lock-in.">
+<meta name="author" content="Caventra">
+<link rel="canonical" href="https://caventraofficial.in/blog/who-owns-your-website-code/">
+<meta property="og:site_name" content="Caventra">
+<meta property="og:title" content="Who Owns Your Website? Code Ownership and How to Avoid Vendor Lock-In | Caventra">
+<meta property="og:description" content="Do you actually own your website? Learn how code ownership, domains, and hosting accounts work and how to avoid vendor lock-in.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://caventraofficial.in/blog/who-owns-your-website-code/">
+<meta property="og:image" content="https://caventraofficial.in/assets/og-caventra.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Who Owns Your Website? Code Ownership and How to Avoid Vendor Lock-In | Caventra">
+<meta name="twitter:description" content="Do you actually own your website? Learn how code ownership, domains, and hosting accounts work and how to avoid vendor lock-in.">
+<meta name="twitter:image" content="https://caventraofficial.in/assets/og-caventra.png">
+<title>Who Owns Your Website? Code Ownership and How to Avoid Vendor Lock-In | Caventra</title>
+<script>if(location.hash&&location.hash.startsWith('#/')){var c=location.hash.replace(/^#\/?/,'').replace(/\/$/,'');history.replaceState(null,'',c?'/'+c+'/'+location.search:'/'+location.search);}</script>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Manrope:wght@300;400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=15">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://caventraofficial.in/#website",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "description": "Custom web design, full-stack engineering, cloud hosting, and security for modern businesses."
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://caventraofficial.in/#organization",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "logo": "https://caventraofficial.in/assets/logo-nav.png",
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "description": "Caventra is an engineering-focused digital solutions studio building custom websites, cloud hosting, security, and digital software for businesses.",
+      "email": "caventraofficial@gmail.com",
+      "telephone": "+918866790989",
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Ahmedabad, Gujarat, India"
+      },
+      "founder": [
+        {
+          "@type": "Person",
+          "name": "Hriday Vayanta",
+          "jobTitle": "Head of Growth"
+        },
+        {
+          "@type": "Person",
+          "name": "Ved Nimbark",
+          "jobTitle": "Head of Design"
+        },
+        {
+          "@type": "Person",
+          "name": "Sauranahmed Mansuri",
+          "jobTitle": "Head of Technology"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+918866790989",
+        "contactType": "customer service",
+        "email": "caventraofficial@gmail.com",
+        "areaServed": ["IN", "US", "Worldwide"],
+        "availableLanguage": ["English", "Hindi", "Gujarati"]
+      },
+      "sameAs": [
+        "https://www.instagram.com/caventra__/"
+      ]
+    },
+    {
+      "@type": ["ProfessionalService", "LocalBusiness"],
+      "@id": "https://caventraofficial.in/#localbusiness",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "logo": "https://caventraofficial.in/assets/logo-nav.png",
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "description": "Website Design, Hosting, Security & Custom Software Engineering studio in Ahmedabad, Gujarat, India.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "addressCountry": "IN"
+      },
+      "priceRange": "$$",
+      "telephone": "+918866790989",
+      "email": "caventraofficial@gmail.com"
+    }
+  ]
+}
+</script>
+<script src="/theme.js?v=2"></script><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://caventraofficial.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Insights & Blog",
+          "item": "https://caventraofficial.in/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Who Owns Your Website? Code Ownership and How to Avoid Vendor Lock-In",
+          "item": "https://caventraofficial.in/blog/who-owns-your-website-code/"
+        }
+      ]
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://caventraofficial.in/blog/who-owns-your-website-code/#article",
+      "headline": "Who Owns Your Website? Code Ownership and How to Avoid Vendor Lock-In",
+      "description": "Do you actually own your website? Learn how code ownership, domains, and hosting accounts work and how to avoid vendor lock-in.",
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "author": {
+        "@type": "Person",
+        "name": "Hriday Vayanta",
+        "jobTitle": "Head of Growth"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Caventra",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://caventraofficial.in/assets/logo-nav.png"
+        }
+      },
+      "mainEntityOfPage": "https://caventraofficial.in/blog/who-owns-your-website-code/",
+      "datePublished": "2026-10-01",
+      "dateModified": "2026-10-16"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://caventraofficial.in/blog/who-owns-your-website-code/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I automatically own my website if I paid for it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not necessarily. Ownership depends on your contract. Without a written clause transferring the code and design to you, the developer may keep the rights. Always confirm ownership in writing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is vendor lock-in in web development?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vendor lock-in is when your site depends on a provider's proprietary platform, hosting, or accounts so that moving elsewhere is costly or impossible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I receive when my website project is finished?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You should receive the full source code, design files and assets, and access to or ownership of your domain, hosting, and any related accounts."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head><body>
+<div id="splash" aria-hidden="true"><img id="sp" src="/assets/logo.png" alt="Caventra — Ideas to Impact" width="810" height="445"></div>
+<nav><div class="wrap"><a href="/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.png" alt="Caventra — Ideas to Impact" width="760" height="355"></a>
+<div class="links" id="lk"><a href="/work/">Work</a><a href="/services/">Services</a><a href="/estimator/">Estimator</a><a href="/about/">About</a><a href="/process/">Process</a><a href="/contact/">Contact</a><a href="/portal/" id="nav-portal">Portal</a><a class="btn sm" href="/contact/">Start a Project</a></div>
+<div class="nav-actions">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false" title="Switch to light theme">
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+  </button>
+  <button class="burger" id="bg" aria-label="Toggle navigation menu" aria-expanded="false">Menu</button>
+</div></div></nav>
+<div id="cur" aria-hidden="true"></div><div id="pb" aria-hidden="true"></div><div id="cg" aria-hidden="true"></div>
+<main id="app"><section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
+    <a class="btn sm" href="/blog/" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>
+    <div class="article-meta">
+      <span>Business &amp; Strategy</span>
+      <span>·</span>
+      <span>October 2026</span>
+      <span>·</span>
+      <span>6 min read</span>
+      
+    </div>
+    <h1 style="font-size:clamp(32px,5.2vw,64px);line-height:1.08;margin-bottom:24px"><span class="w"><span style="--i:0">Who</span></span> <span class="w"><span style="--i:1">Owns</span></span> <span class="w"><span style="--i:2">Your</span></span> <span class="w"><span style="--i:3">Website?</span></span> <span class="w"><span style="--i:4">Code</span></span> <span class="w"><span style="--i:5">Ownership</span></span> <span class="w"><span style="--i:6">and</span></span> <span class="w"><span style="--i:7">How</span></span> <span class="w"><span style="--i:8">to</span></span> <span class="w"><span style="--i:9">Avoid</span></span> <span class="w"><span style="--i:10">Vendor</span></span> <span class="w"><span style="--i:11">Lock-In</span></span></h1>
+    <p style="font-size:20px;color:var(--gold2);line-height:1.55;margin-bottom:48px">Do you actually own your website? Learn how code ownership, domains, and hosting accounts work and how to avoid vendor lock-in.</p>
+    <div class="article-author">
+      <div class="av">H</div>
+      <div>
+        <b>Hriday Vayanta</b>
+        <p>Head of Growth at Caventra</p>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>Most business owners assume that paying for a website means owning it. Often that is not guaranteed. Depending on the contract and the platform, you may be renting your site, or the developer may still hold the rights to the code and design. Finding that out during a dispute or a move is expensive. Here is what to check before you sign.</p>
+
+  <p><em>This article is general information, not legal advice. Have a lawyer review any contract before you sign.</em></p>
+
+  <h2>The four things that make up &ldquo;your website&rdquo;</h2>
+  <ol>
+    <li><strong>Source code:</strong> the files that make your site work.</li>
+    <li><strong>Design and content assets:</strong> layouts, logos, images, fonts, and copy.</li>
+    <li><strong>Domain name:</strong> your web address, such as yourbusiness.com.</li>
+    <li><strong>Hosting and accounts:</strong> the servers and services your site runs on.</li>
+  </ol>
+  <p>You should have clear rights to all four. Losing any one can leave you stuck.</p>
+
+  <h2>What is vendor lock-in?</h2>
+  <p>Vendor lock-in happens when your site depends on a provider&rsquo;s proprietary platform, hosting, or accounts so that leaving means rebuilding from scratch or paying whatever they ask. It often appears in subtle ways:</p>
+  <ul>
+    <li>The site is built on a closed platform you cannot export from</li>
+    <li>The developer registered your domain in their name</li>
+    <li>Hosting runs only on the developer&rsquo;s account</li>
+    <li>The contract keeps the code ownership with the developer</li>
+    <li>Key features rely on paid plugins or licenses tied to the developer</li>
+  </ul>
+
+  <h2>Common ownership situations</h2>
+
+  <h3>Template and subscription platforms</h3>
+  <p>With hosted website builders, you typically license the service rather than own the underlying code. You can usually keep your content, but you often cannot export a working copy of the site itself.</p>
+
+  <h3>Agency or freelancer builds</h3>
+  <p>Ownership depends entirely on the contract. In many arrangements, the developer keeps the rights unless the agreement explicitly transfers them to you, often after final payment. Never assume.</p>
+
+  <h3>Custom code with full transfer</h3>
+  <p>The cleanest model is a custom build where the contract states that all source code, design assets, and account access transfer to you once the project is paid for. You can then host, edit, or hand the site to another developer freely.</p>
+
+  <h2>A checklist to protect yourself</h2>
+  <ol>
+    <li><strong>Get ownership in writing.</strong> The contract should say the code and design assets transfer to you, and when.</li>
+    <li><strong>Register the domain in your name.</strong> You should be the registrant and hold the login.</li>
+    <li><strong>Own your hosting and key accounts,</strong> or have them transferable on request.</li>
+    <li><strong>Ask for the source code and repository access</strong> at handover, not just a live site.</li>
+    <li><strong>List third-party licenses.</strong> Know which paid tools or plugins the site depends on and who pays.</li>
+    <li><strong>Request documentation</strong> covering how to deploy and maintain the site.</li>
+    <li><strong>Clarify what happens if you leave.</strong> There should be no penalty for taking your site elsewhere.</li>
+  </ol>
+
+  <h2>Red flags to watch for</h2>
+  <ul>
+    <li>&ldquo;We retain ownership of the code&rdquo; with no path to transfer</li>
+    <li>The developer insists on keeping your domain or hosting login</li>
+    <li>Reluctance to share the source code at the end</li>
+    <li>A large fee to export or migrate your own site</li>
+    <li>Vague answers about who owns what</li>
+  </ol>
+
+  <h2>Why ownership matters for growth</h2>
+  <p>As your business grows, you may want to change developers, add features, move hosting, or sell the company. Full ownership keeps all of those options open. It also removes the risk of being stranded if a vendor raises prices, changes terms, or shuts down.</p>
+
+  <h2>Frequently asked questions</h2>
+  <h3>Do I automatically own my website if I paid for it?</h3>
+  <p>Not necessarily. Ownership depends on your contract. Without a written clause transferring the code and design to you, the developer may keep the rights. Always confirm ownership in writing.</p>
+  <h3>What is vendor lock-in in web development?</h3>
+  <p>Vendor lock-in is when your site depends on a provider&rsquo;s proprietary platform, hosting, or accounts so that moving elsewhere is costly or impossible.</p>
+  <h3>What should I receive when my website project is finished?</h3>
+  <p>You should receive the full source code, design files and assets, and access to or ownership of your domain, hosting, and any related accounts.</p>
+
+  <h2>Own what you pay for</h2>
+  <p>At Caventra, clients own their code, design assets, and accounts once the project is complete, with no lock-in. Learn about our <a href="/services/web-development/">custom web development</a>, see how we work on the <a href="/process/">process page</a>, or <a href="/contact/">start a project</a> to talk it through.</p>
+    </div>
+    
+      <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:48px">
+        <h3 style="font-size:22px;margin-bottom:24px;color:var(--gold2)">Related Articles</h3>
+        <div class="blog-grid" style="margin:0">
+          
+            <a class="b-card" href="/blog/how-much-does-a-website-cost-in-india/" style="grid-column:span 6">
+              <div>
+                <div class="meta"><span>Pricing &amp; Strategy</span></div>
+                <h3 style="font-size:20px">How Much Does a Custom Website Cost in India? (2026 Transparent Pricing Guide)</h3>
+                <p style="font-size:14px">An honest, transparent breakdown of website development costs in India across landing pages, small business sites, corporate platforms, and custom web applications.</p>
+              </div>
+              <div class="ftr"><span class="read-link">Read ↗</span></div>
+            </a>
+          
+            <a class="b-card" href="/blog/is-my-website-secure-critical-checks/" style="grid-column:span 6">
+              <div>
+                <div class="meta"><span>Website Security</span></div>
+                <h3 style="font-size:20px">Is My Website Secure? 7 Critical Security Checks Every Business Owner Must Run</h3>
+                <p style="font-size:14px">A non-technical security checklist covering SSL certificates, Content Security Policies, spam bot traps, form sanitization, and automated backups.</p>
+              </div>
+              <div class="ftr"><span class="read-link">Read ↗</span></div>
+            </a>
+          
+        </div>
+      </div>
+    
+    <div class="article-cta">
+      <h3>Have an idea worth building?</h3>
+      <p>Caventra turns digital concepts into scalable software products. Let's discuss your project.</p>
+      <div class="row" style="justify-content:center"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/blog/">Explore All Articles</a></div>
+    </div>
+  </div></div></section></main>
+<footer><div class="wrap">
+  <div class="f-col brand-col">
+    <img id="fl" src="/assets/logo.png" alt="Caventra — Ideas to Impact" width="810" height="445" loading="lazy">
+    <p id="fdesc">A software and digital solutions studio engineering custom web applications, AI workflows, and digital products for scaling businesses.</p>
+  </div>
+  <div class="f-col">
+    <h4>Studio</h4>
+    <a href="/work/">Selected Work</a>
+    <a href="/services/">Our Services</a>
+    <a href="/estimator/">Cost Estimator</a>
+    <a href="/about/">About Caventra</a>
+    <a href="/process/">How We Work</a>
+    <a href="/blog/" class="on">Insights &amp; Blog</a>
+    <a href="/portal/">Client Portal</a>
+    <a href="/contact/">Start a Project ↗</a>
+  </div>
+  <div class="f-col">
+    <h4>Capabilities</h4>
+    <a href="/services/web-development/">Web Development</a>
+    <a href="/services/branding/">Branding &amp; Design</a>
+    <a href="/services/maintenance/">Management &amp; Care</a>
+    <a href="/services/hosting/">Cloud &amp; Hosting</a>
+    <a href="/services/security/">Website Security</a>
+  </div>
+  <div class="f-col">
+    <h4>Connect</h4>
+    <a href="mailto:caventraofficial@gmail.com" class="f-mail">caventraofficial@gmail.com</a>
+    <div class="f-team">
+      <span>Hriday Vayanta <small>· Head of Growth</small></span>
+      <span>Ved Nimbark <small>· Head of Design</small></span>
+      <span>Sauranahmed Mansuri <small>· Head of Technology</small></span>
+    </div>
+    <div id="fsoc"></div>
+  </div>
+  <div class="f-mega-brand" aria-label="CAVENTRA">
+    <span>CAVENTRA</span>
+  </div>
+  <div class="copy">
+    <span>© <span id="yr"></span> Caventra. Built with precision and modern engineering.</span>
+    <div class="legallinks">
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Service</a>
+      <a href="/cookies/">Cookie Policy</a>
+      <a href="/sitemap.xml" target="_blank" rel="noopener">Sitemap</a>
+    </div>
+  </div>
+</div></footer>
+<div id="ckb" role="dialog" aria-live="polite" aria-label="Cookie consent banner" class="hide">
+  <p>We use essential cookies to maintain security and core website functionality. No advertising or tracking cookies are used. Learn more in our <a href="/cookies/">Cookie Policy</a>.</p>
+  <div class="ck-btns">
+    <button class="btn sm solid" id="ck-acc" type="button">Accept</button>
+    <button class="btn sm" id="ck-dec" type="button">Essential Only</button>
+  </div>
+</div>
+<script src="/blogs.js?v=10" defer></script>
+<script src="/estimator-config.js?v=1" defer></script>
+<script src="/firebase-config.js?v=1" defer></script>
+<script src="/portal.js?v=1" defer></script>
+<script src="/app.js?v=13" defer></script>
+<script src="/ventrabot.js?v=2" defer></script></body></html>
