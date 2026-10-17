@@ -88,11 +88,16 @@
             </div>
           </div>
           <h3 style="font-family:var(--hd);font-size:20px;margin-bottom:6px">Verify Email Address</h3>
-          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:12px">We dispatched a 6-digit code to <strong id="pt-reg-otp-recipient">your email</strong></p>
+          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:10px">We dispatched a 6-digit code to <strong id="pt-reg-otp-recipient">your email</strong></p>
 
-          <div class="pt-notice-box" style="text-align:left;margin:14px 0">
+          <div class="pt-notice-box" style="text-align:left;margin:12px 0 10px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             <span>Mandatory Verification: Enter the 6-digit verification code dispatched to your email to verify and activate your client account. (Code valid for 5 minutes)</span>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(212,175,55,0.08);border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--tx);margin-bottom:14px;text-align:left">
+            <span style="font-size:14px;line-height:1">📁</span>
+            <span><strong>Check Spam Folder:</strong> If you don't see the email in your primary inbox, please check your <strong>Spam</strong> or <strong>Junk</strong> folder and mark CAVENTRA as "Not Spam".</span>
           </div>
 
           <form id="pt-form-reg-otp" style="margin-top:14px">
@@ -125,11 +130,16 @@
             </div>
           </div>
           <h3 style="font-family:var(--hd);font-size:20px;margin-bottom:6px">Sign-In Security Verification</h3>
-          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:12px">A fresh 6-digit security code was dispatched to <strong id="pt-login-otp-recipient">your email</strong></p>
+          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:10px">A fresh 6-digit security code was dispatched to <strong id="pt-login-otp-recipient">your email</strong></p>
 
-          <div class="pt-notice-box" style="text-align:left;margin:14px 0">
+          <div class="pt-notice-box" style="text-align:left;margin:12px 0 10px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             <span>Two-Step Verification: CAVENTRA accounts require 6-digit OTP verification on every login. Enter the code sent to your email to complete sign-in.</span>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(212,175,55,0.08);border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--tx);margin-bottom:14px;text-align:left">
+            <span style="font-size:14px;line-height:1">📁</span>
+            <span><strong>Check Spam Folder:</strong> If you don't see the email in your primary inbox, please check your <strong>Spam</strong> or <strong>Junk</strong> folder and mark CAVENTRA as "Not Spam".</span>
           </div>
 
           <form id="pt-form-login-otp" style="margin-top:14px">
@@ -162,11 +172,16 @@
             </div>
           </div>
           <h3 style="font-family:var(--hd);font-size:20px;margin-bottom:6px">Two-Factor Security Verification</h3>
-          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:12px">A 6-digit security code was dispatched to <strong id="pt-2fa-email-display">your email</strong></p>
+          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:10px">A 6-digit security code was dispatched to <strong id="pt-2fa-email-display">your email</strong></p>
 
-          <div class="pt-notice-box" style="text-align:left;margin:14px 0">
+          <div class="pt-notice-box" style="text-align:left;margin:12px 0 10px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             <span>A 6-digit 2FA security code has been dispatched to your email. Please check your inbox and enter the 6 digits below to complete sign-in.</span>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(212,175,55,0.08);border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--tx);margin-bottom:14px;text-align:left">
+            <span style="font-size:14px;line-height:1">📁</span>
+            <span><strong>Check Spam Folder:</strong> If the 2FA email does not appear in your primary inbox, please make sure to check your <strong>Spam</strong> or <strong>Junk</strong> folder.</span>
           </div>
 
           <form id="pt-form-2fa" style="margin-top:14px">
@@ -196,11 +211,16 @@
             </div>
           </div>
           <h3 style="font-family:var(--hd);font-size:20px;margin-bottom:6px">Verify Email Address</h3>
-          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:12px">We sent a 6-digit verification code to <strong id="pt-otp-recipient">your email</strong></p>
+          <p style="font-size:13px;color:var(--tx-sub);margin-bottom:10px">We sent a 6-digit verification code to <strong id="pt-otp-recipient">your email</strong></p>
 
-          <div class="pt-notice-box" style="text-align:left;margin:14px 0">
+          <div class="pt-notice-box" style="text-align:left;margin:12px 0 10px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             <span>A 6-digit verification code has been dispatched to your email inbox. Please open your email, find the code from CAVENTRA, and enter it below. (Code valid for 10 minutes)</span>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(212,175,55,0.08);border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--tx);margin-bottom:14px;text-align:left">
+            <span style="font-size:14px;line-height:1">📁</span>
+            <span><strong>Check Spam Folder:</strong> If you don't see the email in your primary inbox, please check your <strong>Spam</strong> or <strong>Junk</strong> folder.</span>
           </div>
 
           <form id="pt-form-otp" style="margin-top:14px">
@@ -3284,7 +3304,7 @@
           const res = await global.CaventraAuth.requestEmailVerificationOtp();
           const codeDisplay = root.querySelector('#pt-otp-code-display');
           if (codeDisplay) codeDisplay.textContent = res.code;
-          alert('A new 6-digit verification code has been dispatched to your email.');
+          alert('A new 6-digit verification code has been dispatched to your email. Please check your inbox and spam folder.');
         } catch (err) {
           alert(err.message);
         }

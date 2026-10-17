@@ -786,7 +786,7 @@
         pendingVerification: true,
         email: cleanEmail,
         code: otpCode, // Provided for automated testing / sandbox convenience
-        message: 'Registration initiated. A 6-digit verification code has been dispatched to ' + cleanEmail + '.'
+        message: 'Registration initiated. A 6-digit verification code has been dispatched to ' + cleanEmail + '. Please check your inbox and spam folder.'
       };
     },
 
@@ -910,7 +910,7 @@
         ok: true,
         email: cleanEmail,
         code: otpCode,
-        message: 'A fresh 6-digit verification code has been dispatched to ' + cleanEmail + '.'
+        message: 'A fresh 6-digit verification code has been dispatched to ' + cleanEmail + '. Please check your inbox and spam folder.'
       };
     },
 
@@ -1013,7 +1013,7 @@
           requiresEmailVerification: true,
           email: cleanEmail,
           code: otpCode,
-          message: 'Your email address is not verified yet. We have sent a 6-digit verification code to your email. Please verify before signing in.'
+          message: 'Your email address is not verified yet. We have sent a 6-digit verification code to your email. Please check your inbox and spam folder before signing in.'
         };
       }
 
@@ -1097,7 +1097,7 @@
         requiresLoginOtp: true,
         email: cleanEmail,
         code: otpCode,
-        message: 'A 6-digit sign-in verification code has been dispatched to ' + cleanEmail + '.'
+        message: 'A 6-digit sign-in verification code has been dispatched to ' + cleanEmail + '. Please check your inbox and spam folder.'
       };
     },
 
@@ -1218,7 +1218,7 @@
         ok: true,
         email: cleanEmail,
         code: otpCode,
-        message: 'A fresh 6-digit login verification code has been dispatched to ' + cleanEmail + '.'
+        message: 'A fresh 6-digit login verification code has been dispatched to ' + cleanEmail + '. Please check your inbox and spam folder.'
       };
     },
 
@@ -1321,7 +1321,7 @@
         email: user.email,
         code: otpCode,
         expiresAt: record.expiresAt,
-        message: 'A 6-digit verification code has been dispatched to ' + user.email + '.'
+        message: 'A 6-digit verification code has been dispatched to ' + user.email + '. Please check your inbox and spam folder.'
       };
     },
 
