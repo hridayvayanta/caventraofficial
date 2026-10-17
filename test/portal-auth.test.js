@@ -951,6 +951,75 @@ const Portal = sandbox.CaventraPortal;
     assert.ok(founderDeskHtml.includes('Sauranahmed Mansuri'), 'Must display assigned founder name');
   });
 
+  // 31. ADMINISTRATION: USER REMOVAL & APPLICATION DECLINE WORKFLOW
+  await asyncTest('Administration User Management: Founder can reject applicants (which clears pending queue) and remove non-founder users', async () => {
+    const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder', displayName: 'Hriday Vayanta' };
+    await Auth.logout();
+
+    // 1. Register a test candidate
+    const regRes = await Auth.register(
+      'rejectable.candidate@caventra.com',
+      'TestCandidatePass123!',
+      'Anand Verma',
+      'CAVENTRA',
+      '+91 9888877777',
+      'TestCandidatePass123!',
+      true,
+      'team'
+    );
+    const key = 'caventra_dev_pending_reg_otp_rejectable.candidate@caventra.com';
+    const challenge = JSON.parse(sandbox.localStorage.getItem(key));
+    await Auth.verifyRegistrationOtp('rejectable.candidate@caventra.com', challenge.code);
+
+    // 2. Candidate appears in pending list
+    const candidateUser = Store.getDb().users.find(u => u.email === 'rejectable.candidate@caventra.com');
+    assert.ok(candidateUser, 'Candidate must exist in DB');
+    const pendingBefore = Store.getPendingTeamMembers(hriday);
+    assert.ok(pendingBefore.some(u => u.email === 'rejectable.candidate@caventra.com'), 'Candidate must be in pending list before decision');
+
+    // 3. Founder rejects the application
+    const rejected = Store.rejectTeamMember(candidateUser.uid, hriday, 'Qualifications do not match current openings');
+    assert.strictEqual(rejected.approvalStatus, 'rejected');
+    assert.strictEqual(rejected.isApproved, false);
+
+    // 4. Verification: Candidate is IMMEDIATELY removed from pending queue
+    const pendingAfter = Store.getPendingTeamMembers(hriday);
+    assert.strictEqual(pendingAfter.some(u => u.email === 'rejectable.candidate@caventra.com'), false, 'Rejected candidate must NOT appear in pending list');
+
+    // 5. Rejected candidate login attempt is explicitly declined
+    let threwDeclined = false;
+    try {
+      await Auth.login('rejectable.candidate@caventra.com', 'TestCandidatePass123!');
+    } catch (e) {
+      threwDeclined = true;
+      assert.ok(e.message.includes('Access Declined'), 'Login must state access was declined');
+    }
+    assert.ok(threwDeclined, 'Declined applicant must not be able to log in');
+
+    // 6. Founder permanently removes the user account
+    const removedUser = Store.removeUser(candidateUser.uid, hriday);
+    assert.strictEqual(removedUser.email, 'rejectable.candidate@caventra.com');
+    const allUsersAfter = Store.getUsers(hriday);
+    assert.strictEqual(allUsersAfter.some(u => u.email === 'rejectable.candidate@caventra.com'), false, 'Removed user must not exist in users list');
+
+    // 7. Founder accounts CANNOT be removed (protected)
+    let threwFounderProtect = false;
+    try {
+      Store.removeUser('founder_hriday', hriday);
+    } catch (e) {
+      threwFounderProtect = true;
+      assert.ok(e.message.includes('Protected Account'), 'Must protect founder accounts from deletion');
+    }
+    assert.ok(threwFounderProtect, 'Founder account deletion must be strictly blocked');
+
+    // 8. Verify Administration DOM contains remove button and protected founder pill
+    sandbox.CaventraAuth.getCurrentUser = () => hriday;
+    Portal.setFounderActiveTab('admin');
+    const adminHtml = Portal.renderFounderDashboard();
+    assert.ok(adminHtml.includes('Protected Founder'), 'Admin table must render Protected Founder badge');
+    assert.ok(adminHtml.includes('data-pt-action="remove-user"'), 'Admin table must render Remove button for non-founders');
+  });
+
   console.log('\n========================================');
   console.log(`PORTAL TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
   console.log('========================================\n');

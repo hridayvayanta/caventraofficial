@@ -1687,6 +1687,7 @@
                       <div style="display:flex;gap:8px">
                         <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(ptm.uid)}" style="background:#238636;border-color:#2ea043;color:#fff">✓ Approve Access</button>
                         <button class="btn sm" data-pt-action="reject-team-member" data-uid="${esc(ptm.uid)}" style="color:#f85149;border-color:rgba(248,81,73,0.4)">✕ Reject</button>
+                        <button class="btn sm" data-pt-action="remove-user" data-uid="${esc(ptm.uid)}" data-name="${esc(ptm.displayName || ptm.email)}" style="color:#f85149;border-color:rgba(248,81,73,0.4)" title="Remove Application">🗑 Remove</button>
                       </div>
                     </div>
                   `).join('')}
@@ -2184,6 +2185,7 @@
                           <div style="display:flex;gap:6px">
                             <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(ptm.uid)}" style="background:#238636;border-color:#2ea043;color:#fff;font-size:12px">✓ Approve Access</button>
                             <button class="btn sm" data-pt-action="reject-team-member" data-uid="${esc(ptm.uid)}" style="color:#f85149;border-color:rgba(248,81,73,0.4);font-size:12px">✕ Reject</button>
+                            <button class="btn sm" data-pt-action="remove-user" data-uid="${esc(ptm.uid)}" data-name="${esc(ptm.displayName || ptm.email)}" style="color:#f85149;border-color:rgba(248,81,73,0.4);font-size:12px" title="Remove Application">🗑 Remove</button>
                           </div>
                         </td>
                       </tr>
@@ -2226,7 +2228,10 @@
                           ${u.approvalStatus === 'approved' ? `
                             <span class="pt-status-pill pt-status-ok" style="font-size:11px">✓ Approved</span>
                           ` : u.approvalStatus === 'rejected' ? `
-                            <span class="pt-status-pill pt-status-warn" style="color:#f85149;font-size:11px">✕ Declined</span>
+                            <div style="display:flex;align-items:center;gap:4px">
+                              <span class="pt-status-pill pt-status-warn" style="color:#f85149;font-size:11px">✕ Declined</span>
+                              <button class="btn sm solid" data-pt-action="approve-team-member" data-uid="${esc(u.uid)}" style="padding:2px 6px;font-size:10px;background:#238636;border-color:#2ea043;color:#fff">Re-Approve</button>
+                            </div>
                           ` : `
                             <div style="display:flex;align-items:center;gap:4px">
                               <span class="pt-status-pill pt-status-warn" style="font-size:11px">⏳ Pending</span>
@@ -2244,13 +2249,20 @@
                       <td>${u.emailVerified ? '✓ Verified' : '⚠️ Pending'}</td>
                       <td>${fmtDate(u.createdAt)}</td>
                       <td>
-                        ${u.email === user.email ? `
-                          <span style="font-size:12px;color:var(--mut)">Current User</span>
-                        ` : `
-                          <button class="btn sm" data-pt-action="toggle-role" data-uid="${esc(u.uid)}" data-current-role="${esc(u.role)}">
-                            ${u.role === 'founder' ? 'Demote to Client' : 'Promote to Founder'}
-                          </button>
-                        `}
+                        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                          ${u.email === user.email ? `
+                            <span style="font-size:12px;color:var(--mut)">Current User</span>
+                          ` : global.CaventraAuth.isFounder(u) ? `
+                            <span class="pt-status-pill pt-status-founder" style="font-size:11px">Protected Founder</span>
+                          ` : `
+                            <button class="btn sm" data-pt-action="toggle-role" data-uid="${esc(u.uid)}" data-current-role="${esc(u.role)}" style="font-size:11px;padding:3px 8px">
+                              ${u.role === 'founder' ? 'Demote to Client' : 'Promote to Founder'}
+                            </button>
+                            <button class="btn sm" data-pt-action="remove-user" data-uid="${esc(u.uid)}" data-name="${esc(u.displayName || u.email)}" style="color:#f85149;border-color:rgba(248,81,73,0.4);font-size:11px;padding:3px 8px" title="Permanently remove user">
+                              🗑 Remove
+                            </button>
+                          `}
+                        </div>
                       </td>
                     </tr>
                   `).join('')}
@@ -3422,12 +3434,34 @@
         if (confirm('Are you sure you want to decline this team member registration request?')) {
           try {
             btn.disabled = true;
-            global.CaventraStore.rejectTeamMember(uid, user);
-            alert('Team member registration request declined.');
+            btn.textContent = 'Declining...';
+            const rejected = global.CaventraStore.rejectTeamMember(uid, user);
+            alert('✓ Team member registration request declined for ' + (rejected.displayName || rejected.email) + '.');
             if (typeof render === 'function') render(true);
           } catch (err) {
             btn.disabled = false;
+            btn.textContent = '✕ Reject';
             alert('Error declining request: ' + (err.message || err));
+          }
+        }
+        return;
+      }
+
+      if (action === 'remove-user') {
+        const uid = btn.getAttribute('data-uid');
+        const name = btn.getAttribute('data-name') || 'this user';
+        const user = global.CaventraAuth.getCurrentUser();
+        if (confirm(`Are you sure you want to permanently remove ${name}? This will delete their account and revoke all portal access.`)) {
+          try {
+            btn.disabled = true;
+            btn.textContent = 'Removing...';
+            const removed = global.CaventraStore.removeUser(uid, user);
+            alert(`✓ User account for ${removed.displayName || removed.email} was removed successfully.`);
+            if (typeof render === 'function') render(true);
+          } catch (err) {
+            btn.disabled = false;
+            btn.textContent = '🗑 Remove';
+            alert('Error removing user: ' + (err.message || err));
           }
         }
         return;

@@ -540,8 +540,20 @@
     if (!remoteDb) return localDb;
     if (!localDb) return remoteDb;
 
+    const localDeleted = Array.isArray(localDb.deletedUserUids) ? localDb.deletedUserUids : [];
+    const remoteDeleted = Array.isArray(remoteDb.deletedUserUids) ? remoteDb.deletedUserUids : [];
+    const allDeletedUids = [];
+    localDeleted.concat(remoteDeleted).forEach(function (id) {
+      if (allDeletedUids.indexOf(id) === -1) allDeletedUids.push(id);
+    });
+
+    const mergedUsers = mergeEntityList(localDb.users, remoteDb.users, 'uid').filter(function (u) {
+      return allDeletedUids.indexOf(u.uid) === -1;
+    });
+
     const merged = {
-      users: mergeEntityList(localDb.users, remoteDb.users, 'uid'),
+      deletedUserUids: allDeletedUids,
+      users: mergedUsers,
       clients: mergeEntityList(localDb.clients, remoteDb.clients, 'id'),
       leads: mergeEntityList(localDb.leads, remoteDb.leads, 'id'),
       projects: mergeEntityList(localDb.projects, remoteDb.projects, 'id'),
@@ -2059,7 +2071,7 @@
       }
       const db = loadDatabase();
       return (db.users || []).filter(function (u) {
-        return (u.role === 'team' || u.role === 'employee') && (u.approvalStatus === 'pending' || !u.isApproved);
+        return (u.role === 'team' || u.role === 'employee') && u.approvalStatus === 'pending' && !u.isApproved;
       });
     },
 
@@ -2111,6 +2123,51 @@
         action: 'TEAM_MEMBER_REJECTED',
         performedBy: founderUser.email,
         details: 'Founder ' + (founderUser.displayName || founderUser.email) + ' rejected team member account for ' + target.displayName + ' (' + target.email + ')',
+        timestamp: new Date().toISOString()
+      });
+
+      saveDatabase(db);
+      return target;
+    },
+
+    removeUser: function (targetUid, founderUser) {
+      if (!CaventraAuth.isFounder(founderUser)) {
+        throw new Error('Permission denied: Only authorized founders can remove accounts.');
+      }
+      const db = loadDatabase();
+      const target = (db.users || []).find(function (u) { return u.uid === targetUid; });
+      if (!target) throw new Error('User record not found.');
+
+      if (CaventraAuth.isFounder(target)) {
+        throw new Error('Protected Account: Founder accounts cannot be removed from Administration.');
+      }
+
+      // Add to deletedUserUids tombstone so syncWithCloud doesn't resurrect them from remote
+      if (!Array.isArray(db.deletedUserUids)) {
+        db.deletedUserUids = [];
+      }
+      if (db.deletedUserUids.indexOf(targetUid) === -1) {
+        db.deletedUserUids.push(targetUid);
+      }
+
+      // Remove from users list
+      db.users = (db.users || []).filter(function (u) { return u.uid !== targetUid; });
+
+      // Remove from clients list if exists
+      db.clients = (db.clients || []).filter(function (c) {
+        return (c.email || '').toLowerCase() !== (target.email || '').toLowerCase();
+      });
+
+      // Clear any pending verification challenges
+      storage.removeItem('caventra_dev_pending_reg_otp_' + (target.email || '').toLowerCase());
+      storage.removeItem('caventra_dev_pending_login_otp_' + (target.email || '').toLowerCase());
+
+      // Log to immutable activity logs
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'USER_REMOVED',
+        performedBy: founderUser.email,
+        details: 'Founder ' + (founderUser.displayName || founderUser.email) + ' removed account for ' + (target.displayName || target.email) + ' (' + target.email + ', role: ' + target.role + ')',
         timestamp: new Date().toISOString()
       });
 
