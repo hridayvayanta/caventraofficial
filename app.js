@@ -271,7 +271,7 @@ function renderContactSuccess(container, f, result) {
 }
 
 const $=s=>document.querySelector(s),app=$('#app');
-const getTheme=()=>document.documentElement.getAttribute('data-theme')||'light';
+const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
 const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.png':'/assets/logo.png');
 const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.png':'/assets/logo-nav.png');
 const ORIG=getLogo();$('#sp').src=getLogo();$('#fl').src=getLogo();
@@ -1826,11 +1826,11 @@ contact:()=>{
     <form id="cf">
       <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px">
       <div class="two">
-        <label>Your Name *<input name="name" required autocomplete="name" placeholder="Full name (letters only)" pattern="^[A-Za-z\s.'-]+$" title="Please enter letters only"></label>
+        <label>Your Name *<input name="name" required autocomplete="name" placeholder="Full name (letters only)" pattern="^[A-Za-z .'-]+$" title="Please enter letters only"></label>
         <label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
       </div>
       <div class="two">
-        <label>Mobile Phone Number *<input name="phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210" pattern="[+]?[0-9\s\-()]{7,18}" title="Please enter a valid mobile phone number (7 to 15 digits)"></label>
+        <label>Mobile Phone Number *<input name="phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210" pattern="[+]?[0-9 ()-]{7,18}" title="Please enter a valid mobile phone number (7 to 15 digits)"></label>
         <label>Company / Organization<input name="company" autocomplete="organization" placeholder="Company or project name"></label>
       </div>
       <div class="two">

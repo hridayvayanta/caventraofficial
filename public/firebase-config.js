@@ -1046,10 +1046,7 @@
         return false;
       });
 
-      const isPasswordMatch = user && (
-        user.passwordHash === password ||
-        (user.role === 'founder' && (password === 'founder1234' || password === user.passwordHash))
-      );
+      const isPasswordMatch = user && (user.passwordHash === password);
 
       if (!user || !isPasswordMatch) {
         const st = this.recordFailedLogin(cleanEmail);
