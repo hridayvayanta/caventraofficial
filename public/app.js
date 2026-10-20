@@ -99,6 +99,7 @@ function buildEstimatorScopeSummary(estimate) {
 
   return {
     websiteType: estimate.websiteType.title,
+    timeline: estimate.websiteType.timeline || '',
     pageCount: estimate.totalPages,
     features: featTitles.length ? featTitles.join(', ') : 'None selected',
     services: srvTitles.length ? srvTitles.join(', ') : 'None selected',

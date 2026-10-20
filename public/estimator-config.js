@@ -36,6 +36,7 @@
         badge: 'Single Page',
         tagline: 'Focused conversion funnel for product or campaign launches',
         description: 'Single-page experience engineered with responsive hierarchy, fast load times, clear call-to-actions, and lead capture routing.',
+        timeline: '2-3 weeks',
         defaultPages: 1,
         pricing: {
           INR: { baseMin: 25000, baseMax: 35000, includedPages: 1, extraPageRate: 3500 },
@@ -48,6 +49,7 @@
         badge: 'Core Online Presence',
         tagline: 'Professional multi-page studio presence for growing brands',
         description: 'Essential digital identity for businesses, consultants, or local services featuring services, about, portfolio highlights, and inquiry workflows.',
+        timeline: '4-6 weeks',
         defaultPages: 5,
         pricing: {
           INR: { baseMin: 45000, baseMax: 65000, includedPages: 5, extraPageRate: 4000 },
@@ -60,6 +62,7 @@
         badge: 'Multi-Department',
         tagline: 'Robust multi-service platform for established organizations',
         description: 'Comprehensive digital footprint with dedicated department sections, case study repositories, careers, leadership profiles, and trust signals.',
+        timeline: '6-8 weeks',
         defaultPages: 10,
         pricing: {
           INR: { baseMin: 85000, baseMax: 130000, includedPages: 10, extraPageRate: 5000 },
@@ -72,6 +75,7 @@
         badge: 'Visual Showcase',
         tagline: 'Bespoke showcase for creators, executives, and architects',
         description: 'Visually driven portfolio emphasizing imagery, project breakdowns, case studies, publication history, and personal achievements.',
+        timeline: '3-4 weeks',
         defaultPages: 4,
         pricing: {
           INR: { baseMin: 35000, baseMax: 50000, includedPages: 4, extraPageRate: 3500 },
@@ -84,6 +88,7 @@
         badge: 'Digital Commerce',
         tagline: 'Complete digital retail storefront with payment integration',
         description: 'Full-featured online store with product catalog, cart workflows, payment gateway (Razorpay/Stripe), automated receipts, and order routing.',
+        timeline: '6-8 weeks',
         defaultPages: 8,
         pricing: {
           INR: { baseMin: 75000, baseMax: 120000, includedPages: 8, extraPageRate: 5000 },
@@ -96,6 +101,7 @@
         badge: 'Automated Scheduling',
         tagline: 'Interactive scheduling system with automated notifications',
         description: 'Appointment booking system with calendar slots, automated WhatsApp/email reminders, customer intake, and optional advance deposits.',
+        timeline: '4-6 weeks',
         defaultPages: 6,
         pricing: {
           INR: { baseMin: 60000, baseMax: 90000, includedPages: 6, extraPageRate: 4500 },
@@ -108,6 +114,7 @@
         badge: 'Custom Architecture',
         tagline: 'Engineered web software tailored around your unique operations',
         description: 'Bespoke digital product with custom data models, user portals, interactive dashboards, or internal automation pipelines.',
+        timeline: '8-12 weeks',
         defaultPages: 10,
         pricing: {
           INR: { baseMin: 120000, baseMax: 200000, includedPages: 10, extraPageRate: 6000 },
