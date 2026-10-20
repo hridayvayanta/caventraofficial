@@ -1827,11 +1827,11 @@ contact:()=>{
     <form id="cf">
       <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px">
       <div class="two">
-        <label>Your Name *<input name="name" required autocomplete="name" placeholder="Full name (letters only)" pattern="^[A-Za-z .'-]+$" title="Please enter letters only"></label>
+        <label>Your Name *<input name="name" required autocomplete="name" placeholder="Full name (letters only)" pattern="^[A-Za-z\\s.'-]+$" title="Please enter letters only"></label>
         <label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
       </div>
       <div class="two">
-        <label>Mobile Phone Number *<input name="phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210" pattern="[+]?[0-9 ()-]{7,18}" title="Please enter a valid mobile phone number (7 to 15 digits)"></label>
+        <label>Mobile Phone Number *<input name="phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210" pattern="[+]?[0-9\\s()\\-]{7,18}" title="Please enter a valid mobile phone number (7 to 15 digits)"></label>
         <label>Company / Organization<input name="company" autocomplete="organization" placeholder="Company or project name"></label>
       </div>
       <div class="two">
@@ -1849,7 +1849,7 @@ contact:()=>{
         <label>Budget<input name="budget" value="${esc(p ? p.budgetSummary : '')}" placeholder="e.g. ₹50,000 - ₹1,00,000"></label>
       </div>
       <div class="two">
-        <label>Timeline<input name="timeline" placeholder="e.g. 4-6 weeks"></label>
+        <label>Timeline<input name="timeline" value="${esc(p ? (p.timeline || '') : '')}" placeholder="e.g. 4-6 weeks"></label>
       </div>
       <label>Message
         <textarea name="message" required placeholder="Describe your project goals or data deletion request...">${esc(p ? p.messageBody : '')}</textarea>
@@ -2161,6 +2161,7 @@ Project Notes & Goals:
       estimatorPrefillData = {
         websiteType: summary.websiteType,
         budgetSummary: summary.budgetSummary,
+        timeline: summary.timeline || (est.websiteType && est.websiteType.timeline) || '',
         messageBody: msg
       };
       location.hash = '#/contact';

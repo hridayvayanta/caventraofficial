@@ -654,6 +654,71 @@
     }
   }
 
+  function dispatchTicketNotificationEmail(ticket, creator) {
+    if (!ticket || !ticket.assignedToEmail || !ticket.assignedToEmail.includes('@')) {
+      return;
+    }
+    const recipientEmail = String(ticket.assignedToEmail).toLowerCase().trim();
+    const gasUrl = (typeof window !== 'undefined' && window.CAVENTRA_CONFIG && window.CAVENTRA_CONFIG.APPS_SCRIPT_URL)
+      || 'https://script.google.com/macros/s/AKfycbyVljM0fD4e6Gqc2F_ugBnjGK0ODWnC88WKn2wFyqn2QOT4_GPZuS6Bwu9ltzwPaL19/exec';
+
+    const payload = {
+      action: 'SEND_TICKET_NOTIFICATION',
+      recipientEmail: recipientEmail,
+      assignedToEmail: recipientEmail,
+      ticketId: ticket.id,
+      subject: ticket.subject,
+      creatorName: creator ? (creator.displayName || creator.email) : (ticket.clientName || 'Team Member'),
+      creatorEmail: creator ? creator.email : (ticket.clientEmail || ''),
+      assignedName: ticket.assignedFounder || 'Team Member',
+      category: ticket.category || 'Technical / Backend',
+      priority: ticket.priority || 'Medium',
+      dueDate: ticket.dueDate || '',
+      description: ticket.description || ''
+    };
+
+    // 1. Google Apps Script Web App (Serverless - runs on caventraofficial@gmail.com)
+    try {
+      if (typeof fetch === 'function') {
+        fetch(gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        }).catch(function (err) {
+          console.warn('[CAVENTRA] Apps Script ticket dispatch notice:', err);
+        });
+      }
+    } catch (e) {}
+
+    // 2. Node.js backend endpoint (/api/tickets/notify)
+    try {
+      if (typeof fetch === 'function') {
+        fetch('/api/tickets/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-requested-with': 'caventra' },
+          body: JSON.stringify(payload)
+        }).catch(function () {});
+      }
+    } catch (e) {}
+
+    // 3. Dispatch client-side CustomEvent
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('caventra:ticket_assigned', { detail: payload }));
+    }
+
+    // 4. Developer / Founder DevTools console notice
+    if (typeof console !== 'undefined' && typeof console.info === 'function') {
+      console.info(
+        '%c[CAVENTRA CORPORATE TICKET NOTIFICATION]%c Dispatched assignment email to: %c' + recipientEmail + '%c for task: %c' + ticket.subject,
+        'background:#4a154b;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px',
+        '',
+        'color:#58a6ff;font-weight:bold',
+        '',
+        'color:#f3e6d1;font-weight:bold'
+      );
+    }
+  }
+
   // --- CaventraAuth API ---
   const CaventraAuth = {
     config: DEV_FIREBASE_CONFIG,
@@ -2152,6 +2217,12 @@
         timestamp: new Date().toISOString()
       });
       saveDatabase(db);
+
+      // Dispatch automated assignment notification email to the assigned team member from caventraofficial@gmail.com
+      if (ticketType === 'internal' && newTicket.assignedToEmail) {
+        dispatchTicketNotificationEmail(newTicket, user);
+      }
+
       return newTicket;
     },
 
@@ -2172,15 +2243,19 @@
         }
       } else {
         // Founder / Team Member can update status, assignedFounder, priority, resolutionNotes, dueDate
+        const previousAssigneeEmail = ticket.assignedToEmail;
         Object.assign(ticket, updates, { updatedAt: new Date().toISOString() });
-        db.activityLogs.unshift({
-          id: 'act_' + Date.now(),
-          action: 'TICKET_UPDATED',
-          performedBy: user.email,
-          details: 'Updated ticket status for: ' + ticket.subject + ' (' + ticket.status + (ticket.assignedFounder ? ' / ' + ticket.assignedFounder : '') + ')',
-          timestamp: new Date().toISOString()
-        });
+        if (ticket.ticketType === 'internal' && updates.assignedToEmail && updates.assignedToEmail !== previousAssigneeEmail) {
+          dispatchTicketNotificationEmail(ticket, user);
+        }
       }
+      db.activityLogs.unshift({
+        id: 'act_' + Date.now(),
+        action: 'TICKET_UPDATED',
+        performedBy: user.email,
+        details: 'Updated ticket status for: ' + ticket.subject + ' (' + ticket.status + (ticket.assignedFounder ? ' / ' + ticket.assignedFounder : '') + ')',
+        timestamp: new Date().toISOString()
+      });
       saveDatabase(db);
       return ticket;
     },

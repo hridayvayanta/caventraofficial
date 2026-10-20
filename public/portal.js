@@ -1782,13 +1782,23 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <label>
                 <span>Assign To Team Member *</span>
-                <select name="assignedFounder" required>
+                <select name="assignedFounder" id="pt-corp-assignee-select" required>
                   <option value="" disabled selected>Select Assignee...</option>
                   ${internalTeam.map(tm => `
                     <option value="${esc(tm.displayName)}" data-email="${esc(tm.email)}">${esc(tm.displayName)} (${esc(tm.title || tm.role || 'Team')})</option>
                   `).join('')}
                 </select>
               </label>
+              <label>
+                <span>Assignee Email (Receives Task Alert) *</span>
+                <input type="email" name="assignedToEmail" id="pt-corp-assignee-email" required placeholder="assignee@company.com">
+              </label>
+            </div>
+            <div style="font-size:12px;color:var(--gold);margin:-6px 0 12px;display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>Automated notification will be sent directly to this email from <strong>caventraofficial@gmail.com</strong>.</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <label>
                 <span>Department / Category *</span>
                 <select name="category" required>
@@ -2389,7 +2399,7 @@
                         <select class="pt-stage-select" data-pt-action="change-ticket-assignee" data-tkt-id="${esc(t.id)}">
                           <option value="Unassigned" ${!t.assignedFounder || t.assignedFounder === 'Unassigned' ? 'selected' : ''}>Unassigned</option>
                           ${internalTeamList.map(tm => `
-                            <option value="${esc(tm.displayName)}" ${t.assignedFounder === tm.displayName ? 'selected' : ''}>${esc(tm.displayName)}</option>
+                            <option value="${esc(tm.displayName)}" data-email="${esc(tm.email)}" ${t.assignedFounder === tm.displayName ? 'selected' : ''}>${esc(tm.displayName)}</option>
                           `).join('')}
                         </select>
                       </td>
@@ -3481,19 +3491,31 @@
     // Corporate Ticket Form (Founder & Team)
     const corpTicketForm = root.querySelector('#pt-form-corp-ticket');
     if (corpTicketForm) {
+      const sel = corpTicketForm.querySelector('#pt-corp-assignee-select') || corpTicketForm.querySelector('[name="assignedFounder"]');
+      const emailInput = corpTicketForm.querySelector('#pt-corp-assignee-email') || corpTicketForm.querySelector('[name="assignedToEmail"]');
+      if (sel && emailInput) {
+        sel.addEventListener('change', function () {
+          const opt = sel.options[sel.selectedIndex];
+          if (opt && opt.getAttribute('data-email')) {
+            emailInput.value = opt.getAttribute('data-email');
+          }
+        });
+      }
+
       corpTicketForm.onsubmit = function (e) {
         e.preventDefault();
         const user = global.CaventraAuth.getCurrentUser();
         if (!user) return;
         const f = Object.fromEntries(new FormData(corpTicketForm));
-        const sel = corpTicketForm.querySelector('[name="assignedFounder"]');
-        const selectedOpt = sel ? sel.options[sel.selectedIndex] : null;
-        if (selectedOpt && selectedOpt.hasAttribute('data-email')) {
-          f.assignedToEmail = selectedOpt.getAttribute('data-email');
+        if (sel) {
+          const selectedOpt = sel.options[sel.selectedIndex];
+          if (selectedOpt && selectedOpt.hasAttribute('data-email') && !f.assignedToEmail) {
+            f.assignedToEmail = selectedOpt.getAttribute('data-email');
+          }
         }
         f.ticketType = 'internal';
         global.CaventraStore.createSupportTicket(f, user);
-        alert('Corporate ticket published and assigned to ' + f.assignedFounder + '.');
+        alert('Corporate ticket published. Assignment notification dispatched from caventraofficial@gmail.com to ' + (f.assignedToEmail || f.assignedFounder) + '.');
         const modal = root.querySelector('#pt-corp-ticket-modal');
         if (modal) modal.style.display = 'none';
         if (typeof render === 'function') render(true);
@@ -4240,8 +4262,10 @@
       if (select.getAttribute('data-pt-action') === 'change-ticket-assignee') {
         const tktId = select.getAttribute('data-tkt-id');
         const newAssignee = select.value;
+        const opt = select.options[select.selectedIndex];
+        const assignedEmail = opt && opt.getAttribute('data-email') ? opt.getAttribute('data-email') : '';
         const user = global.CaventraAuth.getCurrentUser();
-        global.CaventraStore.updateSupportTicket(tktId, { assignedFounder: newAssignee }, user);
+        global.CaventraStore.updateSupportTicket(tktId, { assignedFounder: newAssignee, assignedToEmail: assignedEmail }, user);
         return;
       }
 

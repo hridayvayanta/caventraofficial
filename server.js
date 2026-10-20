@@ -28,8 +28,9 @@ const db = new Database(path.join(DATA, 'caventra.db'));
 db.pragma('journal_mode = WAL');
 db.exec(`
 CREATE TABLE IF NOT EXISTS kv(key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS inquiries(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, company TEXT, type TEXT, budget TEXT, timeline TEXT, message TEXT, ip TEXT, created_at INTEGER NOT NULL);`);
+CREATE TABLE IF NOT EXISTS inquiries(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, company TEXT, type TEXT, budget TEXT, timeline TEXT, message TEXT, ip TEXT, created_at INTEGER NOT NULL, lead_source TEXT);`);
 try { db.exec('ALTER TABLE inquiries ADD COLUMN phone TEXT;'); } catch (e) {}
+try { db.exec('ALTER TABLE inquiries ADD COLUMN lead_source TEXT;'); } catch (e) {}
 const getSite = () => { const r = db.prepare('SELECT value FROM kv WHERE key=?').get('site'); return r ? JSON.parse(r.value) : {}; };
 const setSite = o => db.prepare('INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at').run('site', JSON.stringify(o), Date.now());
 
@@ -152,11 +153,66 @@ async function sendAuthEmail(toEmail, otpCode, type) {
   }
 }
 
+async function sendTicketNotificationEmail(t) {
+  const toEmail = t.recipientEmail;
+  console.log(`\n================== [CAVENTRA CORPORATE TICKET NOTIFICATION] ==================`);
+  console.log(`To (Assignee): ${toEmail}`);
+  console.log(`Assigned By:   ${t.creatorName} <${t.creatorEmail || 'system'}>`);
+  console.log(`Subject:       ${t.subject}`);
+  console.log(`Priority:      ${t.priority} | Department: ${t.category}`);
+  console.log(`Due Date:      ${t.dueDate || 'Immediate'}`);
+  console.log(`Details:       ${(t.description || '').replace(/\n/g, ' ')}`);
+  console.log(`==============================================================================\n`);
+
+  if (E.RESEND_API_KEY) {
+    try {
+      const priorityColor = t.priority === 'Urgent' ? '#f85149' : (t.priority === 'High' ? '#d29922' : '#58a6ff');
+      const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:580px;margin:0 auto;padding:32px 28px;background:#0d1117;color:#f0f6fc;border-radius:12px;border:1px solid #30363d;"><div style="border-bottom:1px solid #30363d;padding-bottom:16px;margin-bottom:20px;"><div style="display:flex;align-items:center;justify-content:space-between;"><div><h1 style="color:#c9b8a0;margin:0;font-size:20px;letter-spacing:1.5px;font-weight:700;">CAVENTRA</h1><p style="color:#8b949e;font-size:11px;margin:3px 0 0;letter-spacing:1px;text-transform:uppercase;">Corporate Operations &amp; Task Assignment</p></div><span style="display:inline-block;padding:4px 10px;font-size:11px;font-weight:600;border-radius:999px;background:rgba(210,153,34,0.15);color:#d29922;border:1px solid rgba(210,153,34,0.4);">${t.category || 'Internal Task'}</span></div></div><h2 style="font-size:18px;color:#ffffff;margin:0 0 16px;line-height:1.4;">${t.subject}</h2><p style="font-size:14px;color:#8b949e;line-height:1.5;margin:0 0 16px;">Hi <strong style="color:#f0f6fc;">${t.assignedName || 'Team Member'}</strong>, a corporate ticket was raised and assigned to you by <strong style="color:#58a6ff;">${t.creatorName || 'Team Member'}</strong>${t.creatorEmail ? ' (&lt;' + t.creatorEmail + '&gt;)' : ''}.</p><table style="width:100%;border-collapse:collapse;margin:16px 0;background:#161b22;border-radius:8px;border:1px solid #30363d;font-size:13px;"><tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;width:30%;">Priority</td><td style="padding:10px 14px;color:${priorityColor};font-weight:600;border-bottom:1px solid #21262d;">${t.priority}</td></tr><tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;">Department</td><td style="padding:10px 14px;color:#e6edf3;border-bottom:1px solid #21262d;">${t.category}</td></tr><tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;">Due Date</td><td style="padding:10px 14px;color:#e6edf3;border-bottom:1px solid #21262d;">${t.dueDate || 'Immediate / Flexible'}</td></tr><tr><td style="padding:10px 14px;color:#8b949e;">Ticket Reference</td><td style="padding:10px 14px;color:#8b949e;font-family:monospace;">${t.ticketId || 'Internal'}</td></tr></table><div style="margin:20px 0;"><p style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Requirements &amp; Scope</p><div style="background:#161b22;padding:16px;border-radius:8px;border:1px solid #30363d;color:#e6edf3;font-size:13px;line-height:1.6;white-space:pre-wrap;">${t.description}</div></div><div style="text-align:center;margin:28px 0 16px;"><a href="https://caventraofficial.in/founder-dashboard/" style="display:inline-block;padding:12px 28px;background:#c9b8a0;color:#0d1117;font-weight:600;font-size:13px;letter-spacing:0.5px;text-decoration:none;border-radius:999px;">Open Founder / Corporate Desk &rarr;</a></div><hr style="border:none;border-top:1px solid #30363d;margin:24px 0 16px;"/><p style="color:#8b949e;font-size:11px;margin:0;text-align:center;">This automated assignment notice was generated by CAVENTRA Corporate Suite &bull; <a href="mailto:caventraofficial@gmail.com" style="color:#8b949e;">caventraofficial@gmail.com</a></p></div>`;
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + E.RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: E.MAIL_FROM || 'CAVENTRA Corporate <security@caventraofficial.in>',
+          to: [toEmail],
+          reply_to: t.creatorEmail || NOTIFY_TO,
+          subject: '[CAVENTRA TASK] ' + t.subject + ' (Assigned to you)',
+          text: `Hi ${t.assignedName || 'Team Member'},\n\nA corporate ticket was assigned to you by ${t.creatorName} (${t.creatorEmail || ''}).\n\nSubject: ${t.subject}\nPriority: ${t.priority}\nDepartment: ${t.category}\nDue Date: ${t.dueDate || 'Immediate'}\n\nRequirements:\n${t.description}\n\nAccess dashboard: https://caventraofficial.in/founder-dashboard/`,
+          html: html
+        })
+      });
+      if (r.ok) {
+        console.log(`✓ Real corporate ticket assignment email dispatched to ${toEmail} via Resend`);
+      }
+    } catch (e) {
+      console.error('Ticket email dispatch error:', e.message);
+    }
+  }
+}
+
 // ---------- routes ----------
 async function api(req, res, u) {
   const p = u.pathname, m = req.method, ip = ipOf(req);
   if (limited('api_' + ip, 60, 6e4)) return send(res, 429, { error: 'Too many API requests. Please slow down.' });
   if (m !== 'GET' && req.headers['x-requested-with'] !== 'caventra') return send(res, 403, { error: 'Forbidden' });
+  if (p === '/api/tickets/notify' && m === 'POST') {
+    const b = await readJSON(req, 1e4);
+    const recipientEmail = str(b.recipientEmail || b.assignedToEmail, 200);
+    const subject = str(b.subject, 200);
+    if (!recipientEmail || !subject) return send(res, 400, { error: 'Recipient email and subject required.' });
+    await sendTicketNotificationEmail({
+      recipientEmail,
+      subject,
+      ticketId: str(b.ticketId, 50),
+      creatorName: str(b.creatorName || b.clientName, 120),
+      creatorEmail: str(b.creatorEmail || b.clientEmail, 200),
+      assignedName: str(b.assignedName || b.assignedFounder, 120),
+      category: str(b.category, 100),
+      priority: str(b.priority, 50),
+      dueDate: str(b.dueDate, 50),
+      description: str(b.description, 5000)
+    });
+    return send(res, 200, { ok: true, message: 'Ticket notification dispatched to ' + recipientEmail });
+  }
   if (p === '/api/auth/send-otp' && m === 'POST') {
     const b = await readJSON(req, 2e3);
     const email = str(b.email, 200);
@@ -170,10 +226,10 @@ async function api(req, res, u) {
   if (p === '/api/contact' && m === 'POST') {
     if (limited('c' + ip, 5, 36e5)) return send(res, 429, { error: 'Too many messages. Please try again later.' });
     const b = await readJSON(req, 2e4); if (b.website) return send(res, 200, { ok: true }); // honeypot
-    const q = { name: str(b.name, 120), email: str(b.email, 200), phone: str(b.phone || '', 50), company: str(b.company, 200), type: str(b.type, 100), budget: str(b.budget, 100), timeline: str(b.timeline, 100), message: str(b.message, 5000) };
+    const q = { name: str(b.name, 120), email: str(b.email, 200), phone: str(b.phone || '', 50), company: str(b.company, 200), type: str(b.type, 100), budget: str(b.budget, 100), timeline: str(b.timeline, 100), message: str(b.message, 5000), lead_source: str(b.leadSource || b.lead_source || 'Website Contact Form', 120) };
     if (!q.name || !q.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(q.email)) return send(res, 400, { error: 'Please fill in name, a valid email and a message.' });
     const ipHash = crypto.createHash('sha256').update(ip + (SECRET || 'caventra')).digest('hex').slice(0, 16);
-    db.prepare('INSERT INTO inquiries(name,email,phone,company,type,budget,timeline,message,ip,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.phone, q.company, q.type, q.budget, q.timeline, q.message, ipHash, Date.now());
+    db.prepare('INSERT INTO inquiries(name,email,phone,company,type,budget,timeline,message,ip,created_at,lead_source) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(q.name, q.email, q.phone, q.company, q.type, q.budget, q.timeline, q.message, ipHash, Date.now(), q.lead_source);
     notify(q); return send(res, 200, { ok: true });
   }
   if (p === '/api/admin/me' && m === 'GET') return send(res, 200, { admin: isAdmin(req) }, { 'Cache-Control': 'no-store' });

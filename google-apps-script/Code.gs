@@ -59,6 +59,33 @@ function doPost(e) {
       });
     }
 
+    // 0b. Handle Corporate Ticket Assignment Notification Email
+    // Dispatches notification directly to the assigned team member's email from caventraofficial@gmail.com
+    if (data.action === 'SEND_TICKET_NOTIFICATION' || data.type === 'CORPORATE_TICKET_NOTIFICATION') {
+      var ticketRecipientEmail = cleanString(data.recipientEmail || data.assignedToEmail || data.email, 200);
+      if (!ticketRecipientEmail || !isValidEmail(ticketRecipientEmail)) {
+        return jsonResponse({ ok: false, error: 'A valid recipient email address is required.' });
+      }
+
+      sendTicketNotificationEmail({
+        recipientEmail: ticketRecipientEmail,
+        ticketId: cleanString(data.ticketId, 50),
+        subject: cleanString(data.subject, 200),
+        creatorName: cleanString(data.creatorName || data.clientName || 'Team Member', 120),
+        creatorEmail: cleanString(data.creatorEmail || data.clientEmail || '', 200),
+        assignedName: cleanString(data.assignedName || data.assignedFounder || 'Team Member', 120),
+        category: cleanString(data.category || 'Technical / Backend', 100),
+        priority: cleanString(data.priority || 'Medium', 50),
+        dueDate: cleanString(data.dueDate || '', 50),
+        description: cleanString(data.description, 5000)
+      });
+
+      return jsonResponse({
+        ok: true,
+        message: 'Ticket assignment notification dispatched to ' + ticketRecipientEmail
+      });
+    }
+
     // 1. Honeypot anti-spam check
     // The "website" field is hidden from real users. Bots fill it out.
     if (data.website && String(data.website).trim().length > 0) {
@@ -385,6 +412,85 @@ function sendAuthOtpEmail(toEmail, otpCode, type) {
     body: textBody,
     htmlBody: htmlBody
   });
+}
+
+/**
+ * Dispatch corporate ticket assignment email to the assigned team member
+ * Sent from caventraofficial@gmail.com directly to the person for whom the ticket is raised
+ */
+function sendTicketNotificationEmail(t) {
+  var priorityColor = '#58a6ff';
+  if (t.priority === 'Urgent') priorityColor = '#f85149';
+  else if (t.priority === 'High') priorityColor = '#d29922';
+  else if (t.priority === 'Low') priorityColor = '#8b949e';
+
+  var subject = '[CAVENTRA TASK] ' + t.subject + ' (Assigned to you)';
+  var textBody = 'Hello ' + t.assignedName + ',\n\n' +
+    'A corporate ticket has been assigned to you by ' + t.creatorName + (t.creatorEmail ? ' (' + t.creatorEmail + ')' : '') + '.\n\n' +
+    'Ticket Details:\n' +
+    '-----------------------------------------\n' +
+    'Subject: ' + t.subject + '\n' +
+    'Ticket ID: ' + (t.ticketId || 'N/A') + '\n' +
+    'Category: ' + t.category + '\n' +
+    'Priority: ' + t.priority + '\n' +
+    'Due Date: ' + (t.dueDate || 'Immediate / Not specified') + '\n\n' +
+    'Requirements & Scope:\n' +
+    t.description + '\n' +
+    '-----------------------------------------\n\n' +
+    'Log in to the Founder / Corporate Suite to update status or reply:\n' +
+    'https://caventraofficial.in/founder-dashboard/\n\n' +
+    'Best regards,\n' +
+    'CAVENTRA Corporate Operations Desk\n' +
+    'caventraofficial@gmail.com';
+
+  var htmlBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;max-width:580px;margin:0 auto;padding:32px 28px;background:#0d1117;color:#f0f6fc;border-radius:12px;border:1px solid #30363d;">' +
+    '<div style="border-bottom:1px solid #30363d;padding-bottom:16px;margin-bottom:20px;">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+        '<div>' +
+          '<h1 style="color:#c9b8a0;margin:0;font-size:20px;letter-spacing:1.5px;font-weight:700;">CAVENTRA</h1>' +
+          '<p style="color:#8b949e;font-size:11px;margin:3px 0 0;letter-spacing:1px;text-transform:uppercase;">Corporate Operations &amp; Task Assignment</p>' +
+        '</div>' +
+        '<span style="display:inline-block;padding:4px 10px;font-size:11px;font-weight:600;border-radius:999px;background:rgba(210,153,34,0.15);color:#d29922;border:1px solid rgba(210,153,34,0.4);">' + escapeHtml(t.category || 'Internal Task') + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<h2 style="font-size:18px;color:#ffffff;margin:0 0 16px;line-height:1.4;">' + escapeHtml(t.subject) + '</h2>' +
+    '<p style="font-size:14px;color:#8b949e;line-height:1.5;margin:0 0 16px;">' +
+      'Hi <strong style="color:#f0f6fc;">' + escapeHtml(t.assignedName) + '</strong>, a corporate ticket was raised and assigned to you by <strong style="color:#58a6ff;">' + escapeHtml(t.creatorName) + '</strong>' + (t.creatorEmail ? ' (&lt;' + escapeHtml(t.creatorEmail) + '&gt;)' : '') + '.' +
+    '</p>' +
+    '<table style="width:100%;border-collapse:collapse;margin:16px 0;background:#161b22;border-radius:8px;border:1px solid #30363d;font-size:13px;">' +
+      '<tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;width:30%;">Priority</td><td style="padding:10px 14px;color:' + priorityColor + ';font-weight:600;border-bottom:1px solid #21262d;">' + escapeHtml(t.priority) + '</td></tr>' +
+      '<tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;">Department</td><td style="padding:10px 14px;color:#e6edf3;border-bottom:1px solid #21262d;">' + escapeHtml(t.category) + '</td></tr>' +
+      '<tr><td style="padding:10px 14px;color:#8b949e;border-bottom:1px solid #21262d;">Due Date</td><td style="padding:10px 14px;color:#e6edf3;border-bottom:1px solid #21262d;">' + (t.dueDate ? escapeHtml(t.dueDate) : '<span style="color:#8b949e;">Immediate / Flexible</span>') + '</td></tr>' +
+      '<tr><td style="padding:10px 14px;color:#8b949e;">Ticket Reference</td><td style="padding:10px 14px;color:#8b949e;font-family:monospace;">' + escapeHtml(t.ticketId || 'Internal') + '</td></tr>' +
+    '</table>' +
+    '<div style="margin:20px 0;">' +
+      '<p style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Requirements &amp; Scope</p>' +
+      '<div style="background:#161b22;padding:16px;border-radius:8px;border:1px solid #30363d;color:#e6edf3;font-size:13px;line-height:1.6;white-space:pre-wrap;">' + escapeHtml(t.description) + '</div>' +
+    '</div>' +
+    '<div style="text-align:center;margin:28px 0 16px;">' +
+      '<a href="https://caventraofficial.in/founder-dashboard/" style="display:inline-block;padding:12px 28px;background:#c9b8a0;color:#0d1117;font-weight:600;font-size:13px;letter-spacing:0.5px;text-decoration:none;border-radius:999px;">Open Founder / Corporate Desk &rarr;</a>' +
+    '</div>' +
+    '<hr style="border:none;border-top:1px solid #30363d;margin:24px 0 16px;"/>' +
+    '<p style="color:#8b949e;font-size:11px;margin:0;text-align:center;">This automated assignment notice was generated by CAVENTRA Corporate Suite &bull; <a href="mailto:caventraofficial@gmail.com" style="color:#8b949e;">caventraofficial@gmail.com</a></p>' +
+    '</div>';
+
+  MailApp.sendEmail({
+    to: t.recipientEmail,
+    name: 'CAVENTRA Corporate Operations',
+    subject: subject,
+    body: textBody,
+    htmlBody: htmlBody
+  });
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 /**

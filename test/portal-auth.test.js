@@ -900,6 +900,14 @@ const Portal = sandbox.CaventraPortal;
     const clientUser = { uid: 'client_external', email: 'externalclient@acme.com', role: 'client', displayName: 'External Client' };
 
     // 1. Create corporate ticket (Hriday assigning to Sauran)
+    let assignedEventDetail = null;
+    sandbox.window.dispatchEvent = (evt) => {
+      if (evt && evt.type === 'caventra:ticket_assigned') {
+        assignedEventDetail = evt.detail;
+      }
+      return true;
+    };
+
     const corpTicket = Store.createSupportTicket({
       subject: 'API Gateway Redis Cache Architecture',
       description: 'Implement distributed Redis sentinel for sub-millisecond route caching',
@@ -917,6 +925,13 @@ const Portal = sandbox.CaventraPortal;
     assert.strictEqual(corpTicket.assignedToEmail, 'sauranahmed12345678@gmail.com');
     assert.strictEqual(corpTicket.status, 'Open');
     assert.strictEqual(corpTicket.comments.length, 0);
+
+    // Verify Assignee Notification Dispatch
+    assert.ok(assignedEventDetail, 'Must dispatch assignment notification event');
+    assert.strictEqual(assignedEventDetail.recipientEmail, 'sauranahmed12345678@gmail.com', 'Notification must be addressed strictly to the assignee');
+    assert.notStrictEqual(assignedEventDetail.recipientEmail, hriday.email, 'Notification must NOT be addressed to the ticket creator');
+    assert.strictEqual(assignedEventDetail.creatorEmail, hriday.email, 'Creator email must match Hriday');
+    assert.strictEqual(assignedEventDetail.action, 'SEND_TICKET_NOTIFICATION');
 
     // 2. Add discussion comment from Sauran
     const comment = Store.addTicketComment(
