@@ -764,7 +764,7 @@ const sitemapEntries = sitemapRoutes.map(r => {
   const loc = `${BASE_URL}/${r.urlPath ? r.urlPath + '/' : ''}`;
   return `  <url>
     <loc>${loc}</loc>
-    <lastmod>${r.lastmod || '2026-10-15'}</lastmod>
+    <lastmod>${r.lastmod || new Date().toISOString().slice(0, 10)}</lastmod>
   </url>`;
 }).join('\n');
 
