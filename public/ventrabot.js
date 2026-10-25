@@ -701,10 +701,13 @@
     // Dynamic offset when cookie banner is visible on small screens
     const updateCookieOffset = () => {
       const ckb = document.getElementById('ckb');
+      const wa = document.querySelector('.whatsapp-float');
       if (ckb && ckb.classList.contains('show') && !ckb.classList.contains('hide')) {
         widgetContainer?.classList.add('above-cookie');
+        wa?.classList.add('above-cookie');
       } else {
         widgetContainer?.classList.remove('above-cookie');
+        wa?.classList.remove('above-cookie');
       }
     };
     const ckb = document.getElementById('ckb');

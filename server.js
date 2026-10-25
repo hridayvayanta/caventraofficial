@@ -303,5 +303,5 @@ const server = http.createServer(async (req, res) => {
     console.error(e); send(res, 500, { error: 'Server error' });
   }
 });
-server.listen(PORT, () => console.log(`Caventra running on http://localhost:${PORT}`));
+server.listen(PORT, '0.0.0.0', () => console.log(`Caventra running on http://localhost:${PORT}`));
 module.exports = server;

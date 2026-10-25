@@ -297,6 +297,32 @@ test('Favicon: Square assets exist, meet Google requirements, maintain root/publ
   assert.ok(robots.includes('Allow: /'), 'robots.txt must allow root');
 });
 
+// 11. FLOATING WHATSAPP CTA & VENTRABOT LEFT DOCKING
+test('Floating WhatsApp CTA & Ventrabot Left Docking: elements exist with correct links, accessibility, and CSS', () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const pubIndex = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
+  const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+
+  // Verify WhatsApp CTA presence and attributes in index.html
+  assert.ok(indexHtml.includes('class="whatsapp-float"'), 'Missing .whatsapp-float class in index.html');
+  assert.ok(indexHtml.includes('https://wa.me/918866790989'), 'Missing wa.me link with Caventra official number');
+  assert.ok(indexHtml.includes('aria-label="Chat with Caventra on WhatsApp"'), 'Missing aria-label on WhatsApp CTA');
+  assert.ok(indexHtml.includes('class="whatsapp-icon"'), 'Missing .whatsapp-icon svg');
+  assert.ok(indexHtml.includes('class="whatsapp-tooltip"'), 'Missing .whatsapp-tooltip');
+
+  // Verify parity in public/index.html
+  assert.ok(pubIndex.includes('class="whatsapp-float"'), 'Missing .whatsapp-float in public/index.html');
+
+  // Verify CSS rules
+  assert.ok(css.includes('.whatsapp-float {'), 'Missing .whatsapp-float in styles.css');
+  assert.ok(css.includes('z-index: 99980;'), 'WhatsApp CTA must have z-index defined');
+  assert.ok(css.includes('.whatsapp-pulse {'), 'Missing .whatsapp-pulse in styles.css');
+  assert.ok(css.includes('@keyframes waPulse'), 'Missing waPulse animation in styles.css');
+
+  // Verify Ventrabot is docked to bottom-left
+  assert.ok(css.includes('bottom: 24px;\n  left: 24px;'), 'Ventrabot must be docked to bottom-left in desktop CSS');
+});
+
 console.log('\n========================================');
 console.log(`TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
 console.log('========================================\n');
