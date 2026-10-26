@@ -1,0 +1,159 @@
+/* ===== FEATURE 3: FLOATING WHATSAPP CTA BUTTON ===== */
+.whatsapp-float {
+  position: fixed;
+  z-index: 99980;
+  bottom: 24px;
+  right: 24px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .3s ease, bottom .4s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.55), 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.whatsapp-float:focus-visible {
+  outline: 2px solid #25D366;
+  outline-offset: 4px;
+}
+
+.whatsapp-float:active {
+  transform: scale(0.96);
+}
+
+.whatsapp-pulse {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: waPulse 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  pointer-events: none;
+}
+
+@keyframes waPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+.whatsapp-icon {
+  width: 32px;
+  height: 32px;
+  fill: #ffffff;
+  pointer-events: none;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.whatsapp-tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  background: rgba(15, 19, 22, 0.94);
+  color: #ffffff;
+  font-family: var(--hd);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, transform .25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s .25s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.whatsapp-float:hover .whatsapp-tooltip,
+.whatsapp-float:focus-visible .whatsapp-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Light Mode Polish for WhatsApp Tooltip */
+[data-theme="light"] .whatsapp-tooltip,
+body.light .whatsapp-tooltip {
+  background: rgba(255, 255, 255, 0.96);
+  color: #14181b;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Dynamic Offset when Cookie Banner is Active */
+.whatsapp-float.above-cookie,
+body:has(#ckb.show) .whatsapp-float {
+  bottom: calc(175px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    width: 52px;
+    height: 52px;
+  }
+  .whatsapp-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle.pulse { animation: none!important; }
+  .ventra-widget { transition: opacity .15s ease!important; }
+  .whatsapp-pulse { animation: none!important; display: none!important; }
+  .whatsapp-float { transition: opacity .15s ease!important; }
+  .ventra-avatar.wake-up { animation: none!important; }
+  .ventra-avatar.greeting .ventra-eyes,
+  .ventra-avatar.greeting .ventra-head,
+  .ventra-avatar.greeting .ventra-arm-left,
+  .ventra-avatar.greeting .ventra-antenna-led,
+  .ventra-torso, .ventra-head, .ventra-arm-left, .ventra-arm-right,
+  .ventra-core, .ventra-antenna-led, .ventra-eyes, .ventra-thrust {
+    animation: none!important;
+  }
+  .ventra-bubble {
+    animation: none!important;
+    transition: opacity .15s ease!important;
+  }
+  .ventra-bubble.fade-out {
+    opacity: 0!important;
+    transform: scale(0.94)!important;
+  }
+  .ventra-panel {
+    transition: opacity .15s ease!important;
+    transform: translateY(0)!important;
+  }
+}
+

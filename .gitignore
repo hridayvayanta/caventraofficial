@@ -7,7 +7,7 @@ firebase-debug.log*
 firestore-debug.log*
 
 .agents/
-ORIGINAL_REQUEST.md
-PROJECT.md
+docs/legacy/ORIGINAL_REQUEST.md
+docs/legacy/PROJECT.md
 DATA/
 

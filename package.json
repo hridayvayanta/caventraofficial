@@ -10,7 +10,10 @@
   },
   "scripts": {
     "start": "node --no-warnings server.js",
+    "build:bundle": "node scripts/build-bundle.js",
     "build:static": "node scripts/build-static.js",
+    "build": "npm run build:bundle && npm run build:static",
+    "build:all": "npm run build && npm run test:all",
     "test": "node --no-warnings test/smoke.js",
     "test:portal": "node test/portal-auth.test.js",
     "test:all": "npm test && node test/master-improvements.test.js && node test/blog-interaction.test.js && node test/portal-auth.test.js && node test/project-submission.test.js && node test/estimator.test.js && node test/founder-and-lead.test.js"

@@ -1,9 +1,21 @@
 'use strict';
-// Caventra — Node.js server with better-sqlite3 (Node 18+)
+/**
+ * CAVENTRA — Production Node.js Server & API Gateway
+ *
+ * Architecture Index:
+ * 1. Configuration & Environment (.env / env.txt)
+ * 2. SQLite Database & WAL Schema Migrations
+ * 3. Security, Cookies & Session Cryptography
+ * 4. Email Notifications (Resend API)
+ * 5. Input Validation & Project Sanitization
+ * 6. API Route Handlers (/api/*)
+ * 7. Static Asset Serving & CDN Headers
+ * 8. Server Lifecycle & 0.0.0.0 Socket Binding
+ */
 const http = require('http'), fs = require('fs'), path = require('path'), crypto = require('crypto');
 const Database = require('better-sqlite3');
 
-// ---------- config ----------
+// ==================== 1. CONFIGURATION & ENVIRONMENT ====================
 try { // tiny .env loader (supports .env or visible env.txt)
   const envFile = [path.join(__dirname, '.env'), path.join(__dirname, 'env.txt')].find(f => fs.existsSync(f));
   if (envFile) {
