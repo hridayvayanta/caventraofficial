@@ -1235,7 +1235,7 @@
     const internalTeam = (users || []).filter(u => u.role === 'founder' || u.role === 'team' || u.role === 'employee');
     const coreFounders = [
       { displayName: 'Hriday Vayanta', title: 'Head of Growth', email: 'hridayvayanta7@gmail.com' },
-      { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauranahmed12345678@gmail.com' },
+      { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauran.caventra@gmail.com' },
       { displayName: 'Ved Nimbaark', title: 'Head of Design', email: 'vednimbark08@gmail.com' }
     ];
     coreFounders.forEach(cf => {
@@ -2300,7 +2300,7 @@
       const internalTeamList = (users || []).filter(u => u.role === 'founder' || u.role === 'team' || u.role === 'employee');
       const coreFounders = [
         { displayName: 'Hriday Vayanta', title: 'Head of Growth', email: 'hridayvayanta7@gmail.com' },
-        { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauranahmed12345678@gmail.com' },
+        { displayName: 'Sauranahmed Mansuri', title: 'Head of Technology', email: 'sauran.caventra@gmail.com' },
         { displayName: 'Ved Nimbaark', title: 'Head of Design', email: 'vednimbark08@gmail.com' }
       ];
       coreFounders.forEach(cf => {

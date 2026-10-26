@@ -245,7 +245,7 @@ const Portal = sandbox.CaventraPortal;
     const clientA = await Auth.login('clienta@company.com', 'Pass12345!', true);
 
     // Founder creates project for Client A
-    const founder = await Auth.login('sauranahmed12345678@gmail.com', 'saurancaventra@0000', true);
+    const founder = await Auth.login('sauran.caventra@gmail.com', 'saurancaventra@0000', true);
     const prjA = Store.createProject({
       name: 'Alpha Logistics Dispatch Portal',
       userId: clientA.uid,
@@ -305,7 +305,7 @@ const Portal = sandbox.CaventraPortal;
   await asyncTest('Founder Dashboard: Founder can view leads, create projects, issue invoices', async () => {
     await Auth.logout();
     // Log in as Sauranahmed Mansuri (Founder)
-    const sauran = await Auth.login('sauranahmed12345678@gmail.com', 'saurancaventra@0000', true);
+    const sauran = await Auth.login('sauran.caventra@gmail.com', 'saurancaventra@0000', true);
     assert.strictEqual(Auth.isFounder(sauran), true);
 
     // Read leads array
@@ -587,7 +587,7 @@ const Portal = sandbox.CaventraPortal;
   // 23. FINANCIAL FIELD VALIDATION HARDENING
   await asyncTest('Financial Field Validation: Positive amount enforcement and client payment block', async () => {
     await Auth.logout();
-    const sauran = await Auth.login('sauranahmed12345678@gmail.com', 'saurancaventra@0000', true);
+    const sauran = await Auth.login('sauran.caventra@gmail.com', 'saurancaventra@0000', true);
 
     // Negative invoice amount
     let threwNegative = false;
@@ -694,7 +694,7 @@ const Portal = sandbox.CaventraPortal;
 
     // Verify founders are preserved
     assert.ok(dbAfter.users.some(u => u.role === 'founder' && (u.email === 'hridayvayanta7@gmail.com' || u.uid === 'founder_hriday')), 'Hriday must be preserved');
-    assert.ok(dbAfter.users.some(u => u.role === 'founder' && (u.email === 'sauranahmed12345678@gmail.com' || u.uid === 'founder_sauran')), 'Sauranahmed must be preserved');
+    assert.ok(dbAfter.users.some(u => u.role === 'founder' && (u.email === 'sauran.caventra@gmail.com' || u.uid === 'founder_sauran')), 'Sauranahmed must be preserved');
     assert.ok(dbAfter.users.some(u => u.role === 'founder' && (u.email === 'vednimbark08@gmail.com' || u.uid === 'founder_ved')), 'Ved must be preserved');
 
     // Verify demo mock records are purged / do not exist in database
@@ -734,10 +734,10 @@ const Portal = sandbox.CaventraPortal;
     await Auth.logout();
 
     // 3. Test Sauranahmed Mansuri
-    const sauranChallenge = await Auth.login('sauranahmed12345678@gmail.com', 'saurancaventra@0000');
+    const sauranChallenge = await Auth.login('sauran.caventra@gmail.com', 'saurancaventra@0000');
     assert.strictEqual(sauranChallenge.requiresLoginOtp, true);
-    assert.strictEqual(sauranChallenge.email, 'sauranahmed12345678@gmail.com');
-    const sauranSession = await Auth.verifyLoginOtp('sauranahmed12345678@gmail.com', sauranChallenge.code);
+    assert.strictEqual(sauranChallenge.email, 'sauran.caventra@gmail.com');
+    const sauranSession = await Auth.verifyLoginOtp('sauran.caventra@gmail.com', sauranChallenge.code);
     assert.strictEqual(sauranSession.role, 'founder');
     assert.strictEqual(sauranSession.displayName, 'Sauranahmed Mansuri');
     assert.strictEqual(Auth.isFounder(sauranSession), true);
@@ -896,7 +896,7 @@ const Portal = sandbox.CaventraPortal;
   // 30. CORPORATE & CROSS-FOUNDER TICKETING SYSTEM
   await asyncTest('Corporate Ticketing: Founders and team members can create internal tasks, reassign, comment, and resolve in real time', async () => {
     const hriday = { uid: 'founder_hriday', email: 'hridayvayanta7@gmail.com', role: 'founder', displayName: 'Hriday Vayanta' };
-    const sauran = { uid: 'founder_sauran', email: 'sauranahmed12345678@gmail.com', role: 'founder', displayName: 'Sauranahmed Mansuri' };
+    const sauran = { uid: 'founder_sauran', email: 'sauran.caventra@gmail.com', role: 'founder', displayName: 'Sauranahmed Mansuri' };
     const clientUser = { uid: 'client_external', email: 'externalclient@acme.com', role: 'client', displayName: 'External Client' };
 
     // 1. Create corporate ticket (Hriday assigning to Sauran)
@@ -915,20 +915,20 @@ const Portal = sandbox.CaventraPortal;
       category: 'Infrastructure',
       ticketType: 'internal',
       assignedFounder: 'Sauranahmed Mansuri',
-      assignedToEmail: 'sauranahmed12345678@gmail.com',
+      assignedToEmail: 'sauran.caventra@gmail.com',
       dueDate: '2026-10-25'
     }, hriday);
 
     assert.ok(corpTicket.id, 'Ticket must have unique ID');
     assert.strictEqual(corpTicket.ticketType, 'internal');
     assert.strictEqual(corpTicket.assignedFounder, 'Sauranahmed Mansuri');
-    assert.strictEqual(corpTicket.assignedToEmail, 'sauranahmed12345678@gmail.com');
+    assert.strictEqual(corpTicket.assignedToEmail, 'sauran.caventra@gmail.com');
     assert.strictEqual(corpTicket.status, 'Open');
     assert.strictEqual(corpTicket.comments.length, 0);
 
     // Verify Assignee Notification Dispatch
     assert.ok(assignedEventDetail, 'Must dispatch assignment notification event');
-    assert.strictEqual(assignedEventDetail.recipientEmail, 'sauranahmed12345678@gmail.com', 'Notification must be addressed strictly to the assignee');
+    assert.strictEqual(assignedEventDetail.recipientEmail, 'sauran.caventra@gmail.com', 'Notification must be addressed strictly to the assignee');
     assert.notStrictEqual(assignedEventDetail.recipientEmail, hriday.email, 'Notification must NOT be addressed to the ticket creator');
     assert.strictEqual(assignedEventDetail.creatorEmail, hriday.email, 'Creator email must match Hriday');
     assert.strictEqual(assignedEventDetail.action, 'SEND_TICKET_NOTIFICATION');

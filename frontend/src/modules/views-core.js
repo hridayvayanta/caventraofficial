@@ -722,7 +722,7 @@ about:()=>{
           <div class="founder-contact-meta">
             <div class="meta-row">
               <span class="meta-label">Email:</span>
-              <a class="meta-val meta-email" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">sauranahmed12345678@gmail.com</a>
+              <a class="meta-val meta-email" href="mailto:sauran.caventra@gmail.com" title="Email Sauranahmed Mansuri">sauran.caventra@gmail.com</a>
             </div>
             <div class="meta-row">
               <span class="meta-label">Direct:</span>
@@ -731,7 +731,7 @@ about:()=>{
           </div>
           <div class="founder-actions">
             <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">Email Sauran ↗</a>
+            <a class="btn sm" href="mailto:sauran.caventra@gmail.com" title="Email Sauranahmed Mansuri">Email Sauran ↗</a>
           </div>
         </div>
       </div>
@@ -827,7 +827,7 @@ founders:()=>{
           <div class="founder-contact-meta">
             <div class="meta-row">
               <span class="meta-label">Email:</span>
-              <a class="meta-val meta-email" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauranahmed Mansuri">sauranahmed12345678@gmail.com</a>
+              <a class="meta-val meta-email" href="mailto:sauran.caventra@gmail.com" title="Email Sauranahmed Mansuri">sauran.caventra@gmail.com</a>
             </div>
             <div class="meta-row">
               <span class="meta-label">Direct:</span>
@@ -836,7 +836,7 @@ founders:()=>{
           </div>
           <div class="founder-actions">
             <a class="btn sm" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp ↗</a>
-            <a class="btn sm" href="mailto:sauranahmed12345678@gmail.com" title="Email Sauran ↗">Email Sauran ↗</a>
+            <a class="btn sm" href="mailto:sauran.caventra@gmail.com" title="Email Sauran ↗">Email Sauran ↗</a>
           </div>
         </div>
       </div>
@@ -883,7 +883,7 @@ founders:()=>{
           <p class="faq-a">The three founders of Caventra are:
             <br>1. <strong>Hriday Vayanta</strong> — Founder &amp; Head of Growth (Email: <a href="mailto:caventraofficial@gmail.com" style="color:var(--gold)">caventraofficial@gmail.com</a>)
             <br>2. <strong>Ved Nimbark</strong> — Founder &amp; Head of Design (Email: <a href="mailto:vednimbark08@gmail.com" style="color:var(--gold)">vednimbark08@gmail.com</a>)
-            <br>3. <strong>Sauranahmed Mansuri</strong> — Founder &amp; Head of Technology (Email: <a href="mailto:sauranahmed12345678@gmail.com" style="color:var(--gold)">sauranahmed12345678@gmail.com</a>)
+            <br>3. <strong>Sauranahmed Mansuri</strong> — Founder &amp; Head of Technology (Email: <a href="mailto:sauran.caventra@gmail.com" style="color:var(--gold)">sauran.caventra@gmail.com</a>)
           </p>
         </div>
         <div class="faq-item">

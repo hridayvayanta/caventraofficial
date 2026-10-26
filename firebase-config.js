@@ -52,7 +52,7 @@
     },
     {
       uid: 'founder_sauran',
-      email: 'sauranahmed12345678@gmail.com',
+      email: 'sauran.caventra@gmail.com',
       displayName: 'Sauranahmed Mansuri',
       role: 'founder',
       title: 'Head of Technology',
@@ -134,7 +134,7 @@
         },
         {
           uid: 'founder_sauran',
-          email: 'sauranahmed12345678@gmail.com',
+          email: 'sauran.caventra@gmail.com',
           passwordHash: 'saurancaventra@0000',
           displayName: 'Sauranahmed Mansuri',
           role: 'founder',
@@ -346,7 +346,7 @@
       },
       {
         uid: 'founder_sauran',
-        email: 'sauranahmed12345678@gmail.com',
+        email: 'sauran.caventra@gmail.com',
         passwordHash: 'saurancaventra@0000',
         displayName: 'Sauranahmed Mansuri',
         role: 'founder',
@@ -1106,7 +1106,7 @@
       const user = db.users.find(function (u) {
         if (u.email && u.email.toLowerCase() === cleanEmail) return true;
         if (cleanEmail === 'hriday@caventra.com' && (u.uid === 'founder_hriday' || u.email === 'hridayvayanta7@gmail.com')) return true;
-        if (cleanEmail === 'sauran@caventra.com' && (u.uid === 'founder_sauran' || u.email === 'sauranahmed12345678@gmail.com')) return true;
+        if (cleanEmail === 'sauran@caventra.com' && (u.uid === 'founder_sauran' || u.email === 'sauran.caventra@gmail.com')) return true;
         if (cleanEmail === 'ved@caventra.com' && (u.uid === 'founder_ved' || u.email === 'vednimbark08@gmail.com')) return true;
         return false;
       });
@@ -1600,7 +1600,7 @@
       if (presetAccount === 'hriday' || presetAccount === 'sauran' || presetAccount === 'ved') {
         const emails = {
           hriday: { email: 'hridayvayanta7@gmail.com', name: 'Hriday Vayanta' },
-          sauran: { email: 'sauranahmed12345678@gmail.com', name: 'Sauranahmed Mansuri' },
+          sauran: { email: 'sauran.caventra@gmail.com', name: 'Sauranahmed Mansuri' },
           ved: { email: 'vednimbark08@gmail.com', name: 'Ved Nimbaark' }
         };
         return this.selectGoogleAccount(emails[presetAccount]);

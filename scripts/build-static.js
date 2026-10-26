@@ -390,7 +390,7 @@ routes.push({
               'jobTitle': 'Founder & Head of Technology',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
               'image': `${BASE_URL}/assets/founders/sauranahmed-mansuri.jpg`,
-              'email': 'sauranahmed12345678@gmail.com',
+              'email': 'sauran.caventra@gmail.com',
               'telephone': '+917990652097',
               'description': 'Founder and Head of Technology at Caventra, architecting full-stack web software, database infrastructures, security protocols, and cloud deployment pipelines.'
             }
@@ -414,7 +414,7 @@ routes.push({
             'name': 'Who are the founders of Caventra?',
             'acceptedAnswer': {
               '@type': 'Answer',
-              'text': 'Caventra was founded by three founders: 1. Hriday Vayanta (Founder & Head of Growth - hridayvayanta7@gmail.com), 2. Ved Nimbark (Founder & Head of Design - vednimbark08@gmail.com), and 3. Sauranahmed Mansuri (Founder & Head of Technology - sauranahmed12345678@gmail.com).'
+              'text': 'Caventra was founded by three founders: 1. Hriday Vayanta (Founder & Head of Growth - hridayvayanta7@gmail.com), 2. Ved Nimbark (Founder & Head of Design - vednimbark08@gmail.com), and 3. Sauranahmed Mansuri (Founder & Head of Technology - sauran.caventra@gmail.com).'
             }
           },
           {
