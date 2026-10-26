@@ -17,10 +17,10 @@ const ROOT = path.join(__dirname, '..');
 const PUB = path.join(ROOT, 'public');
 
 console.log('====================================================');
-console.log('  CAVENTRA: Compiling Source Modules (src/ -> dist)');
+console.log('  CAVENTRA: Compiling Source Modules (frontend/ -> dist)');
 console.log('====================================================\n');
 
-// 1. Compile Stylesheets (src/styles/ -> styles.css & public/styles.css)
+// 1. Compile Stylesheets (frontend/styles/ -> styles.css & public/styles.css)
 const styleFiles = [
   '01-base-layout.css',
   '02-layout-components.css',
@@ -36,7 +36,10 @@ const styleFiles = [
 ];
 
 const bundleStyles = styleFiles.map(file => {
-  const filePath = path.join(ROOT, 'src', 'styles', file);
+  let filePath = path.join(ROOT, 'frontend', 'styles', file);
+  if (!fs.existsSync(filePath)) {
+    filePath = path.join(ROOT, 'src', 'styles', file);
+  }
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing style module: ${filePath}`);
   }
@@ -47,7 +50,7 @@ fs.writeFileSync(path.join(ROOT, 'styles.css'), bundleStyles);
 fs.writeFileSync(path.join(PUB, 'styles.css'), bundleStyles);
 console.log(`✓ Compiled styles.css (${styleFiles.length} modules, ${bundleStyles.length.toLocaleString()} bytes)`);
 
-// 2. Compile Client JavaScript (src/client/ -> app.js & public/app.js)
+// 2. Compile Client JavaScript (frontend/src/ -> app.js & public/app.js)
 const clientFiles = [
   'config.js',
   'modules/estimator.js',
@@ -62,7 +65,10 @@ const clientFiles = [
 ];
 
 const bundleClient = clientFiles.map(file => {
-  const filePath = path.join(ROOT, 'src', 'client', file);
+  let filePath = path.join(ROOT, 'frontend', 'src', file);
+  if (!fs.existsSync(filePath)) {
+    filePath = path.join(ROOT, 'src', 'client', file);
+  }
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing client module: ${filePath}`);
   }
