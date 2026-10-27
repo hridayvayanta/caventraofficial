@@ -58,6 +58,34 @@ blog:()=>{
         <button class="btn b-showall-btn" id="b-showall">Show All ${filtered.length} Articles</button>
       ` : ''}
     </div>
+    <section class="blog-crawl-index" aria-label="Comprehensive Article Directory" style="margin-top:72px;border-top:1px solid var(--line);padding-top:48px">
+      <div style="margin-bottom:32px">
+        <h2 style="font-size:clamp(22px,3.2vw,32px);margin-bottom:10px">Complete Knowledge &amp; Engineering Directory</h2>
+        <p style="color:var(--mut);font-size:15px;line-height:1.6;margin:0;max-width:72ch">A comprehensive technical index of all published engineering guides, cost breakdowns, and digital architecture playbooks.</p>
+      </div>
+      <div class="blog-archive-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
+        ${uniqueCats.filter(c => c !== 'All').map(cat => {
+          const catArticles = list.filter(x => x.category === cat);
+          return `
+            <div class="archive-cat-col" style="background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:20px">
+              <h3 style="font-size:16px;color:var(--gold2);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+                <span>${esc(cat)}</span>
+                <span style="font-size:12px;color:var(--mut);font-weight:normal">(${catArticles.length})</span>
+              </h3>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
+                ${catArticles.map(a => `
+                  <li>
+                    <a href="/blog/${esc(a.slug)}/" style="font-size:13.5px;line-height:1.45;color:var(--tx);display:block;text-decoration:none">
+                      ${esc(a.title)}
+                    </a>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </section>
   `,'style="padding-top:20px"');
 },
 article:s=>{
@@ -65,8 +93,8 @@ article:s=>{
   const b = list.find(x=>x.slug===s);
   if(!b)return V.notFound("The requested insight article could not be found.");
   
-  // Suggest 2 related articles
-  const related = list.filter(x=>x.slug !== b.slug && (x.category === b.category || x.author === b.author)).slice(0, 2);
+  // Suggest 4 related articles for cross-linking
+  const related = list.filter(x=>x.slug !== b.slug && (x.category === b.category || x.author === b.author)).slice(0, 4);
 
   return `<section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
     <a class="btn sm" href="/blog/" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>

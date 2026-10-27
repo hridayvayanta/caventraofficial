@@ -12,6 +12,22 @@ function getRouteParts() {
   return [r || '', s || ''];
 }
 function render(keepScroll = false){const [r,s]=getRouteParts();
+  // Hydration guard: preserve pre-rendered static HTML for search crawlers and initial load
+  if (app && app.innerHTML && app.innerHTML.trim().length > 100) {
+    if (r === 'blog' && s) {
+      const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
+      if (!art && app.querySelector('.article-wrap')) {
+        fx();
+        return;
+      }
+    } else if (r === 'work' && s) {
+      const prj = (S.projects || []).find(x => x.slug === s && x.published);
+      if (!prj && app.querySelector('.service-breadcrumb')) {
+        fx();
+        return;
+      }
+    }
+  }
  let v=r===''?V.home():r==='services'&&s?V.serviceDetail(s):r==='services'?V.services():r==='work'&&s?V.project(s):r==='work'?V.work():r==='blog'&&s?V.article(s):r==='blog'?V.blog():r==='estimator'?V.estimator():r==='404'?V.notFound():V[r]?V[r]():V.notFound();
  const prevY = (typeof window !== 'undefined' && keepScroll) ? window.scrollY : 0;
  app.innerHTML=v;

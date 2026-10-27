@@ -532,7 +532,8 @@ for (const b of blogArticles) {
       'author': {
         '@type': 'Person',
         'name': b.author,
-        'jobTitle': b.authorRole || 'Engineering'
+        'jobTitle': b.authorRole || 'Engineering',
+        'url': `${BASE_URL}/founders/`
       },
       'publisher': {
         '@type': 'Organization',
@@ -544,7 +545,7 @@ for (const b of blogArticles) {
       },
       'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
       'datePublished': '2026-10-01',
-      'dateModified': '2026-10-16'
+      'dateModified': '2026-10-27'
     }
   ];
 
