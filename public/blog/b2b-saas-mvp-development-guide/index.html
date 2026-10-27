@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1316">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="The definitive 6-to-12 week roadmap for engineering a scalable B2B SaaS MVP, covering multi-tenancy database design, RBAC permissions, Stripe webhooks, and capital-efficient development budgets.">
+<meta name="author" content="Caventra">
+<link rel="canonical" href="https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/">
+<meta property="og:site_name" content="Caventra">
+<meta property="og:title" content="How to Build a B2B SaaS MVP in 6 to 12 Weeks: Architecture, Tech Stack & Cost Guide (2026) | Caventra">
+<meta property="og:description" content="The definitive 6-to-12 week roadmap for engineering a scalable B2B SaaS MVP, covering multi-tenancy database design, RBAC permissions, Stripe webhooks, and capital-efficient development budgets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/">
+<meta property="og:image" content="https://caventraofficial.in/assets/og-caventra.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Build a B2B SaaS MVP in 6 to 12 Weeks: Architecture, Tech Stack & Cost Guide (2026) | Caventra">
+<meta name="twitter:description" content="The definitive 6-to-12 week roadmap for engineering a scalable B2B SaaS MVP, covering multi-tenancy database design, RBAC permissions, Stripe webhooks, and capital-efficient development budgets.">
+<meta name="twitter:image" content="https://caventraofficial.in/assets/og-caventra.png">
+<title>How to Build a B2B SaaS MVP in 6 to 12 Weeks: Architecture, Tech Stack & Cost Guide (2026) | Caventra</title>
+<script>if(location.hash&&/^#(?:!\/|\/)?(work|services|about|founders|process|contact|estimator|portal|blog)/i.test(location.hash)){var c=location.hash.replace(/^#(?:!\/|\/)?/,'').replace(/\/$/,'');history.replaceState(null,'',c?'/'+c+'/'+location.search:'/'+location.search);}</script>
+<link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/logo-nav.png" fetchpriority="high">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/favicon-144x144.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Manrope:wght@300;400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=17">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://caventraofficial.in/#website",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "description": "Custom web design, full-stack engineering, cloud hosting, and security for modern businesses."
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://caventraofficial.in/#organization",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://caventraofficial.in/#logo",
+        "url": "https://caventraofficial.in/favicon-512x512.png",
+        "contentUrl": "https://caventraofficial.in/favicon-512x512.png",
+        "caption": "Caventra",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "description": "Caventra is an engineering-focused digital solutions studio building custom websites, cloud hosting, security, and digital software for businesses.",
+      "email": "caventraofficial@gmail.com",
+      "telephone": "+918866790989",
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Ahmedabad, Gujarat, India"
+      },
+      "founder": [
+        {
+          "@type": "Person",
+          "name": "Hriday Vayanta",
+          "jobTitle": "Founder & Head of Growth",
+          "email": "hridayvayanta7@gmail.com",
+          "telephone": "+918866790989",
+          "image": "https://caventraofficial.in/assets/founders/hriday-vayanta.jpg"
+        },
+        {
+          "@type": "Person",
+          "name": "Ved Nimbark",
+          "jobTitle": "Founder & Head of Design",
+          "email": "vednimbark08@gmail.com",
+          "telephone": "+918849186747",
+          "image": "https://caventraofficial.in/assets/founders/ved-nimbark.jpg"
+        },
+        {
+          "@type": "Person",
+          "name": "Sauranahmed Mansuri",
+          "jobTitle": "Founder & Head of Technology",
+          "email": "sauranahmed12345678@gmail.com",
+          "telephone": "+917990652097",
+          "image": "https://caventraofficial.in/assets/founders/sauranahmed-mansuri.jpg"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+918866790989",
+        "contactType": "customer service",
+        "email": "caventraofficial@gmail.com",
+        "areaServed": ["IN", "US", "Worldwide"],
+        "availableLanguage": ["English", "Hindi", "Gujarati"]
+      },
+      "sameAs": [
+        "https://www.instagram.com/caventra__/"
+      ]
+    },
+    {
+      "@type": ["ProfessionalService", "LocalBusiness"],
+      "@id": "https://caventraofficial.in/#localbusiness",
+      "name": "Caventra",
+      "url": "https://caventraofficial.in/",
+      "logo": "https://caventraofficial.in/assets/logo-nav.png",
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "description": "Website Design, Hosting, Security & Custom Software Engineering studio in Ahmedabad, Gujarat, India.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "addressCountry": "IN"
+      },
+      "priceRange": "$$",
+      "telephone": "+918866790989",
+      "email": "caventraofficial@gmail.com"
+    }
+  ]
+}
+</script>
+<script src="/theme.js?v=2"></script><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://caventraofficial.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Insights & Blog",
+          "item": "https://caventraofficial.in/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Build a B2B SaaS MVP in 6 to 12 Weeks: Architecture, Tech Stack & Cost Guide (2026)",
+          "item": "https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/"
+        }
+      ]
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/#article",
+      "headline": "How to Build a B2B SaaS MVP in 6 to 12 Weeks: Architecture, Tech Stack & Cost Guide (2026)",
+      "description": "The definitive 6-to-12 week roadmap for engineering a scalable B2B SaaS MVP, covering multi-tenancy database design, RBAC permissions, Stripe webhooks, and capital-efficient development budgets.",
+      "image": "https://caventraofficial.in/assets/og-caventra.png",
+      "author": {
+        "@type": "Person",
+        "name": "Hriday Vayanta",
+        "jobTitle": "Head of Growth"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Caventra",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://caventraofficial.in/assets/logo-nav.png"
+        }
+      },
+      "mainEntityOfPage": "https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/",
+      "datePublished": "2026-10-01",
+      "dateModified": "2026-10-16"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://caventraofficial.in/blog/b2b-saas-mvp-development-guide/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does it cost to build a B2B SaaS MVP in 2026?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A lean custom B2B SaaS MVP built by a dedicated engineering studio typically ranges from $15,000 to $35,000 (₹12L–₹30L). Highly complex or AI-enabled MVPs range between $50,000 and $100,000+ (₹40L–₹85L)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How fast can a custom B2B SaaS MVP be launched?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With disciplined scoping, a production-ready B2B SaaS MVP can be built, tested, and launched in 6 to 12 weeks through focused two-week development sprints."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between single-tenant and multi-tenant SaaS architecture?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Single-tenant architecture provides an entirely separate database and server instance for each customer, offering maximum isolation at higher infrastructure cost. Multi-tenant architecture shares database tables partitioned by a tenant_id, providing cost-efficiency and unified updates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Should we use no-code tools like Bubble or custom code for our SaaS MVP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No-code tools work for simple consumer prototypes, but B2B SaaS products requiring SOC2 compliance, complex permissions, custom API integrations, or multi-tenant scaling require custom code to avoid expensive rebuilds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the most common technical mistakes founders make with MVPs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The three biggest mistakes are: scope creep (building too many secondary features), failing to architect multi-tenancy data isolation on day one, and neglecting automated, idempotent billing webhook handlers."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head><body>
+<div id="splash" aria-hidden="true"><img id="sp" src="/assets/logo.png" alt="Caventra — Ideas to Impact" width="810" height="445" fetchpriority="high" decoding="sync"></div>
+<nav><div class="wrap"><a href="/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.png" alt="Caventra — Ideas to Impact" width="760" height="355"></a>
+<div class="links" id="lk"><a href="/work/">Work</a><a href="/services/">Services</a><a href="/estimator/">Estimator</a><a href="/about/">About</a><a href="/founders/">Founders</a><a href="/process/">Process</a><a href="/contact/">Contact</a><a href="/portal/" id="nav-portal">Portal</a><a class="btn sm" href="/contact/">Start a Project</a></div>
+<div class="nav-actions">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false" title="Switch to light theme">
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+  </button>
+  <button class="burger" id="bg" aria-label="Toggle navigation menu" aria-expanded="false">Menu</button>
+</div></div></nav>
+<div id="cur" aria-hidden="true"></div><div id="pb" aria-hidden="true"></div><div id="cg" aria-hidden="true"></div>
+<main id="app"><section style="border:0;padding-bottom:32px"><div class="wrap"><div class="article-wrap">
+    <a class="btn sm" href="/blog/" style="margin-bottom:32px;display:inline-flex;align-items:center;gap:6px">← All Insights &amp; Articles</a>
+    <div class="article-meta">
+      <span>Software Engineering &amp; SaaS</span>
+      <span>·</span>
+      <span>October 2026</span>
+      <span>·</span>
+      <span>8 min read</span>
+      <span>·</span><span style="color:var(--gold2)">📍 Global &amp; India</span>
+    </div>
+    <h1 style="font-size:clamp(32px,5.2vw,64px);line-height:1.08;margin-bottom:24px"><span class="w"><span style="--i:0">How</span></span> <span class="w"><span style="--i:1">to</span></span> <span class="w"><span style="--i:2">Build</span></span> <span class="w"><span style="--i:3">a</span></span> <span class="w"><span style="--i:4">B2B</span></span> <span class="w"><span style="--i:5">SaaS</span></span> <span class="w"><span style="--i:6">MVP</span></span> <span class="w"><span style="--i:7">in</span></span> <span class="w"><span style="--i:8">6</span></span> <span class="w"><span style="--i:9">to</span></span> <span class="w"><span style="--i:10">12</span></span> <span class="w"><span style="--i:11">Weeks:</span></span> <span class="w"><span style="--i:12">Architecture,</span></span> <span class="w"><span style="--i:13">Tech</span></span> <span class="w"><span style="--i:14">Stack</span></span> <span class="w"><span style="--i:15">&</span></span> <span class="w"><span style="--i:16">Cost</span></span> <span class="w"><span style="--i:17">Guide</span></span> <span class="w"><span style="--i:18">(2026)</span></span></h1>
+    <p style="font-size:20px;color:var(--gold2);line-height:1.55;margin-bottom:48px">The definitive 6-to-12 week roadmap for engineering a scalable B2B SaaS MVP, covering multi-tenancy database design, RBAC permissions, Stripe webhooks, and capital-efficient development budgets.</p>
+    <div class="article-author">
+      <div class="av">H</div>
+      <div>
+        <b>Hriday Vayanta</b>
+        <p>Head of Growth at Caventra</p>
+      </div>
+    </div>
+    <div class="article-body">
+      
+      <p>Building a successful B2B SaaS product is a race between capital efficiency and market validation. Founders and enterprise innovation leads frequently fall into two traps: spending nine months and hundreds of thousands of dollars over-engineering features nobody wants, or relying on fragile no-code builders that crumble under real commercial workloads.</p>
+
+      <p>A true Minimum Viable Product (MVP) in the B2B market must be enterprise-ready from day one: secure, responsive, and reliable enough to convince paying business clients to trust you with their operational workflows. Here is the architectural blueprint and timeline for shipping a production-grade B2B SaaS MVP in 6 to 12 weeks.</p>
+
+      <h2>1. What is a B2B SaaS MVP? (AEO Definition)</h2>
+      <p><strong>A B2B SaaS MVP (Minimum Viable Product)</strong> is a functional, cloud-hosted software application engineered to solve one specific, high-friction operational problem for business clients. It includes essential commercial infrastructure—such as multi-tenant data isolation, role-based access control (RBAC), and automated subscription billing—allowing founders to onboard paying design partners and validate market demand with minimal capital expenditure.</p>
+
+      <h2>2. Development Cost Spectrum: Choosing the Right Build Strategy</h2>
+      <p>The capital required to build a B2B SaaS MVP depends on architectural complexity and execution model:</p>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Development Route</th>
+              <th>Investment Range</th>
+              <th>Best Used For</th>
+              <th>Key Limitations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>No-Code / Low-Code</strong></td>
+              <td>$5,000 – $15,000<br><small>₹4L – ₹12L</small></td>
+              <td>Validating consumer ideas, non-technical founders, landing page funnels.</td>
+              <td>Platform lock-in, poor performance, high vulnerability risk, impossible to migrate.</td>
+            </tr>
+            <tr>
+              <td><strong>Lean Custom MVP (Recommended)</strong></td>
+              <td>$15,000 – $35,000<br><small>₹12L – ₹30L</small></td>
+              <td>Standard multi-tenant B2B apps, proprietary workflows, SaaS startups.</td>
+              <td>Requires disciplined scoping to focus strictly on the primary problem.</td>
+            </tr>
+            <tr>
+              <td><strong>Complex / AI-Enabled SaaS</strong></td>
+              <td>$50,000 – $100,000+<br><small>₹40L – ₹85L+</small></td>
+              <td>Platforms with autonomous agents, deep enterprise ERP sync, or HIPAA/SOC2 compliance.</td>
+              <td>Longer development cycles (10–16 weeks) and higher operational token costs.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. The 6-to-12 Week Sprint Schedule</h2>
+      <p>Shipping a reliable B2B SaaS product in under 3 months requires strict milestone discipline across six core phases:</p>
+
+      <ol>
+        <li><strong>Weeks 1–2: Discovery, Data Architecture & UI Wireframing</strong>
+          <br>Lock project scope. Map database entity relationships (ERD), user onboarding flows, and design high-fidelity responsive screens in Figma. Choose a proven, lightweight tech stack.
+        </li>
+        <li><strong>Weeks 3–4: Foundations & Multi-Tenancy Architecture</strong>
+          <br>Establish database migrations, configure secure authentication, define organization-level roles (Owner, Admin, Member), and set up automated CI/CD deployment pipelines.
+        </li>
+        <li><strong>Weeks 5–7: Core Proprietary Workflow & Integrations</strong>
+          <br>Engineer the primary value proposition—the specific software mechanism that solves your customer's pain point. Integrate payment gateways (Stripe/Razorpay) with automated webhooks.
+        </li>
+        <li><strong>Weeks 8–9: Admin Dashboard & Security Hardening</strong>
+          <br>Build internal management controls for user accounts, billing status, and platform metrics. Run security audits, input sanitization checks, and cross-browser responsive testing.
+        </li>
+        <li><strong>Weeks 10–12: Soft Launch & Beta Onboarding</strong>
+          <br>Deploy to production cloud infrastructure (AWS/Vercel/Node.js). Onboard your first 5 to 10 pilot clients, collect feedback, monitor error logs, and iterate rapidly.
+        </li>
+      </ol>
+
+      <h2>4. Non-Negotiable Architectural Principles for B2B Software</h2>
+      <p>Cutting corners on basic architecture creates crippling technical debt that stalls growth after launch. Every B2B SaaS must adhere to these four standards:</p>
+
+      <h3>1. Multi-Tenant Data Isolation</h3>
+      <p>In B2B SaaS, Client A must never see Client B's proprietary records. Whether using a shared database with strict <code>tenant_id</code> foreign key enforcement and row-level security (RLS), or dedicated schema-per-tenant isolation, data boundaries must be enforced at the ORM/database level rather than frontend filters.</p>
+
+      <h3>2. Role-Based Access Control (RBAC)</h3>
+      <p>Business clients require organizational hierarchies. Your architecture must support flexible roles (e.g., an Account Owner who manages billing, Managers who invite teammates, and Members with read-only access). Retrofitting permissions into an existing application is extraordinarily expensive.</p>
+
+      <h3>3. Idempotent Billing Webhooks</h3>
+      <p>Subscription billing services like Stripe rely on asynchronous webhooks for upgrades, renewals, and cancellations. Webhooks can fail or be retried multiple times by network timeouts. Implementing idempotent event handlers ensures duplicate webhooks do not double-bill clients or corrupt account statuses.</p>
+
+      <h3>4. Background Task Processing</h3>
+      <p>Heavy operations—such as generating analytical PDF reports, processing bulk CSV imports, or dispatching batched transactional emails—must run in background worker queues (like BullMQ or Celery) so the main web server responds to user clicks in under 200 milliseconds.</p>
+
+      <h2>5. Partnering with Caventra for Your MVP</h2>
+      <p>At Caventra, we build custom digital solutions with clean code, zero framework bloat, and complete transparency. Explore how we engineered real-world software platforms like <a href="/work/">GenResume</a> and <a href="/work/">The Wheel Master</a>, review our <a href="/services/web-development/">web development services</a>, or use our <a href="/estimator/">Website Cost Estimator</a> to calculate your MVP development budget.</p>
+    
+    </div>
+    
+      <div style="margin-top:64px;border-top:1px solid var(--line);padding-top:48px">
+        <h3 style="font-size:22px;margin-bottom:24px;color:var(--gold2)">Related Articles</h3>
+        <div class="blog-grid" style="margin:0">
+          
+            <a class="b-card" href="/blog/how-much-does-a-website-cost-in-india/" style="grid-column:span 6">
+              <div>
+                <div class="meta"><span>Pricing &amp; Strategy</span></div>
+                <h3 style="font-size:20px">How Much Does a Custom Website Cost in India? (2026 Transparent Pricing Guide)</h3>
+                <p style="font-size:14px">An honest, transparent breakdown of website development costs in India across landing pages, small business sites, corporate platforms, and custom web applications.</p>
+              </div>
+              <div class="ftr"><span class="read-link">Read ↗</span></div>
+            </a>
+          
+            <a class="b-card" href="/blog/is-my-website-secure-critical-checks/" style="grid-column:span 6">
+              <div>
+                <div class="meta"><span>Website Security</span></div>
+                <h3 style="font-size:20px">Is My Website Secure? 7 Critical Security Checks Every Business Owner Must Run</h3>
+                <p style="font-size:14px">A non-technical security checklist covering SSL certificates, Content Security Policies, spam bot traps, form sanitization, and automated backups.</p>
+              </div>
+              <div class="ftr"><span class="read-link">Read ↗</span></div>
+            </a>
+          
+        </div>
+      </div>
+    
+    <div class="article-cta">
+      <h3>Have an idea worth building?</h3>
+      <p>Caventra turns digital concepts into scalable software products. Let's discuss your project.</p>
+      <div class="row" style="justify-content:center"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/blog/">Explore All Articles</a></div>
+    </div>
+  </div></div></section></main>
+<footer><div class="wrap">
+  <div class="f-col brand-col">
+    <img id="fl" src="/assets/logo.png" alt="Caventra — Ideas to Impact" width="810" height="445" loading="lazy">
+    <p id="fdesc">A software and digital solutions studio engineering custom web applications, AI workflows, and digital products for scaling businesses.</p>
+  </div>
+  <div class="f-col">
+    <h4>Studio</h4>
+    <a href="/work/">Selected Work</a>
+    <a href="/services/">Our Services</a>
+    <a href="/estimator/">Cost Estimator</a>
+    <a href="/about/">About Caventra</a>
+    <a href="/founders/">Founders</a>
+    <a href="/process/">How We Work</a>
+    <a href="/blog/" class="on">Insights &amp; Blog</a>
+    <a href="/portal/">Client Portal</a>
+    <a href="/contact/">Start a Project ↗</a>
+  </div>
+  <div class="f-col">
+    <h4>Capabilities</h4>
+    <a href="/services/web-development/">Web Development</a>
+    <a href="/services/branding/">Branding &amp; Design</a>
+    <a href="/services/maintenance/">Management &amp; Care</a>
+    <a href="/services/hosting/">Cloud &amp; Hosting</a>
+    <a href="/services/security/">Website Security</a>
+  </div>
+  <div class="f-col">
+    <h4>Connect</h4>
+    <a href="mailto:caventraofficial@gmail.com" class="f-mail">caventraofficial@gmail.com</a>
+    <div class="f-team">
+      <span>Hriday Vayanta <small>· Founder &amp; Head of Growth</small></span>
+      <span>Ved Nimbark <small>· Founder &amp; Head of Design</small></span>
+      <span>Sauranahmed Mansuri <small>· Founder &amp; Head of Technology</small></span>
+    </div>
+    <div id="fsoc"></div>
+  </div>
+  <div class="f-mega-brand" aria-label="CAVENTRA">
+    <span>CAVENTRA</span>
+  </div>
+  <div class="copy">
+    <span>© <span id="yr"></span> Caventra. Built with precision and modern engineering.</span>
+    <div class="legallinks">
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Service</a>
+      <a href="/cookies/">Cookie Policy</a>
+      <a href="/sitemap.xml" target="_blank" rel="noopener">Sitemap</a>
+    </div>
+  </div>
+</div></footer>
+<div id="ckb" role="dialog" aria-live="polite" aria-label="Cookie consent banner" class="hide">
+  <p>We use essential cookies to maintain security and core website functionality. No advertising or tracking cookies are used. Learn more in our <a href="/cookies/">Cookie Policy</a>.</p>
+  <div class="ck-btns">
+    <button class="btn sm solid" id="ck-acc" type="button">Accept</button>
+    <button class="btn sm" id="ck-dec" type="button">Essential Only</button>
+  </div>
+</div>
+<a href="https://wa.me/918866790989?text=Hi%20Caventra,%20I'd%20like%20to%20discuss%20a%20project" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat with Caventra on WhatsApp">
+  <span class="whatsapp-pulse" aria-hidden="true"></span>
+  <svg class="whatsapp-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M16.02 2C8.28 2 2 8.28 2 16.02c0 2.58.7 5.1 2.03 7.3L2 30l6.88-1.99a13.98 13.98 0 0 0 7.14 1.95h.01c7.74 0 14.02-6.28 14.02-14.02 0-3.75-1.46-7.27-4.11-9.92A13.93 13.93 0 0 0 16.02 2zm0 25.63h-.01a11.66 11.66 0 0 1-5.94-1.63l-.43-.25-4.42 1.28 1.27-4.31-.28-.44a11.63 11.63 0 0 1-1.78-6.26c0-6.44 5.24-11.68 11.69-11.68 3.12 0 6.05 1.22 8.26 3.43a11.61 11.61 0 0 1 3.42 8.26c0 6.44-5.24 11.68-11.69 11.68zm6.41-8.76c-.35-.18-2.08-1.03-2.4-1.15-.32-.12-.56-.18-.79.18-.24.35-.91 1.15-1.12 1.39-.21.24-.41.26-.76.09-.35-.18-1.49-.55-2.84-1.75-1.05-.94-1.76-2.09-1.97-2.44-.21-.35-.02-.54.15-.71.16-.16.35-.41.53-.62.18-.21.24-.35.35-.59.12-.24.06-.44-.03-.62-.09-.18-.79-1.91-1.09-2.62-.29-.69-.58-.6-.79-.61h-.68c-.24 0-.62.09-.94.44-.32.35-1.24 1.21-1.24 2.95s1.27 3.42 1.44 3.65c.18.24 2.5 3.82 6.06 5.35.85.37 1.51.59 2.03.75.85.27 1.63.23 2.24.14.69-.1 2.08-.85 2.37-1.67.29-.82.29-1.53.21-1.67-.09-.15-.32-.24-.67-.41z"/>
+  </svg>
+  <span class="whatsapp-tooltip">Chat with us ↗</span>
+</a>
+<script src="/blogs.js?v=10" defer></script>
+<script src="/estimator-config.js?v=1" defer></script>
+<script src="/firebase-config.js?v=1" defer></script>
+<script src="/portal.js?v=1" defer></script>
+<script src="/app.js?v=20" defer></script>
+<script src="/ventrabot.js?v=3" defer></script>
+<script src="/bg-shader.js" defer></script></body></html>
