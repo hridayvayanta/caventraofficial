@@ -252,16 +252,16 @@ const card=p=>{
     <div class="im" style="background-image:url('${esc(cv)}');background-size:cover;background-position:center">
       <div style="background-image:url('${esc(cv)}');background-size:cover;background-position:center"></div>
     </div>
-    <div class="cb">
+    <article class="cb">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <small>${esc(p.category)}</small>
         <span class="project-status-badge ${st.cls}">${esc(st.label)}</span>
       </div>
-      <h3>${esc(p.name)}</h3>
+      <h3 id="case-${esc(p.slug)}">${esc(p.name)}</h3>
       <p>${esc(p.short)}</p>
       <div class="tags">${(p.tech||'').split(',').filter(x=>x.trim()).slice(0,4).map(t=>`<span>${esc(t.trim())}</span>`).join('')}</div>
       <span class="btn sm">View Project ↗</span>
-    </div>
+    </article>
   </a>`;
 };
 const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");

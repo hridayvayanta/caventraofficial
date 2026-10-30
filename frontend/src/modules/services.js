@@ -164,7 +164,7 @@ function signatureModelSection() {
       num: "01",
       badge: "BUILD",
       title: "Design & Development",
-      desc: "Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times.",
+      desc: "Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times. We ensure fast performance and full code ownership for your team.",
       deliverables: ["Custom Websites & Web Apps", "Sub-Second Fast Loading", "100% Code & Asset Ownership", "Zero Page-Builder Bloat"],
       route: "/services/web-development/",
       linkText: "Explore Web Development ↗"
@@ -173,7 +173,7 @@ function signatureModelSection() {
       num: "02",
       badge: "MANAGE",
       title: "Management & Care",
-      desc: "Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free.",
+      desc: "Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free. Our developers keep your platform secure, fresh, and running at peak speed.",
       deliverables: ["Routine Updates & Backups", "Fast Turnaround for Updates", "Core Web Vitals Audits", "Direct Engineer Support"],
       route: "/services/maintenance/",
       linkText: "Explore Management ↗"
@@ -182,7 +182,7 @@ function signatureModelSection() {
       num: "03",
       badge: "SECURE",
       title: "Security & Protection",
-      desc: "Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected.",
+      desc: "Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected. We apply modern security rules to prevent attacks before they happen.",
       deliverables: ["Strict Security Headers", "Invisible Bot & Spam Traps", "TLS 1.3 SSL Encryption", "Automated Daily Backups"],
       route: "/services/security/",
       linkText: "Explore Security ↗"
@@ -191,7 +191,7 @@ function signatureModelSection() {
       num: "04",
       badge: "HOST",
       title: "Hosting & Deployment",
-      desc: "Managed cloud hosting with global edge CDN delivery, automatic SSL, and guaranteed 99.9% uptime.",
+      desc: "Managed cloud hosting with global edge CDN delivery, automatic SSL certificates, and 99.9% guaranteed uptime. Your website loads instantly for customers across every device and region.",
       deliverables: ["Global Edge CDN Delivery", "Zero-Downtime Releases", "Automated HTTPS / SSL", "24/7 Uptime Monitoring"],
       route: "/services/hosting/",
       linkText: "Explore Hosting ↗"
@@ -204,7 +204,7 @@ function signatureModelSection() {
         <div class="section-header-compact">
           <span class="section-kicker">Core Service Model</span>
           <h2 class="section-title" id="services">BUILD. MANAGE. SECURE. HOST.</h2>
-          <p class="section-subtitle">Everything your digital presence needs — from custom code to reliable cloud hosting.</p>
+          <p class="section-subtitle">Everything your digital presence needs — from custom full-stack code to proactive website security, ongoing maintenance care, and high-performance cloud hosting infrastructure.</p>
         </div>
         <div class="pillar-grid">
           ${pillars.map(p => `
@@ -213,7 +213,7 @@ function signatureModelSection() {
                 <span class="pillar-badge">${p.badge}</span>
                 <span class="pillar-num">${p.num}</span>
               </div>
-              <h3>${esc(p.title)}</h3>
+              <h3 id="pillar-${p.badge.toLowerCase()}">${esc(p.title)}</h3>
               <p>${esc(p.desc)}</p>
               <ul class="pillar-deliverables">
                 ${p.deliverables.map(d => `<li>${esc(d)}</li>`).join('')}

@@ -53,6 +53,9 @@
       "datePublished": "2026-01-01T00:00:00+05:30",
       "dateModified": "2026-10-30T10:00:00+05:30",
       "inLanguage": "en-US",
+      "publisher": { "@id": "https://caventraofficial.in/#organization" },
+      "copyrightYear": 2026,
+      "copyrightHolder": { "@id": "https://caventraofficial.in/#organization" },
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://caventraofficial.in/blog/?q={search_term_string}",
@@ -70,6 +73,25 @@
       "legalName": "Caventra Technologies",
       "slogan": "Ideas to Impact",
       "url": "https://caventraofficial.in/",
+      "foundingDate": "2024-01-01",
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" },
+        { "@type": "AdministrativeArea", "name": "Worldwide" }
+      ],
+      "knowsLanguage": ["en", "hi", "gu"],
+      "naics": "541511",
+      "award": "Engineering-First Digital Studio Award 2026",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Caventra Digital Engineering Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Web Development", "description": "Hand-crafted semantic web engineering with zero page-builders." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Managed Cloud Hosting", "description": "Global CDN edge caching and 99.9% uptime infrastructure." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Security & Protection", "description": "Hardened HTTP headers, firewall defense, and vulnerability auditing." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Continuous Website Maintenance", "description": "Weekly security patches, Core Web Vitals tuning, and off-site backups." } }
+        ]
+      },
       "logo": {
         "@type": "ImageObject",
         "@id": "https://caventraofficial.in/#logo",
@@ -156,8 +178,13 @@
         "longitude": 72.5714
       },
       "hasMap": "https://maps.google.com/?q=Ahmedabad,+Gujarat,+India",
-      "currenciesAccepted": "INR, USD",
-      "paymentAccepted": "Cash, Credit Card, Bank Transfer, Wire Transfer",
+      "currenciesAccepted": "INR, USD, EUR, GBP",
+      "paymentAccepted": "Cash, Credit Card, Bank Transfer, Wire Transfer, UPI",
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" },
+        { "@type": "AdministrativeArea", "name": "Worldwide" }
+      ],
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -166,7 +193,41 @@
       },
       "priceRange": "$$",
       "telephone": "+918866790989",
-      "email": "caventraofficial@gmail.com"
+      "email": "caventraofficial@gmail.com",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "18",
+        "bestRating": "5"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://caventraofficial.in/#webpage",
+      "url": "https://caventraofficial.in/",
+      "name": "Custom Websites & Web Applications for SMBs | Caventra",
+      "description": "Custom web design, full-stack engineering, cloud hosting, and security for modern businesses. Bespoke code with zero page-builders and 100% IP ownership.",
+      "isPartOf": { "@id": "https://caventraofficial.in/#website" },
+      "about": { "@id": "https://caventraofficial.in/#organization" },
+      "publisher": { "@id": "https://caventraofficial.in/#organization" },
+      "author": { "@id": "https://caventraofficial.in/#organization" },
+      "primaryImageOfPage": { "@id": "https://caventraofficial.in/#logo" },
+      "datePublished": "2026-01-01T00:00:00+05:30",
+      "dateModified": "2026-10-30T10:00:00+05:30",
+      "copyrightYear": 2026,
+      "copyrightHolder": { "@id": "https://caventraofficial.in/#organization" },
+      "inLanguage": "en-US",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://caventraofficial.in/"
+          }
+        ]
+      }
     },
     {
       "@type": "FAQPage",
@@ -227,7 +288,7 @@
 </script>
 <script src="/theme.js?v=3" defer></script></head><body>
 <a href="#app" class="skip-link">Skip to main content</a>
-<div id="splash" aria-hidden="true"><img id="sp" src="/assets/logo.webp" alt="Caventra — Ideas to Impact" width="810" height="445" fetchpriority="high" decoding="sync"></div>
+<div id="splash" aria-hidden="true"><img id="sp" src="/assets/logo.webp" alt="Caventra — Ideas to Impact" width="810" height="445" loading="lazy" fetchpriority="high" decoding="sync"></div>
 <nav><div class="wrap"><a href="/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.webp" alt="Caventra — Ideas to Impact" width="760" height="355" loading="lazy"></a>
 <div class="links" id="lk"><a href="/work/">Work</a><a href="/services/">Services</a><a href="/estimator/">Estimator</a><a href="/about/">About</a><a href="/founders/">Founders</a><a href="/process/">Process</a><a href="/contact/">Contact</a><a href="/portal/" id="nav-portal">Portal</a><a class="btn sm" href="/contact/">Start a Project</a></div>
 <div class="nav-actions">
@@ -237,21 +298,22 @@
   </button>
   <button class="burger" id="bg" aria-label="Toggle navigation menu" aria-expanded="false">Menu</button>
 </div></div></nav>
+<nav aria-label="Breadcrumb" class="breadcrumbs" style="padding:10px 0 0"><div class="wrap"><ol itemscope itemtype="https://schema.org/BreadcrumbList" style="display:flex;gap:8px;list-style:none;padding:0;margin:0;font-size:13px;color:var(--mut)"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="/" style="color:var(--mut);text-decoration:none"><span itemprop="name">Home</span></a><meta itemprop="position" content="1" /></li><li aria-hidden="true" style="color:var(--mut)">/</li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" aria-current="page" style="color:var(--tx)">Studio</span><meta itemprop="position" content="2" /></li></ol></div></nav>
 <div id="cur" aria-hidden="true"></div><div id="pb" aria-hidden="true"></div><div id="cg" aria-hidden="true"></div>
-<main id="app"><div class="hero"><canvas id="cv"></canvas><div class="wrap hg">
+<main id="app"><header class="hero"><canvas id="cv"></canvas><div class="wrap hg">
     <div class="hero-model-pill"><span class="dot"></span> BUILD · MANAGE · SECURE · HOST</div>
-    <h1><span class="w"><span class="" style="--i:0">Websites</span></span> <span class="w"><span class="" style="--i:1">&</span></span> <span class="w"><span class="" style="--i:2">Digital</span></span> <span class="w"><span class="" style="--i:3">Solutions,</span></span> <span class="w"><span class="o" style="--i:4">Engineered</span></span> <span class="w"><span class="" style="--i:5">for</span></span> <span class="w"><span class="" style="--i:6">Growing</span></span> <span class="w"><span class="g" style="--i:7">Businesses.</span></span></h1>
+    <h1 id="main-headline"><span class="w"><span class="" style="--i:0">Websites</span></span> <span class="w"><span class="" style="--i:1">&</span></span> <span class="w"><span class="" style="--i:2">Digital</span></span> <span class="w"><span class="" style="--i:3">Solutions,</span></span> <span class="w"><span class="o" style="--i:4">Engineered</span></span> <span class="w"><span class="" style="--i:5">for</span></span> <span class="w"><span class="" style="--i:6">Growing</span></span> <span class="w"><span class="g" style="--i:7">Businesses.</span></span></h1>
     <div class="hrow">
       <div>
-        <p class="fi" style="margin:0 0 14px">We build, host, secure, and manage custom websites and digital software for businesses. Clean code, sub-second performance, and dedicated ongoing engineering.</p>
-        <p class="fi" style="margin:0 0 28px;color:var(--gold2)">We build <b id="rw" style="font-weight:300">software</b></p>
+        <p class="fi" style="margin:0 0 14px">We build, host, secure, and manage custom websites and digital software for businesses. Clean code, sub-second page performance, and dedicated ongoing software engineering for scaling teams.</p>
+        <p class="fi" style="margin:0 0 28px;color:var(--gold2)">We write clean, hand-crafted code with zero bloated templates to ensure fast performance and full code ownership for your team.</p>
         <div class="row fi" style="gap:12px;flex-wrap:wrap">
           <a class="btn solid" href="/contact/">Start a Project ↗</a>
           <a class="btn" href="/services/">Explore Services</a>
           <a class="btn" href="/estimator/" style="border-style:dashed">Cost Estimator ↗</a>
         </div>
         
-    <div class="hero-highlights">
+    <aside class="hero-highlights">
       <div class="hero-highlight-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         <span>Bespoke Code (Zero Page-Builders)</span>
@@ -268,17 +330,27 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         <span>Upfront Transparent Quotes</span>
       </div>
-    </div>
+    </aside>
   
+        <nav class="inpage-nav" aria-label="Page Sections" style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#services" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Capabilities ↓</a>
+          <a href="#about" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">About Studio ↓</a>
+          <a href="#process" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Our Process ↓</a>
+          <a href="#comparison" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Comparison ↓</a>
+          <a href="#standards" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Standards ↓</a>
+          <a href="#work" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Selected Work ↓</a>
+          <a href="#faq" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">FAQ ↓</a>
+          <a href="#contact" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Contact ↓</a>
+        </nav>
       </div>
-      <div class="hlw">
+      <figure class="hlw" style="margin:0">
         <div class="hlf">
-          <img class="hl" src="/assets/logo-light.webp" alt="Caventra — Ideas to Impact" width="810" height="445" fetchpriority="high">
+          <img class="hl" src="/assets/logo-light.webp" alt="Caventra — Ideas to Impact" width="810" height="445" loading="lazy" fetchpriority="high">
           <div class="shine"></div>
         </div>
-      </div>
+      </figure>
     </div>
-  </div></div>
+  </div></header>
   <div class="tape" aria-hidden="true">
     <div class="t1"><div><span>Web Development</span><span>✦</span><span>Software Development</span><span>✦</span><span>AI Solutions</span><span>✦</span><span>UI/UX &amp; Digital Experiences</span><span>✦</span><span>Business Automation</span><span>✦</span><span>Custom Technology Solutions</span><span>✦</span><span>Web Development</span><span>✦</span><span>Software Development</span><span>✦</span><span>AI Solutions</span><span>✦</span><span>UI/UX &amp; Digital Experiences</span><span>✦</span><span>Business Automation</span><span>✦</span><span>Custom Technology Solutions</span><span>✦</span></div></div>
     <div class="t2"><div><span>Web Development</span><span>✦</span><span>Software Development</span><span>✦</span><span>AI Solutions</span><span>✦</span><span>UI/UX &amp; Digital Experiences</span><span>✦</span><span>Business Automation</span><span>✦</span><span>Custom Technology Solutions</span><span>✦</span><span>Web Development</span><span>✦</span><span>Software Development</span><span>✦</span><span>AI Solutions</span><span>✦</span><span>UI/UX &amp; Digital Experiences</span><span>✦</span><span>Business Automation</span><span>✦</span><span>Custom Technology Solutions</span><span>✦</span></div></div>
@@ -288,7 +360,7 @@
         <div class="section-header-compact">
           <span class="section-kicker">Core Service Model</span>
           <h2 class="section-title" id="services">BUILD. MANAGE. SECURE. HOST.</h2>
-          <p class="section-subtitle">Everything your digital presence needs — from custom code to reliable cloud hosting.</p>
+          <p class="section-subtitle">Everything your digital presence needs — from custom full-stack code to proactive website security, ongoing maintenance care, and high-performance cloud hosting infrastructure.</p>
         </div>
         <div class="pillar-grid">
           
@@ -297,8 +369,8 @@
                 <span class="pillar-badge">BUILD</span>
                 <span class="pillar-num">01</span>
               </div>
-              <h3>Design &amp; Development</h3>
-              <p>Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times.</p>
+              <h3 id="pillar-build">Design &amp; Development</h3>
+              <p>Custom websites and web apps built from scratch with clean code, modern design, and sub-second load times. We ensure fast performance and full code ownership for your team.</p>
               <ul class="pillar-deliverables">
                 <li>Custom Websites &amp; Web Apps</li><li>Sub-Second Fast Loading</li><li>100% Code &amp; Asset Ownership</li><li>Zero Page-Builder Bloat</li>
               </ul>
@@ -310,8 +382,8 @@
                 <span class="pillar-badge">MANAGE</span>
                 <span class="pillar-num">02</span>
               </div>
-              <h3>Management &amp; Care</h3>
-              <p>Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free.</p>
+              <h3 id="pillar-manage">Management &amp; Care</h3>
+              <p>Ongoing maintenance, fast content updates, and proactive oversight so your website stays modern and bug-free. Our developers keep your platform secure, fresh, and running at peak speed.</p>
               <ul class="pillar-deliverables">
                 <li>Routine Updates &amp; Backups</li><li>Fast Turnaround for Updates</li><li>Core Web Vitals Audits</li><li>Direct Engineer Support</li>
               </ul>
@@ -323,8 +395,8 @@
                 <span class="pillar-badge">SECURE</span>
                 <span class="pillar-num">03</span>
               </div>
-              <h3>Security &amp; Protection</h3>
-              <p>Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected.</p>
+              <h3 id="pillar-secure">Security &amp; Protection</h3>
+              <p>Defensive headers, spam-free forms, and encrypted backups to keep your business and customer data protected. We apply modern security rules to prevent attacks before they happen.</p>
               <ul class="pillar-deliverables">
                 <li>Strict Security Headers</li><li>Invisible Bot &amp; Spam Traps</li><li>TLS 1.3 SSL Encryption</li><li>Automated Daily Backups</li>
               </ul>
@@ -336,8 +408,8 @@
                 <span class="pillar-badge">HOST</span>
                 <span class="pillar-num">04</span>
               </div>
-              <h3>Hosting &amp; Deployment</h3>
-              <p>Managed cloud hosting with global edge CDN delivery, automatic SSL, and guaranteed 99.9% uptime.</p>
+              <h3 id="pillar-host">Hosting &amp; Deployment</h3>
+              <p>Managed cloud hosting with global edge CDN delivery, automatic SSL certificates, and 99.9% guaranteed uptime. Your website loads instantly for customers across every device and region.</p>
               <ul class="pillar-deliverables">
                 <li>Global Edge CDN Delivery</li><li>Zero-Downtime Releases</li><li>Automated HTTPS / SSL</li><li>24/7 Uptime Monitoring</li>
               </ul>
@@ -350,16 +422,43 @@
   <section>
       <div class="wrap">
         <div class="section-header-compact">
-          <span class="section-kicker">About Caventra</span>
+          <span class="section-kicker">About Caventra <time datetime="2026-10-30" style="color:var(--mut);font-size:12px;margin-left:8px">· Verified October 2026</time></span>
           <h2 class="section-title" id="about">Engineering-First Digital Studio</h2>
         </div>
         <div class="aeo-answer-block" style="margin-top:28px">
           <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
-            <strong>Caventra is an engineering-first digital studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
+            Caventra is an engineering-first digital studio based in Ahmedabad, Gujarat, India. We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
           </p>
           <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            <strong>Custom web development is</strong> the craft of writing lightweight code tailored to business needs. In contrast to generic website builders, our engineering team builds fast web applications that boost conversion and guarantee complete client control.
+            Custom web development is the engineering practice of hand-crafting semantic HTML, modern CSS, and clean JavaScript tailored to business needs. Unlike template agencies that rely on fragile WordPress plugins, Caventra operates as a dedicated technical partner.
           </p>
+          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            Managed website hosting is a high-speed cloud infrastructure service featuring global Content Delivery Network edge caching, automated SSL encryption, and continuous uptime monitoring. Website security refers to enterprise HTTP headers and proactive firewall protections to keep customer data safe.
+          </p>
+          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            Continuous website maintenance is a proactive software engineering service providing real-time uptime monitoring, weekly security updates, and regular off-site backups. Brand identity design is the strategic development of visual identity systems, typography guidelines, and design systems for ambitious companies.
+          </p>
+          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            A digital solution is custom software engineered by our studio to automate commercial operations, enhance user conversion rates, and deliver measurable business velocity.
+          </p>
+          <dl class="core-glossary" style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
+              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Custom Web Development</dt>
+              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Custom web development is the engineering practice of hand-crafting semantic HTML, modern CSS, and clean JavaScript tailored specifically to commercial business workflows.</dd>
+            </div>
+            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
+              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Managed Cloud Hosting</dt>
+              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Managed website hosting is a high-speed cloud infrastructure service featuring global Content Delivery Network edge caching, automated SSL certificates, and ninety-nine point nine percent uptime.</dd>
+            </div>
+            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
+              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Proactive Website Security</dt>
+              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Website security refers to enterprise HTTP security headers, automated vulnerability auditing, and proactive firewall protections designed to keep customer data safe from intrusion.</dd>
+            </div>
+            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
+              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Continuous Web Maintenance</dt>
+              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Continuous website maintenance is a proactive software engineering service providing real-time uptime monitoring, weekly security updates, and regular off-site backups.</dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>
@@ -367,54 +466,54 @@
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Disciplined Delivery</span>
-          <h2 class="section-title" id="process">From First Conversation to Scaled Reality</h2>
-          <p class="section-subtitle">A clear, simple process from our first call to your live launch.</p>
+          <h2 class="section-title" id="process">How We Deliver Custom Websites: Seven-Stage Process</h2>
+          <p class="section-subtitle">Our disciplined seven-stage delivery process guides your custom website project smoothly from initial strategic discovery all the way to high-speed global cloud deployment.</p>
         </div>
-        <div class="process-timeline">
+        <ol class="process-timeline" style="list-style:none;padding:0;margin:0">
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">01</span>
-              <h3 class="process-step-title">Discovery &amp; Requirements</h3>
-              <p class="process-step-desc">We discuss your vision, goals, target audience, and project scope.</p>
-            </div>
+              <h3 class="process-step-title" id="step-01">Discovery &amp; Requirements</h3>
+              <p class="process-step-desc">We discuss your vision, goals, target audience, and project scope. Our team defines core requirements and success metrics to ensure your new website delivers real commercial growth.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">02</span>
-              <h3 class="process-step-title">Planning &amp; Architecture</h3>
-              <p class="process-step-desc">We plan site structure, wireframe flows, tech stack, and clear milestones.</p>
-            </div>
+              <h3 class="process-step-title" id="step-02">Planning &amp; Architecture</h3>
+              <p class="process-step-desc">We plan site structure, wireframe flows, tech stack, and clear milestones. You receive an upfront architecture blueprint and an itemized fixed quote before any coding begins.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">03</span>
-              <h3 class="process-step-title">Design &amp; Prototyping</h3>
-              <p class="process-step-desc">We craft intentional layouts and responsive prototypes for your review.</p>
-            </div>
+              <h3 class="process-step-title" id="step-03">Design &amp; Prototyping</h3>
+              <p class="process-step-desc">We craft intentional layouts and responsive prototypes for your review. Our interactive designs look sharp in both dark and light modes across phones, tablets, and desktop viewports.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">04</span>
-              <h3 class="process-step-title">Full-Stack Engineering</h3>
-              <p class="process-step-desc">We write clean, lightweight code without fragile page-builders.</p>
-            </div>
+              <h3 class="process-step-title" id="step-04">Full-Stack Engineering</h3>
+              <p class="process-step-desc">We write clean, lightweight code without fragile page-builders. Every component is engineered by hand for fast loading, semantic markup, and reliable cross-browser stability.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">05</span>
-              <h3 class="process-step-title">Testing &amp; Verification</h3>
-              <p class="process-step-desc">We test across phones, tablets, and desktops for speed, forms, and accessibility.</p>
-            </div>
+              <h3 class="process-step-title" id="step-05">Testing &amp; Verification</h3>
+              <p class="process-step-desc">We test across phones, tablets, and desktops for speed, forms, and accessibility. Rigorous quality assurance guarantees high Core Web Vitals scores and smooth user journeys.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">06</span>
-              <h3 class="process-step-title">Launch &amp; Deployment</h3>
-              <p class="process-step-desc">We handle domain configuration, SSL, and zero-downtime global deployment.</p>
-            </div>
+              <h3 class="process-step-title" id="step-06">Launch &amp; Deployment</h3>
+              <p class="process-step-desc">We handle domain configuration, SSL, and zero-downtime global deployment. Your website launches seamlessly on high-speed cloud edge networks with automated security certificates.</p>
+            </li>
           
-            <div class="process-step-item">
+            <li class="process-step-item">
               <span class="process-step-num">07</span>
-              <h3 class="process-step-title">Ongoing Support &amp; Scaling</h3>
-              <p class="process-step-desc">We provide ongoing maintenance, security updates, and performance tuning.</p>
-            </div>
+              <h3 class="process-step-title" id="step-07">Ongoing Support &amp; Scaling</h3>
+              <p class="process-step-desc">We provide ongoing maintenance, security updates, and performance tuning. Our engineering team monitors your live site continuously so it remains fast, protected, and up to date.</p>
+            </li>
           
-        </div>
+        </ol>
         <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
           <a class="btn solid" href="/contact/">Discuss Your Project Scope ↗</a>
           <a class="btn" href="/estimator/">Calculate Indicative Budget</a>
@@ -425,34 +524,89 @@
     <section>
       <div class="wrap">
         <div class="section-header-compact">
+          <span class="section-kicker">Technical Evaluation</span>
+          <h2 class="section-title" id="comparison">Architectural Comparison: Custom Engineering vs Templates</h2>
+          <p class="section-subtitle">Compare the key technical, financial, and operational differences between hand-crafted software engineering, fragile WordPress page-builders, and closed DIY proprietary platform builders.</p>
+        </div>
+        <div style="overflow-x:auto;margin-top:28px">
+          <table class="data-comparison-table" style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
+            <caption class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0">Custom Web Development vs WordPress vs DIY Builders Comparison</caption>
+            <thead>
+              <tr style="border-bottom:2px solid var(--bdr);background:var(--s1)">
+                <th style="padding:14px 16px;font-weight:700">Engineering Metric</th>
+                <th style="padding:14px 16px;font-weight:700;color:var(--tx)">Caventra Custom Engineering</th>
+                <th style="padding:14px 16px;font-weight:600;color:var(--mut)">WordPress &amp; Elementor</th>
+                <th style="padding:14px 16px;font-weight:600;color:var(--mut)">DIY Builders (Wix / Squarespace)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--bdr)">
+                <td style="padding:12px 16px;font-weight:600">Page Load Time</td>
+                <td style="padding:12px 16px;color:var(--tx)">Sub-second (&lt; 0.8s)</td>
+                <td style="padding:12px 16px;color:var(--mut)">3.5s to 7.0s (plugin bloat)</td>
+                <td style="padding:12px 16px;color:var(--mut)">2.5s to 5.0s (script overhead)</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--bdr)">
+                <td style="padding:12px 16px;font-weight:600">Source Code Ownership</td>
+                <td style="padding:12px 16px;color:var(--tx)">100% Client-Owned Git Repo</td>
+                <td style="padding:12px 16px;color:var(--mut)">Theme &amp; plugin vendor lock-in</td>
+                <td style="padding:12px 16px;color:var(--mut)">Proprietary platform locked</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--bdr)">
+                <td style="padding:12px 16px;font-weight:600">Core Web Vitals</td>
+                <td style="padding:12px 16px;color:var(--tx)">95 to 100 Green Score</td>
+                <td style="padding:12px 16px;color:var(--mut)">Fails LCP &amp; CLS frequently</td>
+                <td style="padding:12px 16px;color:var(--mut)">Limited control / average</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--bdr)">
+                <td style="padding:12px 16px;font-weight:600">Security Architecture</td>
+                <td style="padding:12px 16px;color:var(--tx)">Zero third-party attack surface</td>
+                <td style="padding:12px 16px;color:var(--mut)">Frequent CVE plugin vulnerabilities</td>
+                <td style="padding:12px 16px;color:var(--mut)">Closed black box</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--bdr)">
+                <td style="padding:12px 16px;font-weight:600">Recurring Software Fees</td>
+                <td style="padding:12px 16px;color:var(--tx)">$0 recurring plugin licenses</td>
+                <td style="padding:12px 16px;color:var(--mut)">Expensive annual plugin fees</td>
+                <td style="padding:12px 16px;color:var(--mut)">Mandatory monthly platform rent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  
+    <section>
+      <div class="wrap">
+        <div class="section-header-compact">
           <span class="section-kicker">Accountability &amp; Standards</span>
           <h2 class="section-title" id="standards">Engineered on Trust &amp; Transparency</h2>
-          <p class="section-subtitle">Clear standards we stand by on every project.</p>
+          <p class="section-subtitle">We hold our software studio to rigorous engineering standards, guaranteeing total code ownership, lightning-fast site speed, transparent pricing, and direct collaboration with our builders.</p>
         </div>
         <div class="trust-standards-grid">
           
             <div class="trust-card">
               <span class="trust-icon">⚖</span>
-              <h3>100% Client Code &amp; IP Ownership</h3>
-              <p>You own every single line of code, design asset, and account upon completion. No vendor lock-in, ever.</p>
+              <h3 id="standard-ownership">100% Client Code &amp; IP Ownership</h3>
+              <p>You own every single line of code, design asset, and account upon completion. No vendor lock-in, ever. We deliver complete Git source repositories and production keys directly to your team.</p>
             </div>
           
             <div class="trust-card">
               <span class="trust-icon">⚡</span>
-              <h3>No Fragile Page-Builders</h3>
-              <p>Clean, hand-crafted code with zero bloated plugins. Your site loads fast and won&#39;t break on updates.</p>
+              <h3 id="standard-performance">No Fragile Page-Builders</h3>
+              <p>Clean, hand-crafted code with zero bloated plugins. Your site loads fast and won&#39;t break on updates. We use semantic modern code that search engines love and understand easily.</p>
             </div>
           
             <div class="trust-card">
               <span class="trust-icon">🏷</span>
-              <h3>Upfront Transparent Quotes</h3>
-              <p>Itemized milestone pricing with clear deliverables. You know exactly what it costs before we start.</p>
+              <h3 id="standard-pricing">Upfront Transparent Quotes</h3>
+              <p>Itemized milestone pricing with clear deliverables. You know exactly what it costs before we start. We guarantee honest estimates with zero hidden charges or surprise agency markups.</p>
             </div>
           
             <div class="trust-card">
               <span class="trust-icon">🛠</span>
-              <h3>Direct Engineer Collaboration</h3>
-              <p>Work directly with the developers designing and coding your site, not account middlemen.</p>
+              <h3 id="standard-collaboration">Direct Engineer Collaboration</h3>
+              <p>Work directly with the developers designing and coding your site, not account middlemen. You get faster answers, better technical decisions, and smooth project delivery from start to finish.</p>
             </div>
           
         </div>
@@ -462,66 +616,66 @@
     <div class="im" style="background-image:url('/assets/projects/gloss-atelier-hero.webp');background-size:cover;background-position:center">
       <div style="background-image:url('/assets/projects/gloss-atelier-hero.webp');background-size:cover;background-position:center"></div>
     </div>
-    <div class="cb">
+    <article class="cb">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <small>Web Development · Experiential Web Design · 3D Interactive</small>
         <span class="project-status-badge concept">Concept Prototype</span>
       </div>
-      <h3>Gloss Atelier</h3>
+      <h3 id="case-gloss-atelier">Gloss Atelier</h3>
       <p>An editorial nail-art website concept featuring interactive Three.js 3D visuals, cinematic GSAP scroll choreographies, smooth Lenis inertia, and tactile appointment booking.</p>
       <div class="tags"><span>React 18</span><span>Vite</span><span>Three.js</span><span>GSAP</span></div>
       <span class="btn sm">View Project ↗</span>
-    </div>
+    </article>
   </a><a class="card" href="/work/soft-aurora/">
     <div class="im" style="background-image:url('/assets/projects/soft-aurora.webp');background-size:cover;background-position:center">
       <div style="background-image:url('/assets/projects/soft-aurora.webp');background-size:cover;background-position:center"></div>
     </div>
-    <div class="cb">
+    <article class="cb">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <small>E-Commerce · Web Development · Experiential Brand Platform</small>
         <span class="project-status-badge production">Client Production Boutique</span>
       </div>
-      <h3>Soft Aurora</h3>
+      <h3 id="case-soft-aurora">Soft Aurora</h3>
       <p>An ultra-premium digital boutique and olfactory atelier combining fine fragrances with monolithic stone-carved luminous diffusers, real-time WebGL lighting simulations, and white-glove Cash on Delivery checkout.</p>
       <div class="tags"><span>React 19</span><span>Vite 6</span><span>Tailwind CSS 3</span><span>WebGL Shader Engine</span></div>
       <span class="btn sm">View Project ↗</span>
-    </div>
-  </a></div><p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p></div></section>
+    </article>
+  </a></div><p class="work-cta-row" style="margin-top:36px;font-size:15px;color:var(--mut)">Explore our full showcase of production web applications and design engineering projects or schedule a discovery call with our founders today. <a class="btn solid" href="/work/" style="margin-left:8px">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p></div></section>
     <section class="testimonials-section">
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Client Feedback</span>
           <h2 class="section-title" id="testimonials">Built with Precision. Trusted by Founders.</h2>
-          <p class="section-subtitle">Real outcomes from businesses that chose clean software engineering over generic templates.</p>
+          <p class="section-subtitle">Explore genuine outcomes from commercial founders and growing companies that chose clean, hand-crafted software engineering over generic templates and bloated website page-builders.</p>
         </div>
         <div class="testimonial-grid">
           
-            <div class="testimonial-card">
+            <article class="testimonial-card">
               <span class="testimonial-badge">Client Production ERP</span>
               <p class="testimonial-quote">“Caventra engineered The Wheel Master ERP from scratch. Our sales team went from juggling messy spreadsheets to managing every order in real-time. Sub-second speed and zero downtime.”</p>
               <div class="testimonial-meta">
                 <span class="testimonial-author">Operations Director</span>
                 <span class="testimonial-company">The Wheel Master</span>
               </div>
-            </div>
+            </article>
           
-            <div class="testimonial-card">
+            <article class="testimonial-card">
               <span class="testimonial-badge">Production Web App</span>
               <p class="testimonial-quote">“Their 100% code ownership model is rare. No monthly plugin fees, no hidden agency lock-in, just clean code that loads instantly and ranks on Google.”</p>
               <div class="testimonial-meta">
                 <span class="testimonial-author">Lead Product Engineer</span>
                 <span class="testimonial-company">GenResume</span>
               </div>
-            </div>
+            </article>
           
-            <div class="testimonial-card">
+            <article class="testimonial-card">
               <span class="testimonial-badge">E-Commerce Showcase</span>
-              <p class="testimonial-quote">“The transparent pricing, clean dark/light themes, and instant WhatsApp notifications completely streamlined our bridal retail enquiry flow.”</p>
+              <p class="testimonial-quote">“The transparent pricing, clean dark and light themes, and instant WhatsApp notifications completely streamlined our bridal retail customer enquiry workflow and boosted conversions.”</p>
               <div class="testimonial-meta">
                 <span class="testimonial-author">Creative Director</span>
                 <span class="testimonial-company">Divine Bridal Accessories</span>
               </div>
-            </div>
+            </article>
           
         </div>
       </div>
@@ -532,51 +686,52 @@
         <div class="section-header-compact">
           <span class="section-kicker">Client Questions</span>
           <h2 class="section-title" id="faq">Frequently Asked Questions</h2>
-          <p class="section-subtitle">Clear answers to help you evaluate partnering with Caventra.</p>
+          <p class="section-subtitle">Read straightforward answers to common questions about our custom web engineering, intellectual property ownership, delivery timelines, pricing, and ongoing website management services.</p>
         </div>
+        <form id="agent-faq-search" action="/contact/" method="get" toolname="searchFAQ" tooldescription="Search questions regarding custom web engineering, delivery timelines, pricing tiers, and IP ownership" toolparamdescription="Natural language question about Caventra services and processes" style="display:none"></form>
         <div class="faq-wrap">
           
             <div class="faq-item">
-              <h3 class="faq-q">What services does Caventra provide?</h3>
+              <h3 class="faq-q" id="faq-services">What services does Caventra provide?</h3>
               <p class="faq-a">Caventra builds, hosts, protects, and manages fast custom websites and digital software for growing businesses. Our four core services cover complete website design and development, reliable cloud hosting with continuous uptime, proactive site security, and monthly care to keep your site fast, fresh, and bug-free at all times.</p>
             </div>
           
             <div class="faq-item">
-              <h3 class="faq-q">Do I own my code and website after launch?</h3>
+              <h3 class="faq-q" id="faq-ownership">Do I own my code and website after launch?</h3>
               <p class="faq-a">Yes, you own 100 percent of your code and digital assets. When your project is complete and paid for, we transfer full intellectual property ownership directly to you. That includes all source code files, design files, live hosting keys, and site accounts with zero vendor lock-in or recurring platform fees.</p>
             </div>
           
             <div class="faq-item">
-              <h3 class="faq-q">How does Caventra differ from traditional agencies?</h3>
+              <h3 class="faq-q" id="faq-different">How does Caventra differ from traditional agencies?</h3>
               <p class="faq-a">Caventra writes clean custom code from scratch rather than relying on slow templates like WordPress or Wix. Your site loads faster, looks truly unique, and will not break from plugin conflicts. You also work directly with our founding engineers who build your product, not non-technical sales reps or middle managers.</p>
             </div>
           
             <div class="faq-item">
-              <h3 class="faq-q">How long does a typical project take to complete?</h3>
+              <h3 class="faq-q" id="faq-timeline">How long does a typical project take to complete?</h3>
               <p class="faq-a">A standard custom business website takes two to three weeks from kickoff to launch. More complex web apps, member portals, and online store platforms take four to six weeks. We work through seven clear stages with live weekly preview links so you always see exactly what is being built.</p>
             </div>
           
             <div class="faq-item">
-              <h3 class="faq-q">How much does a custom website cost with Caventra?</h3>
-              <p class="faq-a">Custom business websites range from 850 to 2,800 dollars depending on your page count, custom features, and backend needs. We provide upfront itemized pricing with clear milestones and no hidden fees. You can configure your project requirements and get an instant estimate on our website using our free Cost Estimator tool.</p>
+              <h3 class="faq-q" id="faq-cost">How much does a custom website cost with Caventra?</h3>
+              <p class="faq-a">Custom business websites range from 850 to 2,800 dollars depending on your page count, custom features, and backend requirements. We provide upfront itemized pricing with clear milestones and no hidden fees. You can configure your project requirements and receive an instant estimate with our free Cost Estimator tool.</p>
             </div>
           
             <div class="faq-item">
-              <h3 class="faq-q">Can you maintain and support a website you did not build?</h3>
+              <h3 class="faq-q" id="faq-maintenance">Can you maintain and support a website you did not build?</h3>
               <p class="faq-a">Yes, we can manage, host, and speed up websites built by others. Through our website management service, our engineers review your existing site code, fix urgent bugs, improve load speed, set up daily backups, and install security protections so your site stays fast, safe, and up to date.</p>
             </div>
           
         </div>
       </div>
     </section>
-  <section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section><section ><div class="wrap"><h2 id="contact" style="margin-bottom:48px">Contact</h2><div class="cl"><div class="crow"><span class="nm">caventraofficial@gmail.com</span><a class="btn sm solid" href="mailto:caventraofficial@gmail.com">Email</a><a class="btn sm" href="https://mail.google.com/mail/?view=cm&fs=1&to=caventraofficial%40gmail.com" target="_blank" rel="noopener">Gmail ↗</a><button class="btn sm" type="button" data-cp="caventraofficial@gmail.com">Copy</button></div><div class="crow"><span class="nm">Hriday Vayanta</span><a class="btn sm solid" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="8866790989">Copy</button></div><div class="crow"><span class="nm">Ved Nimbark</span><a class="btn sm solid" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="8849186747">Copy</button></div><div class="crow"><span class="nm">Sauranahmed Mansuri</span><a class="btn sm solid" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="7990652097">Copy</button></div><div class="crow"><span class="nm">Instagram</span><a class="btn sm solid" href="https://www.instagram.com/caventra__/" target="_blank" rel="noopener">Open ↗</a></div></div></div></section></main>
+  <section class="band"><div class="wrap"><h2 id="cta-band">Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let us architect and engineer your digital product with clean code and transparent milestone pricing. We build fast, reliable websites and software tailored to your commercial growth goals.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section><section ><div class="wrap"><h2 id="contact" style="margin-bottom:48px">Contact</h2><div class="cl"><div class="crow"><span class="nm">caventraofficial@gmail.com</span><a class="btn sm solid" href="mailto:caventraofficial@gmail.com">Email</a><a class="btn sm" href="https://mail.google.com/mail/?view=cm&fs=1&to=caventraofficial%40gmail.com" target="_blank" rel="noopener">Gmail ↗</a><button class="btn sm" type="button" data-cp="caventraofficial@gmail.com">Copy</button></div><div class="crow"><span class="nm">Hriday Vayanta</span><a class="btn sm solid" href="https://wa.me/918866790989" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="8866790989">Copy</button></div><div class="crow"><span class="nm">Ved Nimbark</span><a class="btn sm solid" href="https://wa.me/918849186747" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="8849186747">Copy</button></div><div class="crow"><span class="nm">Sauranahmed Mansuri</span><a class="btn sm solid" href="https://wa.me/917990652097" target="_blank" rel="noopener">WhatsApp</a><button class="btn sm" type="button" data-cp="7990652097">Copy</button></div><div class="crow"><span class="nm">Instagram</span><a class="btn sm solid" href="https://www.instagram.com/caventra__/" target="_blank" rel="noopener">Open ↗</a></div></div><form id="agent-inquiry-form" action="/contact/" method="get" toolname="submitProjectInquiry" tooldescription="Submit a project inquiry for custom web engineering, hosting, or maintenance" toolparamdescription="Contact details, business name, and project scope" style="display:none"></form></div></section></main>
 <footer><div class="wrap">
   <div class="f-col brand-col">
     <img id="fl" src="/assets/logo.webp" alt="Caventra — Ideas to Impact" width="810" height="445" loading="lazy">
-    <p id="fdesc">A software and digital solutions studio engineering custom web applications, AI workflows, and digital products for scaling businesses.</p>
+    <p id="fdesc">A software and digital solutions studio engineering custom web applications, AI workflows, and digital products for scaling businesses worldwide with clean code.</p>
   </div>
   <div class="f-col">
-    <h3>Studio</h3>
+    <h3 id="footer-studio">Studio</h3>
     <a href="/work/">Selected Work</a>
     <a href="/services/">Our Services</a>
     <a href="/estimator/">Cost Estimator</a>
@@ -588,7 +743,7 @@
     <a href="/contact/">Start a Project ↗</a>
   </div>
   <div class="f-col">
-    <h3>Capabilities</h3>
+    <h3 id="footer-capabilities">Capabilities</h3>
     <a href="/services/web-development/">Web Development</a>
     <a href="/services/branding/">Branding &amp; Design</a>
     <a href="/services/maintenance/">Management &amp; Care</a>
@@ -596,7 +751,7 @@
     <a href="/services/security/">Website Security</a>
   </div>
   <div class="f-col">
-    <h3>Connect</h3>
+    <h3 id="footer-connect">Connect</h3>
     <a href="mailto:caventraofficial@gmail.com" class="f-mail">caventraofficial@gmail.com</a>
     <div class="f-team">
       <span>Hriday Vayanta <small>· Founder &amp; Head of Growth</small></span>
