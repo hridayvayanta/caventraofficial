@@ -738,6 +738,11 @@ for (const r of routes) {
   const bodyContent = r.render();
   html = html.replace('<main id="app"></main>', `<main id="app">${bodyContent}</main>`);
 
+  // Inject blogs.js specifically for blog routes to keep other pages 100% lightweight
+  if (r.urlPath.startsWith('blog')) {
+    html = html.replace('</body>', '<script src="/blogs.js?v=10" defer></script>\n</body>');
+  }
+
   // Output paths
   if (r.urlPath === '') {
     // Root index.html

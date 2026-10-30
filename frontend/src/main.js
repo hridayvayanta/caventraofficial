@@ -355,9 +355,15 @@ if(typeof window!=='undefined'){
       }
     }
   });
+  document.addEventListener('mouseover', e => {
+    const a = e.target && e.target.closest && e.target.closest('a[href*="/blog"]');
+    if (a && typeof ensureBlogsLoaded === 'function') ensureBlogsLoaded();
+  }, { passive: true });
 }
 render();
 const norm=()=>{if(!S.socials||!S.socials.length)S.socials=D.socials.slice();S.contact=Object.assign({},D.contact,Object.fromEntries(Object.entries(S.contact||{}).filter(([k,v])=>v)));if(Array.isArray(S.projects)){S.projects.forEach(p=>{if(!p.cover||!p.cover.trim()){const m=D.projects.find(x=>x.slug===p.slug||x.name===p.name);if(m&&m.cover)p.cover=m.cover;}});}};
 async function loadAdmin(){const r=await fetch('/api/admin/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const q=await fetch('/api/admin/inquiries');if(q.ok)INQ=await q.json()}
 async function doLogin(e){e.preventDefault();const m=$('#lm');try{const r=await fetch('/api/admin/login',{method:'POST',headers:H,body:JSON.stringify({password:$('#lp').value})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Login failed');owner=true;await loadAdmin();render()}catch(x){m.textContent=x.message}}
-(async()=>{try{const r=await fetch('/api/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const m=await (await fetch('/api/admin/me')).json();if(m.admin){owner=true;await loadAdmin()}}catch(x){}render()})();
+if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  (async()=>{try{const r=await fetch('/api/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const m=await (await fetch('/api/admin/me')).json();if(m.admin){owner=true;await loadAdmin()}}catch(x){}render()})();
+}

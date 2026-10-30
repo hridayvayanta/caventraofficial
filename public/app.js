@@ -805,22 +805,6 @@ home:()=>{
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
   + homepageTestimonialsSection()
   + homepageFAQSection()
-  + wrapS("Latest Insights &amp; Engineering", `
-    <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
-    <div class="blog-grid" style="margin:0">
-      ${getB().slice(0,3).map(b=>`
-        <a class="b-card" href="/blog/${esc(b.slug)}/" style="grid-column:span 4">
-          <div>
-            <div class="meta"><span>${esc(b.category)}</span><span class="dot-sep"></span><span>${esc(b.readTime)}</span></div>
-            <h3 style="font-size:20px">${esc(b.title)}</h3>
-            <p style="font-size:15px;line-height:1.55">${esc(b.summary)}</p>
-          </div>
-          <div class="ftr"><span class="tag">${esc(b.author)}</span><span class="read-link">Read ↗</span></div>
-        </a>
-      `).join('')}
-    </div>
-    <p style="margin-top:36px"><a class="btn" href="/blog/">Explore All Articles ↗</a></p>
-  `)
   + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
   + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
 },
@@ -1974,14 +1958,40 @@ function getRouteParts() {
   const [r, s] = p.split('/');
   return [r || '', s || ''];
 }
+let blogsLoading = false;
+function ensureBlogsLoaded() {
+  if (typeof window === 'undefined') return;
+  if (window.BLOGS && window.BLOGS.length) return;
+  if (blogsLoading) return;
+  blogsLoading = true;
+  const scr = document.createElement('script');
+  scr.src = '/blogs.js?v=10';
+  scr.defer = true;
+  scr.onload = () => {
+    blogsLoading = false;
+    const [curR] = getRouteParts();
+    if (curR === 'blog') render(true);
+  };
+  scr.onerror = () => { blogsLoading = false; };
+  document.body.appendChild(scr);
+}
+
 function render(keepScroll = false){const [r,s]=getRouteParts();
+  if (r === 'blog') ensureBlogsLoaded();
   // Hydration guard: preserve pre-rendered static HTML for search crawlers and initial load
   if (app && app.innerHTML && app.innerHTML.trim().length > 100) {
-    if (r === 'blog' && s) {
-      const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
-      if (!art && app.querySelector('.article-wrap')) {
-        fx();
-        return;
+    if (r === 'blog') {
+      if (s) {
+        const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
+        if (!art && app.querySelector('.article-wrap')) {
+          fx();
+          return;
+        }
+      } else {
+        if ((!window.BLOGS || !window.BLOGS.length) && (app.querySelector('.blog-grid') || app.querySelector('.blog-crawl-index'))) {
+          fx();
+          return;
+        }
       }
     } else if (r === 'work' && s) {
       const prj = (S.projects || []).find(x => x.slug === s && x.published);
@@ -2488,9 +2498,15 @@ if(typeof window!=='undefined'){
       }
     }
   });
+  document.addEventListener('mouseover', e => {
+    const a = e.target && e.target.closest && e.target.closest('a[href*="/blog"]');
+    if (a && typeof ensureBlogsLoaded === 'function') ensureBlogsLoaded();
+  }, { passive: true });
 }
 render();
 const norm=()=>{if(!S.socials||!S.socials.length)S.socials=D.socials.slice();S.contact=Object.assign({},D.contact,Object.fromEntries(Object.entries(S.contact||{}).filter(([k,v])=>v)));if(Array.isArray(S.projects)){S.projects.forEach(p=>{if(!p.cover||!p.cover.trim()){const m=D.projects.find(x=>x.slug===p.slug||x.name===p.name);if(m&&m.cover)p.cover=m.cover;}});}};
 async function loadAdmin(){const r=await fetch('/api/admin/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const q=await fetch('/api/admin/inquiries');if(q.ok)INQ=await q.json()}
 async function doLogin(e){e.preventDefault();const m=$('#lm');try{const r=await fetch('/api/admin/login',{method:'POST',headers:H,body:JSON.stringify({password:$('#lp').value})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Login failed');owner=true;await loadAdmin();render()}catch(x){m.textContent=x.message}}
-(async()=>{try{const r=await fetch('/api/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const m=await (await fetch('/api/admin/me')).json();if(m.admin){owner=true;await loadAdmin()}}catch(x){}render()})();
+if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  (async()=>{try{const r=await fetch('/api/site');if(r.ok){S=Object.assign(JSON.parse(JSON.stringify(D)),await r.json());norm()}const m=await (await fetch('/api/admin/me')).json();if(m.admin){owner=true;await loadAdmin()}}catch(x){}render()})();
+}

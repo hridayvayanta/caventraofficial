@@ -11,14 +11,40 @@ function getRouteParts() {
   const [r, s] = p.split('/');
   return [r || '', s || ''];
 }
+let blogsLoading = false;
+function ensureBlogsLoaded() {
+  if (typeof window === 'undefined') return;
+  if (window.BLOGS && window.BLOGS.length) return;
+  if (blogsLoading) return;
+  blogsLoading = true;
+  const scr = document.createElement('script');
+  scr.src = '/blogs.js?v=10';
+  scr.defer = true;
+  scr.onload = () => {
+    blogsLoading = false;
+    const [curR] = getRouteParts();
+    if (curR === 'blog') render(true);
+  };
+  scr.onerror = () => { blogsLoading = false; };
+  document.body.appendChild(scr);
+}
+
 function render(keepScroll = false){const [r,s]=getRouteParts();
+  if (r === 'blog') ensureBlogsLoaded();
   // Hydration guard: preserve pre-rendered static HTML for search crawlers and initial load
   if (app && app.innerHTML && app.innerHTML.trim().length > 100) {
-    if (r === 'blog' && s) {
-      const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
-      if (!art && app.querySelector('.article-wrap')) {
-        fx();
-        return;
+    if (r === 'blog') {
+      if (s) {
+        const art = (typeof getB === 'function' ? getB() : []).find(x => x.slug === s);
+        if (!art && app.querySelector('.article-wrap')) {
+          fx();
+          return;
+        }
+      } else {
+        if ((!window.BLOGS || !window.BLOGS.length) && (app.querySelector('.blog-grid') || app.querySelector('.blog-crawl-index'))) {
+          fx();
+          return;
+        }
       }
     } else if (r === 'work' && s) {
       const prj = (S.projects || []).find(x => x.slug === s && x.published);

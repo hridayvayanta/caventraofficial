@@ -53,22 +53,6 @@ home:()=>{
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
   + homepageTestimonialsSection()
   + homepageFAQSection()
-  + wrapS("Latest Insights &amp; Engineering", `
-    <p style="margin-bottom:32px;font-size:18px">Technical perspectives on custom software engineering, applied AI, and digital product design.</p>
-    <div class="blog-grid" style="margin:0">
-      ${getB().slice(0,3).map(b=>`
-        <a class="b-card" href="/blog/${esc(b.slug)}/" style="grid-column:span 4">
-          <div>
-            <div class="meta"><span>${esc(b.category)}</span><span class="dot-sep"></span><span>${esc(b.readTime)}</span></div>
-            <h3 style="font-size:20px">${esc(b.title)}</h3>
-            <p style="font-size:15px;line-height:1.55">${esc(b.summary)}</p>
-          </div>
-          <div class="ftr"><span class="tag">${esc(b.author)}</span><span class="read-link">Read ↗</span></div>
-        </a>
-      `).join('')}
-    </div>
-    <p style="margin-top:36px"><a class="btn" href="/blog/">Explore All Articles ↗</a></p>
-  `)
   + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
   + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
 },
