@@ -13,6 +13,28 @@ const D={
 },
  desc:"A software and digital solutions studio. We turn ideas into powerful digital products.",
  projects:[
+  {
+    "name": "Gloss Atelier",
+    "slug": "gloss-atelier",
+    "category": "Web Development · Experiential Web Design · 3D Interactive",
+    "short": "An editorial nail-art website concept featuring interactive Three.js 3D visuals, cinematic GSAP scroll choreographies, smooth Lenis inertia, and tactile appointment booking.",
+    "tech": "React 18, Vite, Three.js, GSAP, ScrollTrigger, Lenis, Tailwind CSS, HTML5 Canvas 2D",
+    "client": "Independent nail-art brand concept · Client identity undisclosed (Location not yet verified)",
+    "overview": "Gloss Atelier is a speculative luxury web concept crafted to explore modern editorial beauty experiences. The platform merges bespoke nail artistry with interactive Three.js 3D visualisations, silky GSAP scroll choreographies, and tactile appointment flows.\n\nDesigned as an exploration of elevated digital presence for high-end boutique services, Gloss Atelier demonstrates how fluid animations, thoughtful typography hierarchies, and reduced-motion accessibility transform routine appointment booking into an aspirational sensory journey.",
+    "challenge": "Independent beauty studios and high-end nail ateliers typically rely on generic social media links or rigid template booking pages that fail to reflect the craftsmanship, texture, and bespoke artistry of their work.",
+    "solution": "Caventra engineered a high-fidelity interactive concept combining hardware-accelerated 3D visualisations with frictionless WhatsApp inquiry integrations, cinematic typography, and responsive micro-interactions across mobile and desktop viewports.",
+    "features": "Interactive 3D Visualisations — Real-time Three.js spatial simulations capturing dynamic specular highlights and textures\nCinematic GSAP Choreography — Fluid ScrollTrigger transitions engineered with Lenis smooth-scroll inertia\nEditorial Service Showcase — Curated treatment menus detailing structural manicures, bespoke extensions, and nail art tiers\nTactile WhatsApp Enquiry Flow — Direct booking integration connecting prospective clients directly with studio artists\nMobile-First Performance — Sub-second interaction latency with reduced-motion accessibility compliance and responsive layout scaling",
+    "results": "Engineered as an internal portfolio concept showcasing advanced 3D web capabilities, responsive animation choreography, and luxury retail UI/UX design. Status: Concept Prototype (No client endorsement claimed).",
+    "live": "https://hridayvayanta.github.io/testimonial-project-for-caventra/",
+    "github": "",
+    "cover": "/assets/projects/gloss-atelier-hero.png",
+    "gallery": [
+      "/assets/projects/gloss-atelier-full.png",
+      "/assets/projects/gloss-atelier-mobile.png"
+    ],
+    "published": true,
+    "featured": true
+  },
 {
     "name": "Soft Aurora",
     "slug": "soft-aurora",
