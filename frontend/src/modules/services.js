@@ -22,7 +22,7 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "03", title: "Development", desc: "We write clean, lightweight code and connect custom features." },
       { num: "04", title: "Launch", desc: "We audit speed, verify forms, configure DNS, and deploy live." }
     ],
-    projectSlugs: ["the-wheel-master", "genresume", "divine-bridal-accessories"],
+    projectSlugs: ["soft-aurora", "gloss-atelier"],
     whoItsFor: "Growing SMEs, founders, service businesses, and e-commerce brands looking to eliminate slow page-builders and invest in a fast, bespoke digital platform that converts.",
     pricingTier: "Bespoke projects starting from ₹25,000 / $450",
     faqs: [
@@ -54,7 +54,7 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "03", title: "Refinement", desc: "We test chosen designs across dark and light formats and lock in colors." },
       { num: "04", title: "Delivery", desc: "We export production-ready vector assets and your brand style guide." }
     ],
-    projectSlugs: ["divine-bridal-accessories", "ironforge-fitness-store"],
+    projectSlugs: ["soft-aurora", "gloss-atelier"],
     whoItsFor: "Modern startups, established firms undergoing a rebrand, and companies requiring an authoritative visual identity, logo suite, typographic system, and UI guidelines.",
     pricingTier: "Brand packages starting from ₹20,000 / $350",
     faqs: [
@@ -85,7 +85,7 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "03", title: "Routine Care", desc: "We apply scheduled updates, run security scans, and monitor uptime." },
       { num: "04", title: "On-Demand Tasks", desc: "We implement new features, pages, and content updates as your business grows." }
     ],
-    projectSlugs: ["the-wheel-master", "crm-platform"],
+    projectSlugs: ["soft-aurora", "gloss-atelier"],
     whoItsFor: "Business owners who want peace of mind knowing their website is continuously monitored, updated with fresh content within 24–48 hours, patched, and running smoothly.",
     pricingTier: "Care plans starting from ₹4,500/month / $85/month",
     faqs: [
@@ -116,7 +116,7 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "03", title: "SSL & Security", desc: "We enforce modern HTTPS encryption and DDoS protection." },
       { num: "04", title: "Monitoring", desc: "We activate automated health checks to ensure continuous 99.9% uptime." }
     ],
-    projectSlugs: ["plinth", "the-wheel-master"],
+    projectSlugs: ["soft-aurora", "gloss-atelier"],
     whoItsFor: "Organizations seeking guaranteed 99.9% uptime, global CDN edge caching, automated SSL encryption, and direct client account ownership without slow shared server headaches.",
     pricingTier: "Cloud edge hosting starting from ₹1,500/month / $30/month",
     faqs: [
@@ -147,7 +147,7 @@ const CAVENTRA_SERVICES_DATA = {
       { num: "03", title: "Bot Protection", desc: "We install invisible honeypots on contact forms to stop spam cold." },
       { num: "04", title: "Backup Setup", desc: "We set up automated backup schedules and verify restore procedures." }
     ],
-    projectSlugs: ["the-wheel-master", "crm-platform"],
+    projectSlugs: ["soft-aurora", "gloss-atelier"],
     whoItsFor: "Websites and web applications handling client inquiries, customer data, or payments that need hardened CSP headers, invisible bot mitigation, and defenses against spam and injection.",
     pricingTier: "Security hardening starting from ₹15,000 / $280",
     faqs: [

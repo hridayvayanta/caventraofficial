@@ -91,11 +91,8 @@ test('Change 1: Homepage hero contains headline "Websites & Digital Solutions, E
 test('Change 2: Portfolio has category filters, honest status badges, and structured case study layout', () => {
   const js = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
   assert.ok(js.includes('work-filter-wrap'), 'Portfolio has category filter buttons wrap');
-  assert.ok(js.includes('Client Production ERP'), 'Wheel Master identified as Client Production ERP');
-  assert.ok(js.includes('In Active Development'), 'PLINTH identified as In Active Development');
-  assert.ok(js.includes('Production Web App'), 'GenResume identified as Production Web App');
-  assert.ok(js.includes('Developer Showcase'), 'Personal Portfolio identified as Developer Showcase');
-  assert.ok(js.includes('Concept Prototype'), 'Other projects honestly identified as Concept Prototype');
+  assert.ok(js.includes('Client Production Boutique'), 'Soft Aurora identified as Client Production Boutique');
+  assert.ok(js.includes('Concept Prototype'), 'Gloss Atelier honestly identified as Concept Prototype');
   assert.ok(js.includes('The Business Challenge'), 'Case study has dedicated Challenge section');
   assert.ok(js.includes('Engineered Solution'), 'Case study has dedicated Solution section');
   assert.ok(js.includes('Key Features &amp; Technical Capabilities'), 'Case study has dedicated Features list');

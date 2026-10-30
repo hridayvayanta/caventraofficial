@@ -243,10 +243,6 @@ const prc=()=>`<div class="steps">${S.process.map((s,i)=>`<div><b>${String(i+1).
 const getCover=p=>((p.cover&&/^(https?:|\/_blob\/|\/assets\/|\/uploads\/|data:image)/.test(p.cover))?p.cover:((D.projects.find(x=>x.slug===p.slug||x.name===p.name)||{}).cover||''));
 const getProjectStatus=(p)=>{
   if(p.slug==='soft-aurora')return{label:'Client Production Boutique',cls:'production'};
-  if(p.slug==='the-wheel-master')return{label:'Client Production ERP',cls:'production'};
-  if(p.slug==='plinth')return{label:'In Active Development',cls:'active-dev'};
-  if(p.slug==='genresume')return{label:'Production Web App',cls:'production'};
-  if(p.slug==='personal-portfolio-website')return{label:'Developer Showcase',cls:'concept'};
   return{label:'Concept Prototype',cls:'concept'};
 };
 const card=p=>{
