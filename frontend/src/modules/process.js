@@ -22,7 +22,7 @@ function deliveryProcessSection() {
           ${steps.map(s => `
             <div class="process-step-item">
               <span class="process-step-num">${s.num}</span>
-              <h4 class="process-step-title">${esc(s.title)}</h4>
+              <h3 class="process-step-title">${esc(s.title)}</h3>
               <p class="process-step-desc">${esc(s.desc)}</p>
             </div>
           `).join('')}
@@ -72,7 +72,7 @@ function trustStandardsSection() {
           ${standards.map(s => `
             <div class="trust-card">
               <span class="trust-icon">${s.icon}</span>
-              <h4>${esc(s.title)}</h4>
+              <h3>${esc(s.title)}</h3>
               <p>${esc(s.desc)}</p>
             </div>
           `).join('')}
@@ -85,20 +85,28 @@ function trustStandardsSection() {
 function homepageFAQSection() {
   const faqs = [
     {
+      q: "What services does Caventra provide?",
+      a: "Caventra provides end-to-end digital software engineering through four core pillars: BUILD (custom website design and full-stack web applications), MANAGE (routine maintenance, content updates, and Core Web Vitals optimization), SECURE (enterprise HTTP headers, spam defense, and encrypted backups), and HOST (global edge CDN cloud hosting with 99.9% uptime)."
+    },
+    {
       q: "Do I own my code and website after launch?",
-      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you."
+      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you with zero vendor lock-in. You receive full intellectual property ownership, source repositories, production builds, and host account access."
     },
     {
       q: "How does Caventra differ from traditional agencies?",
-      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break."
+      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break from third-party plugin conflicts. You collaborate directly with our founding engineers rather than non-technical account managers."
     },
     {
       q: "How long does a typical project take to complete?",
-      a: "Standard business websites take 2 to 3 weeks. Custom web apps and complex platforms take 4 to 6 weeks."
+      a: "Standard business websites take 2 to 3 weeks from discovery kickoff to production launch. Custom web applications, interactive portals, and complex e-commerce platforms take 4 to 6 weeks, delivered across seven disciplined milestone stages."
+    },
+    {
+      q: "How much does a custom website cost with Caventra?",
+      a: "Custom business websites range from $850 to $2,800 depending on interactive scope, custom animations, and backend requirements. We offer transparent upfront milestone pricing with zero hidden fees. You can calculate an instant estimate using our interactive Website Cost Estimator."
     },
     {
       q: "Can you maintain and support a website you didn't build?",
-      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, and provide regular maintenance and hosting."
+      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, optimize Core Web Vitals, and provide ongoing maintenance, security patching, and managed cloud hosting."
     }
   ];
 
@@ -113,7 +121,7 @@ function homepageFAQSection() {
         <div class="faq-wrap">
           ${faqs.map(f => `
             <div class="faq-item">
-              <div class="faq-q">${esc(f.q)}</div>
+              <h3 class="faq-q">${esc(f.q)}</h3>
               <p class="faq-a">${esc(f.a)}</p>
             </div>
           `).join('')}

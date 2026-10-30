@@ -27,11 +27,11 @@ const D={
     "results": "Engineered as an internal portfolio concept showcasing advanced 3D web capabilities, responsive animation choreography, and luxury retail UI/UX design. Status: Concept Prototype (No client endorsement claimed).",
     "live": "https://hridayvayanta.github.io/testimonial-project-for-caventra/",
     "github": "",
-    "cover": "/assets/projects/gloss-atelier-hero.png",
+    "cover": "/assets/projects/gloss-atelier-hero.webp",
     "gallery": [
-      "/assets/projects/gloss-atelier-services.png",
-      "/assets/projects/gloss-atelier-story.png",
-      "/assets/projects/gloss-atelier-booking.png"
+      "/assets/projects/gloss-atelier-services.webp",
+      "/assets/projects/gloss-atelier-story.webp",
+      "/assets/projects/gloss-atelier-booking.webp"
     ],
     "published": true,
     "featured": true
@@ -50,11 +50,11 @@ const D={
     "results": "Transformed high-luxury fragrance retail into an experiential digital atelier. Eliminated cart abandonment by integrating doorstep physical inspection with cash/card handover, achieving elevated patron conversion and establishing Soft Aurora as a benchmark in interactive spatial commerce.",
     "live": "",
     "github": "",
-    "cover": "/assets/projects/soft-aurora.png",
+    "cover": "/assets/projects/soft-aurora.webp",
     "gallery": [
-      "/assets/projects/soft-aurora-scent-selector.png",
-      "/assets/projects/soft-aurora-diffuser.png",
-      "/assets/projects/soft-aurora-checkout.png"
+      "/assets/projects/soft-aurora-scent-selector.webp",
+      "/assets/projects/soft-aurora-diffuser.webp",
+      "/assets/projects/soft-aurora-checkout.webp"
     ],
     "published": true,
     "featured": true
@@ -296,8 +296,8 @@ function renderContactSuccess(container, f, result) {
 
 const $=s=>document.querySelector(s),app=$('#app');
 const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
-const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.png':'/assets/logo.png');
-const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.png':'/assets/logo-nav.png');
+const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.webp':'/assets/logo.webp');
+const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.webp':'/assets/logo-nav.webp');
 const ORIG=getLogo();$('#sp').src=getLogo();$('#fl').src=getLogo();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe=u=>/^(https?:\/\/|\/_blob\/|\/assets\/|\/uploads\/|mailto:|data:image)/.test(u||'')?esc(u):'#';
@@ -601,7 +601,7 @@ function deliveryProcessSection() {
           ${steps.map(s => `
             <div class="process-step-item">
               <span class="process-step-num">${s.num}</span>
-              <h4 class="process-step-title">${esc(s.title)}</h4>
+              <h3 class="process-step-title">${esc(s.title)}</h3>
               <p class="process-step-desc">${esc(s.desc)}</p>
             </div>
           `).join('')}
@@ -651,7 +651,7 @@ function trustStandardsSection() {
           ${standards.map(s => `
             <div class="trust-card">
               <span class="trust-icon">${s.icon}</span>
-              <h4>${esc(s.title)}</h4>
+              <h3>${esc(s.title)}</h3>
               <p>${esc(s.desc)}</p>
             </div>
           `).join('')}
@@ -664,20 +664,28 @@ function trustStandardsSection() {
 function homepageFAQSection() {
   const faqs = [
     {
+      q: "What services does Caventra provide?",
+      a: "Caventra provides end-to-end digital software engineering through four core pillars: BUILD (custom website design and full-stack web applications), MANAGE (routine maintenance, content updates, and Core Web Vitals optimization), SECURE (enterprise HTTP headers, spam defense, and encrypted backups), and HOST (global edge CDN cloud hosting with 99.9% uptime)."
+    },
+    {
       q: "Do I own my code and website after launch?",
-      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you."
+      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you with zero vendor lock-in. You receive full intellectual property ownership, source repositories, production builds, and host account access."
     },
     {
       q: "How does Caventra differ from traditional agencies?",
-      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break."
+      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break from third-party plugin conflicts. You collaborate directly with our founding engineers rather than non-technical account managers."
     },
     {
       q: "How long does a typical project take to complete?",
-      a: "Standard business websites take 2 to 3 weeks. Custom web apps and complex platforms take 4 to 6 weeks."
+      a: "Standard business websites take 2 to 3 weeks from discovery kickoff to production launch. Custom web applications, interactive portals, and complex e-commerce platforms take 4 to 6 weeks, delivered across seven disciplined milestone stages."
+    },
+    {
+      q: "How much does a custom website cost with Caventra?",
+      a: "Custom business websites range from $850 to $2,800 depending on interactive scope, custom animations, and backend requirements. We offer transparent upfront milestone pricing with zero hidden fees. You can calculate an instant estimate using our interactive Website Cost Estimator."
     },
     {
       q: "Can you maintain and support a website you didn't build?",
-      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, and provide regular maintenance and hosting."
+      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, optimize Core Web Vitals, and provide ongoing maintenance, security patching, and managed cloud hosting."
     }
   ];
 
@@ -692,7 +700,7 @@ function homepageFAQSection() {
         <div class="faq-wrap">
           ${faqs.map(f => `
             <div class="faq-item">
-              <div class="faq-q">${esc(f.q)}</div>
+              <h3 class="faq-q">${esc(f.q)}</h3>
               <p class="faq-a">${esc(f.a)}</p>
             </div>
           `).join('')}
@@ -799,7 +807,22 @@ home:()=>{
     <div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div>
   </div>`
   + signatureModelSection()
-  + wrapS("", bigp(S.about.who) + `<p style="font-size:18px;max-width:58ch;line-height:1.6;margin-top:16px">Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
+  + `<section>
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">About Caventra</span>
+          <h2 class="section-title">Engineering-First Digital Studio</h2>
+        </div>
+        <div class="aeo-answer-block" style="margin-top:28px">
+          <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
+            <strong>Caventra is an engineering-focused digital solutions studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
+          </p>
+          <p style="font-size:17px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            Technology, design, and business thinking combined into practical, scalable digital solutions. We are a dedicated technology partner, not a marketing agency.
+          </p>
+        </div>
+      </div>
+    </section>`
   + deliveryProcessSection()
   + trustStandardsSection()
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
@@ -1806,7 +1829,7 @@ process:()=>head("Our 7-Stage Process","A disciplined engineering methodology fr
     ].map(s => `
       <div class="process-step-item">
         <span class="process-step-num">${s.num}</span>
-        <h4 class="process-step-title">${esc(s.title)}</h4>
+        <h3 class="process-step-title">${esc(s.title)}</h3>
         <p class="process-step-desc">${esc(s.desc)}</p>
       </div>
     `).join('')}
@@ -1823,7 +1846,7 @@ process:()=>head("Our 7-Stage Process","A disciplined engineering methodology fr
       ].map(s => `
         <div class="trust-card">
           <span class="trust-icon">${s.icon}</span>
-          <h4>${esc(s.title)}</h4>
+          <h3>${esc(s.title)}</h3>
           <p>${esc(s.desc)}</p>
         </div>
       `).join('')}

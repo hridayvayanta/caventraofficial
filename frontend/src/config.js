@@ -27,11 +27,11 @@ const D={
     "results": "Engineered as an internal portfolio concept showcasing advanced 3D web capabilities, responsive animation choreography, and luxury retail UI/UX design. Status: Concept Prototype (No client endorsement claimed).",
     "live": "https://hridayvayanta.github.io/testimonial-project-for-caventra/",
     "github": "",
-    "cover": "/assets/projects/gloss-atelier-hero.png",
+    "cover": "/assets/projects/gloss-atelier-hero.webp",
     "gallery": [
-      "/assets/projects/gloss-atelier-services.png",
-      "/assets/projects/gloss-atelier-story.png",
-      "/assets/projects/gloss-atelier-booking.png"
+      "/assets/projects/gloss-atelier-services.webp",
+      "/assets/projects/gloss-atelier-story.webp",
+      "/assets/projects/gloss-atelier-booking.webp"
     ],
     "published": true,
     "featured": true
@@ -50,11 +50,11 @@ const D={
     "results": "Transformed high-luxury fragrance retail into an experiential digital atelier. Eliminated cart abandonment by integrating doorstep physical inspection with cash/card handover, achieving elevated patron conversion and establishing Soft Aurora as a benchmark in interactive spatial commerce.",
     "live": "",
     "github": "",
-    "cover": "/assets/projects/soft-aurora.png",
+    "cover": "/assets/projects/soft-aurora.webp",
     "gallery": [
-      "/assets/projects/soft-aurora-scent-selector.png",
-      "/assets/projects/soft-aurora-diffuser.png",
-      "/assets/projects/soft-aurora-checkout.png"
+      "/assets/projects/soft-aurora-scent-selector.webp",
+      "/assets/projects/soft-aurora-diffuser.webp",
+      "/assets/projects/soft-aurora-checkout.webp"
     ],
     "published": true,
     "featured": true

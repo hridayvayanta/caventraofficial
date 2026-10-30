@@ -224,8 +224,8 @@ function renderContactSuccess(container, f, result) {
 
 const $=s=>document.querySelector(s),app=$('#app');
 const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
-const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.png':'/assets/logo.png');
-const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.png':'/assets/logo-nav.png');
+const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.webp':'/assets/logo.webp');
+const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.webp':'/assets/logo-nav.webp');
 const ORIG=getLogo();$('#sp').src=getLogo();$('#fl').src=getLogo();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe=u=>/^(https?:\/\/|\/_blob\/|\/assets\/|\/uploads\/|mailto:|data:image)/.test(u||'')?esc(u):'#';

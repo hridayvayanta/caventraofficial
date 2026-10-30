@@ -42,8 +42,8 @@
 
   function updateThemeLogos(theme) {
     const isLight = theme === 'light';
-    const logoNavSrc = isLight ? '/assets/logo-nav-light.png' : '/assets/logo-nav.png';
-    const logoSrc = isLight ? '/assets/logo-light.png' : '/assets/logo.png';
+    const logoNavSrc = isLight ? '/assets/logo-nav-light.webp' : '/assets/logo-nav.webp';
+    const logoSrc = isLight ? '/assets/logo-light.webp' : '/assets/logo.webp';
 
     // 1. Navigation logo
     document.querySelectorAll('nav .mk').forEach(img => {
@@ -85,7 +85,7 @@
 
   // Preload logo assets to guarantee instant zero-flash View Transitions
   function preloadThemeLogos() {
-    ['/assets/logo.png', '/assets/logo-nav.png', '/assets/logo-light.png', '/assets/logo-nav-light.png'].forEach(src => {
+    ['/assets/logo.webp', '/assets/logo-nav.webp', '/assets/logo-light.webp', '/assets/logo-nav-light.webp'].forEach(src => {
       const img = new Image();
       img.src = src;
     });

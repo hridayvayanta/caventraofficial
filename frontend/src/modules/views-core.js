@@ -47,7 +47,22 @@ home:()=>{
     <div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div>
   </div>`
   + signatureModelSection()
-  + wrapS("", bigp(S.about.who) + `<p style="font-size:18px;max-width:58ch;line-height:1.6;margin-top:16px">Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`)
+  + `<section>
+      <div class="wrap">
+        <div class="section-header-compact">
+          <span class="section-kicker">About Caventra</span>
+          <h2 class="section-title">Engineering-First Digital Studio</h2>
+        </div>
+        <div class="aeo-answer-block" style="margin-top:28px">
+          <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
+            <strong>Caventra is an engineering-focused digital solutions studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
+          </p>
+          <p style="font-size:17px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            Technology, design, and business thinking combined into practical, scalable digital solutions. We are a dedicated technology partner, not a marketing agency.
+          </p>
+        </div>
+      </div>
+    </section>`
   + deliveryProcessSection()
   + trustStandardsSection()
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)

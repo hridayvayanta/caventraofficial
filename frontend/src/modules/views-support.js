@@ -16,7 +16,7 @@ process:()=>head("Our 7-Stage Process","A disciplined engineering methodology fr
     ].map(s => `
       <div class="process-step-item">
         <span class="process-step-num">${s.num}</span>
-        <h4 class="process-step-title">${esc(s.title)}</h4>
+        <h3 class="process-step-title">${esc(s.title)}</h3>
         <p class="process-step-desc">${esc(s.desc)}</p>
       </div>
     `).join('')}
@@ -33,7 +33,7 @@ process:()=>head("Our 7-Stage Process","A disciplined engineering methodology fr
       ].map(s => `
         <div class="trust-card">
           <span class="trust-icon">${s.icon}</span>
-          <h4>${esc(s.title)}</h4>
+          <h3>${esc(s.title)}</h3>
           <p>${esc(s.desc)}</p>
         </div>
       `).join('')}

@@ -79,6 +79,11 @@ fs.writeFileSync(path.join(ROOT, 'app.js'), bundleClient);
 fs.writeFileSync(path.join(PUB, 'app.js'), bundleClient);
 console.log(`✓ Compiled app.js (${clientFiles.length} modules, ${bundleClient.length.toLocaleString()} bytes)`);
 
+// Sync theme.js to public/
+if (fs.existsSync(path.join(ROOT, 'theme.js'))) {
+  fs.copyFileSync(path.join(ROOT, 'theme.js'), path.join(PUB, 'theme.js'));
+}
+
 // 3. Parity Self-Verification
 assert.strictEqual(
   fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'),

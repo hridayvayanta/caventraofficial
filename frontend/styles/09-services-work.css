@@ -240,9 +240,11 @@
   display: inline-block;
   color: var(--gold2);
 }
+.trust-card h3,
 .trust-card h4 {
   font-size: 18px;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
   color: var(--tx);
 }
 .trust-card p {
@@ -269,10 +271,12 @@
   font-size: 18.5px;
   font-weight: 600;
   color: var(--tx);
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: inherit;
+  line-height: 1.35;
 }
 .faq-q::before {
   content: "Q.";
@@ -577,6 +581,7 @@
 [data-theme="light"] .trust-icon {
   color: #5A431E;
 }
+[data-theme="light"] .trust-card h3,
 [data-theme="light"] .trust-card h4 {
   color: #1E2226;
 }

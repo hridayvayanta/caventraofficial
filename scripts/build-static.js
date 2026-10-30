@@ -269,7 +269,7 @@ for (const p of projects) {
             'url': `${BASE_URL}/`
           },
           'url': `${BASE_URL}/work/${p.slug}/`,
-          'image': `${BASE_URL}${p.cover || '/assets/og-caventra.png'}`
+          'image': `${BASE_URL}${p.cover || '/assets/og-caventra.webp'}`
         }
       ]
     }
@@ -356,7 +356,7 @@ routes.push({
           'name': 'Caventra',
           'url': `${BASE_URL}/`,
           'logo': `${BASE_URL}/favicon-512x512.png`,
-          'image': `${BASE_URL}/assets/og-caventra.png`,
+          'image': `${BASE_URL}/assets/og-caventra.webp`,
           'founder': [
             {
               '@type': 'Person',
@@ -364,7 +364,7 @@ routes.push({
               'name': 'Hriday Vayanta',
               'jobTitle': 'Founder & Head of Growth',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
-              'image': `${BASE_URL}/assets/founders/hriday-vayanta.jpg`,
+              'image': `${BASE_URL}/assets/founders/hriday-vayanta.webp`,
               'email': 'hridayvayanta7@gmail.com',
               'telephone': '+918866790989',
               'description': 'Founder and Head of Growth at Caventra, leading commercial strategy, client partnerships, marketing campaigns, and recruitment operations.',
@@ -378,7 +378,7 @@ routes.push({
               'name': 'Ved Nimbark',
               'jobTitle': 'Founder & Head of Design',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
-              'image': `${BASE_URL}/assets/founders/ved-nimbark.jpg`,
+              'image': `${BASE_URL}/assets/founders/ved-nimbark.webp`,
               'email': 'vednimbark08@gmail.com',
               'telephone': '+918849186747',
               'description': 'Founder and Head of Design at Caventra, directing brand identities, accessible design systems, typographic hierarchies, and high-conversion user interfaces.'
@@ -389,7 +389,7 @@ routes.push({
               'name': 'Sauranahmed Mansuri',
               'jobTitle': 'Founder & Head of Technology',
               'worksFor': { '@id': `${BASE_URL}/#organization` },
-              'image': `${BASE_URL}/assets/founders/sauranahmed-mansuri.jpg`,
+              'image': `${BASE_URL}/assets/founders/sauranahmed-mansuri.webp`,
               'email': 'sauran.caventra@gmail.com',
               'telephone': '+917990652097',
               'description': 'Founder and Head of Technology at Caventra, architecting full-stack web software, database infrastructures, security protocols, and cloud deployment pipelines.'
@@ -528,7 +528,7 @@ for (const b of blogArticles) {
       '@id': `${BASE_URL}/blog/${b.slug}/#article`,
       'headline': b.title,
       'description': b.summary,
-      'image': `${BASE_URL}/assets/og-caventra.png`,
+      'image': `${BASE_URL}/assets/og-caventra.webp`,
       'author': {
         '@type': 'Person',
         'name': b.author,
@@ -540,7 +540,7 @@ for (const b of blogArticles) {
         'name': 'Caventra',
         'logo': {
           '@type': 'ImageObject',
-          'url': `${BASE_URL}/assets/logo-nav.png`
+          'url': `${BASE_URL}/assets/logo-nav.webp`
         }
       },
       'mainEntityOfPage': `${BASE_URL}/blog/${b.slug}/`,
