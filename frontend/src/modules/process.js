@@ -1,13 +1,13 @@
 
 function deliveryProcessSection() {
   const steps = [
-    { num: "01", title: "Discovery & Requirements", desc: "We discuss your vision, goals, target audience, and project scope. Our team defines core requirements and success metrics to ensure your new website delivers real commercial growth." },
-    { num: "02", title: "Planning & Architecture", desc: "We plan site structure, wireframe flows, tech stack, and clear milestones. You receive an upfront architecture blueprint and an itemized fixed quote before any coding begins." },
-    { num: "03", title: "Design & Prototyping", desc: "We craft intentional layouts and responsive prototypes for your review. Our interactive designs look sharp in both dark and light modes across phones, tablets, and desktop viewports." },
-    { num: "04", title: "Full-Stack Engineering", desc: "We write clean, lightweight code without fragile page-builders. Every component is engineered by hand for fast loading, semantic markup, and reliable cross-browser stability." },
-    { num: "05", title: "Testing & Verification", desc: "We test across phones, tablets, and desktops for speed, forms, and accessibility. Rigorous quality assurance guarantees high Core Web Vitals scores and smooth user journeys." },
-    { num: "06", title: "Launch & Deployment", desc: "We handle domain configuration, SSL, and zero-downtime global deployment. Your website launches seamlessly on high-speed cloud edge networks with automated security certificates." },
-    { num: "07", title: "Ongoing Support & Scaling", desc: "We provide ongoing maintenance, security updates, and performance tuning. Our engineering team monitors your live site continuously so it remains fast, protected, and up to date." }
+    { num: "01", title: "Discovery & Requirements", desc: "We discuss your vision, goals, target audience, and project scope." },
+    { num: "02", title: "Planning & Architecture", desc: "We plan site structure, wireframe flows, tech stack, and clear milestones." },
+    { num: "03", title: "Design & Prototyping", desc: "We craft intentional layouts and responsive prototypes for your review." },
+    { num: "04", title: "Full-Stack Engineering", desc: "We write clean, lightweight code without fragile page-builders." },
+    { num: "05", title: "Testing & Verification", desc: "We test across phones, tablets, and desktops for speed, forms, and accessibility." },
+    { num: "06", title: "Launch & Deployment", desc: "We handle domain configuration, SSL, and zero-downtime global deployment." },
+    { num: "07", title: "Ongoing Support & Scaling", desc: "We provide ongoing maintenance, security updates, and performance tuning." }
   ];
 
   return `
@@ -15,18 +15,18 @@ function deliveryProcessSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Disciplined Delivery</span>
-          <h2 class="section-title" id="process">How We Deliver Custom Websites: Seven-Stage Process</h2>
-          <p class="section-subtitle">Our disciplined seven-stage delivery process guides your custom website project smoothly from initial strategic discovery all the way to high-speed global cloud deployment.</p>
+          <h2 class="section-title" id="process">From First Conversation to Scaled Reality</h2>
+          <p class="section-subtitle">A clear, simple process from our first call to your live launch.</p>
         </div>
-        <ol class="process-timeline" style="list-style:none;padding:0;margin:0">
+        <div class="process-timeline">
           ${steps.map(s => `
-            <li class="process-step-item">
+            <div class="process-step-item">
               <span class="process-step-num">${s.num}</span>
               <h3 class="process-step-title" id="step-${s.num}">${esc(s.title)}</h3>
               <p class="process-step-desc">${esc(s.desc)}</p>
-            </li>
+            </div>
           `).join('')}
-        </ol>
+        </div>
         <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
           <a class="btn solid" href="/contact/">Discuss Your Project Scope ↗</a>
           <a class="btn" href="/estimator/">Calculate Indicative Budget</a>
@@ -42,25 +42,25 @@ function trustStandardsSection() {
       id: "ownership",
       icon: "⚖",
       title: "100% Client Code & IP Ownership",
-      desc: "You own every single line of code, design asset, and account upon completion. No vendor lock-in, ever. We deliver complete Git source repositories and production keys directly to your team."
+      desc: "You own every single line of code, design asset, and account upon completion. No vendor lock-in, ever."
     },
     {
       id: "performance",
       icon: "⚡",
       title: "No Fragile Page-Builders",
-      desc: "Clean, hand-crafted code with zero bloated plugins. Your site loads fast and won't break on updates. We use semantic modern code that search engines love and understand easily."
+      desc: "Clean, hand-crafted code with zero bloated plugins. Your site loads fast and won't break on updates."
     },
     {
       id: "pricing",
       icon: "🏷",
       title: "Upfront Transparent Quotes",
-      desc: "Itemized milestone pricing with clear deliverables. You know exactly what it costs before we start. We guarantee honest estimates with zero hidden charges or surprise agency markups."
+      desc: "Itemized milestone pricing with clear deliverables. You know exactly what it costs before we start."
     },
     {
       id: "collaboration",
       icon: "🛠",
       title: "Direct Engineer Collaboration",
-      desc: "Work directly with the developers designing and coding your site, not account middlemen. You get faster answers, better technical decisions, and smooth project delivery from start to finish."
+      desc: "Work directly with the developers designing and coding your site, not account middlemen."
     }
   ];
 
@@ -70,7 +70,7 @@ function trustStandardsSection() {
         <div class="section-header-compact">
           <span class="section-kicker">Accountability &amp; Standards</span>
           <h2 class="section-title" id="standards">Engineered on Trust &amp; Transparency</h2>
-          <p class="section-subtitle">We hold our software studio to rigorous engineering standards, guaranteeing total code ownership, lightning-fast site speed, transparent pricing, and direct collaboration with our builders.</p>
+          <p class="section-subtitle">Clear standards we stand by on every project.</p>
         </div>
         <div class="trust-standards-grid">
           ${standards.map(s => `
@@ -89,34 +89,24 @@ function trustStandardsSection() {
 function homepageFAQSection() {
   const faqs = [
     {
-      id: "services",
-      q: "What services does Caventra provide?",
-      a: "Caventra builds, hosts, protects, and manages fast custom websites and digital software for growing businesses. Our four core services cover complete website design and development, reliable cloud hosting with continuous uptime, proactive site security, and monthly care to keep your site fast, fresh, and bug-free at all times."
-    },
-    {
       id: "ownership",
       q: "Do I own my code and website after launch?",
-      a: "Yes, you own 100 percent of your code and digital assets. When your project is complete and paid for, we transfer full intellectual property ownership directly to you. That includes all source code files, design files, live hosting keys, and site accounts with zero vendor lock-in or recurring platform fees."
+      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you."
     },
     {
       id: "different",
       q: "How does Caventra differ from traditional agencies?",
-      a: "Caventra writes clean custom code from scratch rather than relying on slow templates like WordPress or Wix. Your site loads faster, looks truly unique, and will not break from plugin conflicts. You also work directly with our founding engineers who build your product, not non-technical sales reps or middle managers."
+      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break."
     },
     {
       id: "timeline",
       q: "How long does a typical project take to complete?",
-      a: "A standard custom business website takes two to three weeks from kickoff to launch. More complex web apps, member portals, and online store platforms take four to six weeks. We work through seven clear stages with live weekly preview links so you always see exactly what is being built."
-    },
-    {
-      id: "cost",
-      q: "How much does a custom website cost with Caventra?",
-      a: "Custom business websites range from 850 to 2,800 dollars depending on your page count, custom features, and backend requirements. We provide upfront itemized pricing with clear milestones and no hidden fees. You can configure your project requirements and receive an instant estimate with our free Cost Estimator tool."
+      a: "Standard business websites take 2 to 3 weeks. Custom web apps and complex platforms take 4 to 6 weeks."
     },
     {
       id: "maintenance",
-      q: "Can you maintain and support a website you did not build?",
-      a: "Yes, we can manage, host, and speed up websites built by others. Through our website management service, our engineers review your existing site code, fix urgent bugs, improve load speed, set up daily backups, and install security protections so your site stays fast, safe, and up to date."
+      q: "Can you maintain and support a website you didn't build?",
+      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, and provide regular maintenance and hosting."
     }
   ];
 
@@ -126,9 +116,8 @@ function homepageFAQSection() {
         <div class="section-header-compact">
           <span class="section-kicker">Client Questions</span>
           <h2 class="section-title" id="faq">Frequently Asked Questions</h2>
-          <p class="section-subtitle">Read straightforward answers to common questions about our custom web engineering, intellectual property ownership, delivery timelines, pricing, and ongoing website management services.</p>
+          <p class="section-subtitle">Clear answers to help you evaluate partnering with Caventra.</p>
         </div>
-        <form id="agent-faq-search" action="/contact/" method="get" toolname="searchFAQ" tooldescription="Search questions regarding custom web engineering, delivery timelines, pricing tiers, and IP ownership" toolparamdescription="Natural language question about Caventra services and processes" style="display:none"></form>
         <div class="faq-wrap">
           ${faqs.map(f => `
             <div class="faq-item">
@@ -157,7 +146,7 @@ function homepageTestimonialsSection() {
       badge: "Production Web App"
     },
     {
-      quote: "The transparent pricing, clean dark and light themes, and instant WhatsApp notifications completely streamlined our bridal retail customer enquiry workflow and boosted conversions.",
+      quote: "The transparent pricing, clean dark/light themes, and instant WhatsApp notifications completely streamlined our bridal retail enquiry flow.",
       author: "Creative Director",
       company: "Divine Bridal Accessories",
       badge: "E-Commerce Showcase"
@@ -170,7 +159,7 @@ function homepageTestimonialsSection() {
         <div class="section-header-compact">
           <span class="section-kicker">Client Feedback</span>
           <h2 class="section-title" id="testimonials">Built with Precision. Trusted by Founders.</h2>
-          <p class="section-subtitle">Explore genuine outcomes from commercial founders and growing companies that chose clean, hand-crafted software engineering over generic templates and bloated website page-builders.</p>
+          <p class="section-subtitle">Real outcomes from businesses that chose clean software engineering over generic templates.</p>
         </div>
         <div class="testimonial-grid">
           ${testimonials.map(t => `

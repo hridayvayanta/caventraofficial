@@ -33,15 +33,6 @@ home:()=>{
           <a class="btn" href="/estimator/" style="border-style:dashed">Cost Estimator ↗</a>
         </div>
         ${heroHighlights}
-        <nav class="inpage-nav" aria-label="Page Sections" style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-          <a href="#services" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Capabilities ↓</a>
-          <a href="#about" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">About Studio ↓</a>
-          <a href="#process" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Our Process ↓</a>
-          <a href="#standards" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Standards ↓</a>
-          <a href="#work" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Selected Work ↓</a>
-          <a href="#faq" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">FAQ ↓</a>
-          <a href="#contact" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Contact ↓</a>
-        </nav>
       </div>
       <figure class="hlw" style="margin:0">
         <div class="hlf">
@@ -56,56 +47,14 @@ home:()=>{
     <div class="t2"><div>${[...S.services,...S.services].map(s=>`<span>${esc(s[0])}</span><span>✦</span>`).join('')}</div></div>
   </div>`
   + signatureModelSection()
-  + `<section>
-      <div class="wrap">
-        <div class="section-header-compact">
-          <span class="section-kicker">About Caventra <time datetime="2026-10-30" style="color:var(--mut);font-size:12px;margin-left:8px">· Verified October 2026</time></span>
-          <h2 class="section-title" id="about">Engineering-First Digital Studio</h2>
-        </div>
-        <div class="aeo-answer-block" style="margin-top:28px">
-          <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
-            Caventra is an engineering-first digital studio based in Ahmedabad, Gujarat, India. We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
-          </p>
-          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            Custom web development is the engineering practice of hand-crafting semantic HTML, modern CSS, and clean JavaScript tailored to business needs. Unlike template agencies that rely on fragile WordPress plugins, Caventra operates as a dedicated technical partner.
-          </p>
-          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            Managed website hosting is a high-speed cloud infrastructure service featuring global Content Delivery Network edge caching, automated SSL encryption, and continuous uptime monitoring. Website security refers to enterprise HTTP headers and proactive firewall protections to keep customer data safe.
-          </p>
-          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            Continuous website maintenance is a proactive software engineering service providing real-time uptime monitoring, weekly security updates, and regular off-site backups. Brand identity design is the strategic development of visual identity systems, typography guidelines, and design systems for ambitious companies.
-          </p>
-          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            A digital solution is custom software engineered by our studio to automate commercial operations, enhance user conversion rates, and deliver measurable business velocity.
-          </p>
-          <dl class="core-glossary" style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
-            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
-              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Custom Web Development</dt>
-              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Custom web development is the engineering practice of hand-crafting semantic HTML, modern CSS, and clean JavaScript tailored specifically to commercial business workflows.</dd>
-            </div>
-            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
-              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Managed Cloud Hosting</dt>
-              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Managed website hosting is a high-speed cloud infrastructure service featuring global Content Delivery Network edge caching, automated SSL certificates, and ninety-nine point nine percent uptime.</dd>
-            </div>
-            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
-              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Proactive Website Security</dt>
-              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Website security refers to enterprise HTTP security headers, automated vulnerability auditing, and proactive firewall protections designed to keep customer data safe from intrusion.</dd>
-            </div>
-            <div class="glossary-term" style="padding:16px;border:1px solid var(--bdr);border-radius:12px;background:var(--s1)">
-              <dt style="font-weight:700;font-size:16px;color:var(--tx)">Continuous Web Maintenance</dt>
-              <dd style="margin:8px 0 0;font-size:15px;color:var(--mut);line-height:1.6">Continuous website maintenance is a proactive software engineering service providing real-time uptime monitoring, weekly security updates, and regular off-site backups.</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </section>`
+  + wrapS("", bigp(S.about.who) + `<p style="font-size:18px;max-width:58ch;line-height:1.6;margin-top:16px">Technology, design, AI, and business thinking, combined into practical, scalable digital solutions. We are a technology partner, not a marketing agency.</p>`, '', 'about')
   + deliveryProcessSection()
   + trustStandardsSection()
-  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p class="work-cta-row" style="margin-top:36px;font-size:15px;color:var(--mut)">Explore our full showcase of production web applications and design engineering projects or schedule a discovery call with our founders today. <a class="btn solid" href="/work/" style="margin-left:8px">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
+  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
   + homepageTestimonialsSection()
   + homepageFAQSection()
-  + `<section class="band"><div class="wrap"><h2 id="cta-band">Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let us architect and engineer your digital product with clean code and transparent milestone pricing. We build fast, reliable websites and software tailored to your commercial growth goals.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
-  + (contactInfo() ? wrapS("Contact", contactInfo() + '<form id="agent-inquiry-form" action="/contact/" method="get" toolname="submitProjectInquiry" tooldescription="Submit a project inquiry for custom web engineering, hosting, or maintenance" toolparamdescription="Contact details, business name, and project scope" style="display:none"></form>', '', 'contact') : '');
+  + `<section class="band"><div class="wrap"><h2 id="cta-band">Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let us architect and engineer your digital product with clean code and transparent milestone pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
+  + (contactInfo() ? wrapS("Contact", contactInfo(), '', 'contact') : '');
 },
 services: () => {
   const serviceCards = [
