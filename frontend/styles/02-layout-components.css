@@ -156,6 +156,7 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--gold);outline-offse
 /* ===== ENHANCED FOOTER & BLOG STYLES ===== */
 footer{border-top:1px solid var(--line);padding:84px 0 40px;background:var(--bg)}
 footer .wrap{display:grid;grid-template-columns:1.6fr 1fr 1.1fr 1.3fr;gap:48px}
+.f-col h3,
 .f-col h4{font-family:var(--hd);font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);margin:0 0 20px}
 .f-col a{display:block;color:var(--mut);padding:5px 0;font-size:14.5px;transition:color .2s,transform .2s}
 .f-col a:hover{color:var(--gold2);transform:translateX(3px)}

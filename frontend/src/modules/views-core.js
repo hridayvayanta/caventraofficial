@@ -51,25 +51,25 @@ home:()=>{
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">About Caventra</span>
-          <h2 class="section-title">Engineering-First Digital Studio</h2>
+          <h2 class="section-title" id="about">Engineering-First Digital Studio</h2>
         </div>
         <div class="aeo-answer-block" style="margin-top:28px">
           <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
-            <strong>Caventra is an engineering-focused digital solutions studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
+            <strong>Caventra is an engineering-first digital studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
           </p>
-          <p style="font-size:17px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            Technology, design, and business thinking combined into practical, scalable digital solutions. We are a dedicated technology partner, not a marketing agency.
+          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            <strong>Custom web development is</strong> the craft of writing lightweight code tailored to business needs. In contrast to generic website builders, our engineering team builds fast web applications that boost conversion and guarantee complete client control.
           </p>
         </div>
       </div>
     </section>`
   + deliveryProcessSection()
   + trustStandardsSection()
-  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
+  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
   + homepageTestimonialsSection()
   + homepageFAQSection()
   + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
-  + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
+  + (contactInfo() ? wrapS("Contact", contactInfo(), '', 'contact') : '');
 },
 services: () => {
   const serviceCards = [
@@ -666,7 +666,7 @@ about:()=>{
       <div class="founders-grid">
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Head of Growth" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.webp" alt="Hriday Vayanta — Head of Growth" width="320" height="320" loading="lazy">
           </div>
           <h3>Hriday Vayanta</h3>
           <span class="founder-role">Head of Growth</span>
@@ -689,7 +689,7 @@ about:()=>{
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Head of Design" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.webp" alt="Ved Nimbark — Head of Design" width="320" height="320" loading="lazy">
           </div>
           <h3>Ved Nimbark</h3>
           <span class="founder-role">Head of Design</span>
@@ -712,7 +712,7 @@ about:()=>{
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.jpg" alt="Sauranahmed Mansuri — Head of Technology" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.webp" alt="Sauranahmed Mansuri — Head of Technology" width="320" height="320" loading="lazy">
           </div>
           <h3>Sauranahmed Mansuri</h3>
           <span class="founder-role">Head of Technology</span>
@@ -769,7 +769,7 @@ founders:()=>{
       <div class="founders-grid">
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Founder &amp; Head of Growth at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.webp" alt="Hriday Vayanta — Founder &amp; Head of Growth at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Hriday Vayanta</h3>
           <span class="founder-role">Founder &amp; Head of Growth</span>
@@ -793,7 +793,7 @@ founders:()=>{
 
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Founder &amp; Head of Design at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.webp" alt="Ved Nimbark — Founder &amp; Head of Design at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Ved Nimbark</h3>
           <span class="founder-role">Founder &amp; Head of Design</span>
@@ -817,7 +817,7 @@ founders:()=>{
 
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.jpg" alt="Sauranahmed Mansuri — Founder &amp; Head of Technology at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.webp" alt="Sauranahmed Mansuri — Founder &amp; Head of Technology at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Sauranahmed Mansuri</h3>
           <span class="founder-role">Founder &amp; Head of Technology</span>

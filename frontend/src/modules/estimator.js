@@ -265,7 +265,7 @@ const card=p=>{
   </a>`;
 };
 const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");
-const wrapS=(h,b,x='')=>`<section ${x}><div class="wrap">${h?`<h2 style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
+const wrapS=(h,b,x='',id='')=>`<section ${x}><div class="wrap">${h?`<h2 ${id?`id="${id}"`:''} style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
 const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"';
  if(c.email)r.push(`<span class="nm">${esc(c.email)}</span><a class="btn sm solid" href="mailto:${esc(c.email)}">Email</a><a class="btn sm" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(c.email)}" ${B}>Gmail ↗</a><button class="btn sm" type="button" data-cp="${esc(c.email)}">Copy</button>`);
  if(c.phone)c.phone.split(/[,\n]+/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=n.includes(":")?n.split(":"):n.includes("|")?n.split("|"):[n,n];const label=p[0].trim(),num=(p[1]||p[0]).trim();const d=num.replace(/[^\d+]/g,""),w=d[0]==="+"?d.slice(1):"91"+d;r.push(`<span class="nm">${esc(label)}</span><a class="btn sm solid" href="https://wa.me/${w}" ${B}>WhatsApp</a><button class="btn sm" type="button" data-cp="${esc(num)}">Copy</button>`);});

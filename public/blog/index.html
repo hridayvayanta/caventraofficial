@@ -53,6 +53,11 @@
       "datePublished": "2026-01-01T00:00:00+05:30",
       "dateModified": "2026-10-30T10:00:00+05:30",
       "inLanguage": "en-US",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://caventraofficial.in/blog/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
       "speakable": {
         "@type": "SpeakableSpecification",
         "cssSelector": [".hero h1", ".hero p.fi", ".aeo-answer-block", ".faq-q", ".faq-a"]
@@ -62,6 +67,8 @@
       "@type": "Organization",
       "@id": "https://caventraofficial.in/#organization",
       "name": "Caventra",
+      "legalName": "Caventra Technologies",
+      "slogan": "Ideas to Impact",
       "url": "https://caventraofficial.in/",
       "logo": {
         "@type": "ImageObject",
@@ -76,6 +83,17 @@
       "description": "Caventra is an engineering-focused digital solutions studio building custom websites, cloud hosting, security, and digital software for businesses.",
       "email": "caventraofficial@gmail.com",
       "telephone": "+918866790989",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "value": 3
+      },
+      "knowsAbout": [
+        "Custom Web Development",
+        "Website Design",
+        "Cloud Hosting",
+        "Website Security",
+        "Full-Stack Software Engineering"
+      ],
       "foundingLocation": {
         "@type": "Place",
         "name": "Ahmedabad, Gujarat, India"
@@ -132,6 +150,20 @@
         "addressRegion": "Gujarat",
         "addressCountry": "IN"
       },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 23.0225,
+        "longitude": 72.5714
+      },
+      "hasMap": "https://maps.google.com/?q=Ahmedabad,+Gujarat,+India",
+      "currenciesAccepted": "INR, USD",
+      "paymentAccepted": "Cash, Credit Card, Bank Transfer, Wire Transfer",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "09:00",
+        "closes": "20:00"
+      },
       "priceRange": "$$",
       "telephone": "+918866790989",
       "email": "caventraofficial@gmail.com"
@@ -145,7 +177,7 @@
           "name": "What services does Caventra provide?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Caventra provides end-to-end digital software engineering through four core pillars: BUILD (custom website design and full-stack web applications), MANAGE (routine maintenance, content updates, and Core Web Vitals optimization), SECURE (enterprise HTTP headers, spam defense, and encrypted backups), and HOST (global edge CDN cloud hosting with 99.9% uptime)."
+            "text": "Caventra builds, hosts, protects, and manages fast custom websites and digital software for growing businesses. Our four core services cover complete website design and development, reliable cloud hosting with continuous uptime, proactive site security, and monthly care to keep your site fast, fresh, and bug-free at all times."
           }
         },
         {
@@ -153,7 +185,7 @@
           "name": "Do I own my code and website after launch?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you with zero vendor lock-in. You receive full intellectual property ownership, source repositories, production builds, and host account access."
+            "text": "Yes, you own 100 percent of your code and digital assets. When your project is complete and paid for, we transfer full intellectual property ownership directly to you. That includes all source code files, design files, live hosting keys, and site accounts with zero vendor lock-in or recurring platform fees."
           }
         },
         {
@@ -161,15 +193,15 @@
           "name": "How does Caventra differ from traditional agencies?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break from third-party plugin conflicts. You collaborate directly with our founding engineers rather than non-technical account managers."
+            "text": "Caventra writes clean custom code from scratch rather than relying on slow templates like WordPress or Wix. Your site loads faster, looks truly unique, and will not break from plugin conflicts. You also work directly with our founding engineers who build your product, not non-technical sales reps or middle managers."
           }
         },
         {
           "@type": "Question",
-          "name": "How long does a typical project take to complete?",
+          "name": "How long does custom website development take?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Standard business websites take 2 to 3 weeks from discovery kickoff to production launch. Custom web applications, interactive portals, and complex e-commerce platforms take 4 to 6 weeks, delivered across seven disciplined milestone stages."
+            "text": "A standard custom business website takes two to three weeks from kickoff to launch. More complex web apps, member portals, and online store platforms take four to six weeks. We work through seven clear stages with live weekly preview links so you always see exactly what is being built."
           }
         },
         {
@@ -177,7 +209,7 @@
           "name": "How much does a custom website cost with Caventra?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Custom business websites range from $850 to $2,800 depending on interactive scope, custom animations, and backend requirements. We offer transparent upfront milestone pricing with zero hidden fees. You can calculate an instant estimate using our interactive Website Cost Estimator."
+            "text": "Custom business websites range from 850 to 2,800 dollars depending on your page count, custom features, and backend needs. We provide upfront itemized pricing with clear milestones and no hidden fees. You can configure your project requirements and get an instant estimate on our website using our free Cost Estimator tool."
           }
         },
         {
@@ -185,7 +217,7 @@
           "name": "Can you maintain and support a website you didn't build?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, optimize Core Web Vitals, and provide ongoing maintenance, security patching, and managed cloud hosting."
+            "text": "Yes, we can manage, host, and speed up websites built by others. Through our website management service, our engineers review your existing site code, fix urgent bugs, improve load speed, set up daily backups, and install security protections so your site stays fast, safe, and up to date."
           }
         }
       ]
@@ -220,7 +252,7 @@
 </head><body>
 <a href="#app" class="skip-link">Skip to main content</a>
 <div id="splash" aria-hidden="true"><img id="sp" src="/assets/logo.webp" alt="Caventra — Ideas to Impact" width="810" height="445" fetchpriority="high" decoding="sync"></div>
-<nav><div class="wrap"><a href="/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.webp" alt="Caventra — Ideas to Impact" width="760" height="355"></a>
+<nav><div class="wrap"><a href="/" aria-label="Caventra home"><img class="mk" src="/assets/logo-nav.webp" alt="Caventra — Ideas to Impact" width="760" height="355" loading="lazy"></a>
 <div class="links" id="lk"><a href="/work/">Work</a><a href="/services/">Services</a><a href="/estimator/">Estimator</a><a href="/about/">About</a><a href="/founders/">Founders</a><a href="/process/">Process</a><a href="/contact/">Contact</a><a href="/portal/" id="nav-portal">Portal</a><a class="btn sm" href="/contact/">Start a Project</a></div>
 <div class="nav-actions">
   <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false" title="Switch to light theme">
@@ -1566,7 +1598,7 @@
     <p id="fdesc">A software and digital solutions studio engineering custom web applications, AI workflows, and digital products for scaling businesses.</p>
   </div>
   <div class="f-col">
-    <h4>Studio</h4>
+    <h3>Studio</h3>
     <a href="/work/">Selected Work</a>
     <a href="/services/">Our Services</a>
     <a href="/estimator/">Cost Estimator</a>
@@ -1578,7 +1610,7 @@
     <a href="/contact/">Start a Project ↗</a>
   </div>
   <div class="f-col">
-    <h4>Capabilities</h4>
+    <h3>Capabilities</h3>
     <a href="/services/web-development/">Web Development</a>
     <a href="/services/branding/">Branding &amp; Design</a>
     <a href="/services/maintenance/">Management &amp; Care</a>
@@ -1586,7 +1618,7 @@
     <a href="/services/security/">Website Security</a>
   </div>
   <div class="f-col">
-    <h4>Connect</h4>
+    <h3>Connect</h3>
     <a href="mailto:caventraofficial@gmail.com" class="f-mail">caventraofficial@gmail.com</a>
     <div class="f-team">
       <span>Hriday Vayanta <small>· Founder &amp; Head of Growth</small></span>

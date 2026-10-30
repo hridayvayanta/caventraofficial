@@ -203,7 +203,7 @@ function signatureModelSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Core Service Model</span>
-          <h2 class="section-title">BUILD. MANAGE. SECURE. HOST.</h2>
+          <h2 class="section-title" id="services">BUILD. MANAGE. SECURE. HOST.</h2>
           <p class="section-subtitle">Everything your digital presence needs — from custom code to reliable cloud hosting.</p>
         </div>
         <div class="pillar-grid">

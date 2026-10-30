@@ -245,7 +245,7 @@ const bg=$('#bg'),lk=$('#lk');if(bg&&lk){bg.onclick=()=>{const o=lk.classList.to
 $('#yr').textContent=new Date().getFullYear();
 const ckb=$('#ckb'),ckAcc=$('#ck-acc'),ckDec=$('#ck-dec');
 if(ckb&&!localStorage.getItem('cv_cookie_consent')){ckb.classList.remove('hide');setTimeout(()=>ckb.classList.add('show'),700);if(ckAcc)ckAcc.onclick=()=>{localStorage.setItem('cv_cookie_consent','accepted');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};if(ckDec)ckDec.onclick=()=>{localStorage.setItem('cv_cookie_consent','essential');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};}
-let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+getLogo()+'" alt="" aria-hidden="true">';
+let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+getLogo()+'" alt="" width="810" height="445" loading="lazy" aria-hidden="true">';
 function scr(el){const t=el.textContent,G='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+<>/',n=t.length;let f=0;const id=setInterval(()=>{f++;el.textContent=t.split('').map((c,i)=>c===' '||i<f*n/18?c:G[Math.random()*G.length|0]).join('');if(f>=18){clearInterval(id);el.textContent=t}},38)}
 function nav(){if(first||RM){first=false;render();return}if(busy)return;busy=true;cur.className='cin';setTimeout(()=>{render();cur.className='cout';setTimeout(()=>{cur.className='';busy=false},540)},520)}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);if(e.target.tagName==='H2'&&!e.target.children.length)scr(e.target)}}),{threshold:.12});

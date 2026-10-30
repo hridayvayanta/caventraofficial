@@ -665,6 +665,7 @@
 [data-theme="light"] .article-body {
   color: #2B2F35;
 }
+[data-theme="light"] .f-col h3,
 [data-theme="light"] .f-col h4 {
   color: #5A431E;
 }

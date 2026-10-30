@@ -118,7 +118,7 @@ project:s=>{
 
   return head(esc(p.name),esc(p.short))+wrapS("",
     `<div class="service-breadcrumb"><a href="/">Home</a> / <a href="/work/">Selected Work</a> / <span>${esc(p.name)}</span></div>`+
-    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block" loading="lazy">`:'')+
+    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" width="1200" height="675" style="width:100%;height:auto;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block" loading="lazy">`:'')+
     `<div style="display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap">
        <span class="project-status-badge ${st.cls}" style="margin-left:0;padding:5px 12px;font-size:12px">${esc(st.label)}</span>
        <span style="font-size:14px;color:var(--mut)">Category: <b>${esc(p.category)}</b></span>
@@ -130,7 +130,7 @@ project:s=>{
     sec("Engineered Solution",p.solution)+
     (f.length?`<h3 style="margin:48px 0 12px">Key Features &amp; Technical Capabilities</h3><ul style="padding-left:20px;line-height:1.7;color:var(--mut)">${f.map(x=>`<li style="margin-bottom:6px"><span style="color:var(--tx)">${esc(x)}</span></li>`).join('')}</ul>`:'')+
     sec("Tangible Results & Current Status",p.results)+
-    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)" loading="lazy">`).join('')+
+    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" width="1200" height="675" style="width:100%;height:auto;margin-top:24px;border:1px solid var(--line);border-radius:12px;display:block" loading="lazy">`).join('')+
     `<div class="row" style="margin-top:48px;flex-wrap:wrap;gap:12px">
        ${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website ↗</a>`:''}
        ${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub ↗</a>`:''}

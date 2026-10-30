@@ -337,7 +337,7 @@ const card=p=>{
   </a>`;
 };
 const workGrid=l=>l.length?`<div class="grid">${l.map(card).join('')}</div>`:empty("Building what comes next.","New work will appear here as it is completed.");
-const wrapS=(h,b,x='')=>`<section ${x}><div class="wrap">${h?`<h2 style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
+const wrapS=(h,b,x='',id='')=>`<section ${x}><div class="wrap">${h?`<h2 ${id?`id="${id}"`:''} style="margin-bottom:48px">${h}</h2>`:''}${b}</div></section>`;
 const contactInfo=()=>{const c=S.contact,r=[],B='target="_blank" rel="noopener"';
  if(c.email)r.push(`<span class="nm">${esc(c.email)}</span><a class="btn sm solid" href="mailto:${esc(c.email)}">Email</a><a class="btn sm" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(c.email)}" ${B}>Gmail ↗</a><button class="btn sm" type="button" data-cp="${esc(c.email)}">Copy</button>`);
  if(c.phone)c.phone.split(/[,\n]+/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=n.includes(":")?n.split(":"):n.includes("|")?n.split("|"):[n,n];const label=p[0].trim(),num=(p[1]||p[0]).trim();const d=num.replace(/[^\d+]/g,""),w=d[0]==="+"?d.slice(1):"91"+d;r.push(`<span class="nm">${esc(label)}</span><a class="btn sm solid" href="https://wa.me/${w}" ${B}>WhatsApp</a><button class="btn sm" type="button" data-cp="${esc(num)}">Copy</button>`);});
@@ -554,7 +554,7 @@ function signatureModelSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Core Service Model</span>
-          <h2 class="section-title">BUILD. MANAGE. SECURE. HOST.</h2>
+          <h2 class="section-title" id="services">BUILD. MANAGE. SECURE. HOST.</h2>
           <p class="section-subtitle">Everything your digital presence needs — from custom code to reliable cloud hosting.</p>
         </div>
         <div class="pillar-grid">
@@ -594,7 +594,7 @@ function deliveryProcessSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Disciplined Delivery</span>
-          <h2 class="section-title">From First Conversation to Scaled Reality</h2>
+          <h2 class="section-title" id="process">From First Conversation to Scaled Reality</h2>
           <p class="section-subtitle">A clear, simple process from our first call to your live launch.</p>
         </div>
         <div class="process-timeline">
@@ -644,7 +644,7 @@ function trustStandardsSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Accountability &amp; Standards</span>
-          <h2 class="section-title">Engineered on Trust &amp; Transparency</h2>
+          <h2 class="section-title" id="standards">Engineered on Trust &amp; Transparency</h2>
           <p class="section-subtitle">Clear standards we stand by on every project.</p>
         </div>
         <div class="trust-standards-grid">
@@ -665,27 +665,27 @@ function homepageFAQSection() {
   const faqs = [
     {
       q: "What services does Caventra provide?",
-      a: "Caventra provides end-to-end digital software engineering through four core pillars: BUILD (custom website design and full-stack web applications), MANAGE (routine maintenance, content updates, and Core Web Vitals optimization), SECURE (enterprise HTTP headers, spam defense, and encrypted backups), and HOST (global edge CDN cloud hosting with 99.9% uptime)."
+      a: "Caventra builds, hosts, protects, and manages fast custom websites and digital software for growing businesses. Our four core services cover complete website design and development, reliable cloud hosting with continuous uptime, proactive site security, and monthly care to keep your site fast, fresh, and bug-free at all times."
     },
     {
       q: "Do I own my code and website after launch?",
-      a: "Yes, 100%. Once final payment is fulfilled, all source code, design assets, and deployment keys transfer directly to you with zero vendor lock-in. You receive full intellectual property ownership, source repositories, production builds, and host account access."
+      a: "Yes, you own 100 percent of your code and digital assets. When your project is complete and paid for, we transfer full intellectual property ownership directly to you. That includes all source code files, design files, live hosting keys, and site accounts with zero vendor lock-in or recurring platform fees."
     },
     {
       q: "How does Caventra differ from traditional agencies?",
-      a: "We write custom, lightweight code instead of using slow templates like WordPress or Wix. Your site loads faster, looks unique, and doesn't break from third-party plugin conflicts. You collaborate directly with our founding engineers rather than non-technical account managers."
+      a: "Caventra writes clean custom code from scratch rather than relying on slow templates like WordPress or Wix. Your site loads faster, looks truly unique, and will not break from plugin conflicts. You also work directly with our founding engineers who build your product, not non-technical sales reps or middle managers."
     },
     {
       q: "How long does a typical project take to complete?",
-      a: "Standard business websites take 2 to 3 weeks from discovery kickoff to production launch. Custom web applications, interactive portals, and complex e-commerce platforms take 4 to 6 weeks, delivered across seven disciplined milestone stages."
+      a: "A standard custom business website takes two to three weeks from kickoff to launch. More complex web apps, member portals, and online store platforms take four to six weeks. We work through seven clear stages with live weekly preview links so you always see exactly what is being built."
     },
     {
       q: "How much does a custom website cost with Caventra?",
-      a: "Custom business websites range from $850 to $2,800 depending on interactive scope, custom animations, and backend requirements. We offer transparent upfront milestone pricing with zero hidden fees. You can calculate an instant estimate using our interactive Website Cost Estimator."
+      a: "Custom business websites range from 850 to 2,800 dollars depending on your page count, custom features, and backend needs. We provide upfront itemized pricing with clear milestones and no hidden fees. You can configure your project requirements and get an instant estimate on our website using our free Cost Estimator tool."
     },
     {
-      q: "Can you maintain and support a website you didn't build?",
-      a: "Yes. Through our MANAGE service, we audit your existing site, resolve urgent issues, optimize Core Web Vitals, and provide ongoing maintenance, security patching, and managed cloud hosting."
+      q: "Can you maintain and support a website you did not build?",
+      a: "Yes, we can manage, host, and speed up websites built by others. Through our website management service, our engineers review your existing site code, fix urgent bugs, improve load speed, set up daily backups, and install security protections so your site stays fast, safe, and up to date."
     }
   ];
 
@@ -694,7 +694,7 @@ function homepageFAQSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Client Questions</span>
-          <h2 class="section-title">Frequently Asked Questions</h2>
+          <h2 class="section-title" id="faq">Frequently Asked Questions</h2>
           <p class="section-subtitle">Clear answers to help you evaluate partnering with Caventra.</p>
         </div>
         <div class="faq-wrap">
@@ -737,7 +737,7 @@ function homepageTestimonialsSection() {
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">Client Feedback</span>
-          <h2 class="section-title">Built with Precision. Trusted by Founders.</h2>
+          <h2 class="section-title" id="testimonials">Built with Precision. Trusted by Founders.</h2>
           <p class="section-subtitle">Real outcomes from businesses that chose clean software engineering over generic templates.</p>
         </div>
         <div class="testimonial-grid">
@@ -811,25 +811,25 @@ home:()=>{
       <div class="wrap">
         <div class="section-header-compact">
           <span class="section-kicker">About Caventra</span>
-          <h2 class="section-title">Engineering-First Digital Studio</h2>
+          <h2 class="section-title" id="about">Engineering-First Digital Studio</h2>
         </div>
         <div class="aeo-answer-block" style="margin-top:28px">
           <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.55;color:var(--tx);font-weight:400;max-width:68ch">
-            <strong>Caventra is an engineering-focused digital solutions studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
+            <strong>Caventra is an engineering-first digital studio based in Ahmedabad, Gujarat, India.</strong> We design, build, host, secure, and manage custom websites and digital software for businesses worldwide with bespoke hand-crafted code, zero page-builders, sub-second page performance, and 100% intellectual property ownership.
           </p>
-          <p style="font-size:17px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
-            Technology, design, and business thinking combined into practical, scalable digital solutions. We are a dedicated technology partner, not a marketing agency.
+          <p style="font-size:16px;max-width:64ch;line-height:1.65;margin-top:16px;color:var(--mut)">
+            <strong>Custom web development is</strong> the craft of writing lightweight code tailored to business needs. In contrast to generic website builders, our engineering team builds fast web applications that boost conversion and guarantee complete client control.
           </p>
         </div>
       </div>
     </section>`
   + deliveryProcessSection()
   + trustStandardsSection()
-  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`)
+  + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p style="margin-top:36px"><a class="btn solid" href="/work/">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
   + homepageTestimonialsSection()
   + homepageFAQSection()
   + `<section class="band"><div class="wrap"><h2>Have an idea worth building?</h2><p style="margin:16px auto 32px;max-width:54ch;font-size:18px;color:var(--mut)">Let's architect and engineer your digital product with clean code and transparent pricing.</p><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap"><a class="btn solid" href="/contact/">Start a Project ↗</a><a class="btn" href="/estimator/">Launch Cost Estimator</a></div></div></section>`
-  + (contactInfo() ? wrapS("Contact", contactInfo()) : '');
+  + (contactInfo() ? wrapS("Contact", contactInfo(), '', 'contact') : '');
 },
 services: () => {
   const serviceCards = [
@@ -1426,7 +1426,7 @@ about:()=>{
       <div class="founders-grid">
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Head of Growth" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.webp" alt="Hriday Vayanta — Head of Growth" width="320" height="320" loading="lazy">
           </div>
           <h3>Hriday Vayanta</h3>
           <span class="founder-role">Head of Growth</span>
@@ -1449,7 +1449,7 @@ about:()=>{
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Head of Design" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.webp" alt="Ved Nimbark — Head of Design" width="320" height="320" loading="lazy">
           </div>
           <h3>Ved Nimbark</h3>
           <span class="founder-role">Head of Design</span>
@@ -1472,7 +1472,7 @@ about:()=>{
         </div>
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.jpg" alt="Sauranahmed Mansuri — Head of Technology" width="320" height="320" loading="lazy">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.webp" alt="Sauranahmed Mansuri — Head of Technology" width="320" height="320" loading="lazy">
           </div>
           <h3>Sauranahmed Mansuri</h3>
           <span class="founder-role">Head of Technology</span>
@@ -1529,7 +1529,7 @@ founders:()=>{
       <div class="founders-grid">
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/hriday-vayanta.jpg" alt="Hriday Vayanta — Founder &amp; Head of Growth at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/hriday-vayanta.webp" alt="Hriday Vayanta — Founder &amp; Head of Growth at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Hriday Vayanta</h3>
           <span class="founder-role">Founder &amp; Head of Growth</span>
@@ -1553,7 +1553,7 @@ founders:()=>{
 
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/ved-nimbark.jpg" alt="Ved Nimbark — Founder &amp; Head of Design at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/ved-nimbark.webp" alt="Ved Nimbark — Founder &amp; Head of Design at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Ved Nimbark</h3>
           <span class="founder-role">Founder &amp; Head of Design</span>
@@ -1577,7 +1577,7 @@ founders:()=>{
 
         <div class="founder-card">
           <div class="founder-photo-wrap">
-            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.jpg" alt="Sauranahmed Mansuri — Founder &amp; Head of Technology at Caventra" width="320" height="320" loading="eager">
+            <img class="founder-photo" src="/assets/founders/sauranahmed-mansuri.webp" alt="Sauranahmed Mansuri — Founder &amp; Head of Technology at Caventra" width="320" height="320" loading="eager">
           </div>
           <h3>Sauranahmed Mansuri</h3>
           <span class="founder-role">Founder &amp; Head of Technology</span>
@@ -1931,7 +1931,7 @@ project:s=>{
 
   return head(esc(p.name),esc(p.short))+wrapS("",
     `<div class="service-breadcrumb"><a href="/">Home</a> / <a href="/work/">Selected Work</a> / <span>${esc(p.name)}</span></div>`+
-    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block" loading="lazy">`:'')+
+    (cv?`<img src="${safe(cv)}" alt="${esc(p.name)}" width="1200" height="675" style="width:100%;height:auto;border:1px solid var(--line);border-radius:12px;margin-bottom:24px;display:block" loading="lazy">`:'')+
     `<div style="display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap">
        <span class="project-status-badge ${st.cls}" style="margin-left:0;padding:5px 12px;font-size:12px">${esc(st.label)}</span>
        <span style="font-size:14px;color:var(--mut)">Category: <b>${esc(p.category)}</b></span>
@@ -1943,7 +1943,7 @@ project:s=>{
     sec("Engineered Solution",p.solution)+
     (f.length?`<h3 style="margin:48px 0 12px">Key Features &amp; Technical Capabilities</h3><ul style="padding-left:20px;line-height:1.7;color:var(--mut)">${f.map(x=>`<li style="margin-bottom:6px"><span style="color:var(--tx)">${esc(x)}</span></li>`).join('')}</ul>`:'')+
     sec("Tangible Results & Current Status",p.results)+
-    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" style="margin-top:24px;border:1px solid var(--line)" loading="lazy">`).join('')+
+    (p.gallery||[]).map(g=>`<img src="${safe(g)}" alt="${esc(p.name)} gallery preview" width="1200" height="675" style="width:100%;height:auto;margin-top:24px;border:1px solid var(--line);border-radius:12px;display:block" loading="lazy">`).join('')+
     `<div class="row" style="margin-top:48px;flex-wrap:wrap;gap:12px">
        ${p.live?`<a class="btn solid" href="${safe(p.live)}" target="_blank" rel="noopener">Live Website ↗</a>`:''}
        ${p.github?`<a class="btn" href="${safe(p.github)}" target="_blank" rel="noopener">GitHub ↗</a>`:''}
@@ -2411,7 +2411,7 @@ const bg=$('#bg'),lk=$('#lk');if(bg&&lk){bg.onclick=()=>{const o=lk.classList.to
 $('#yr').textContent=new Date().getFullYear();
 const ckb=$('#ckb'),ckAcc=$('#ck-acc'),ckDec=$('#ck-dec');
 if(ckb&&!localStorage.getItem('cv_cookie_consent')){ckb.classList.remove('hide');setTimeout(()=>ckb.classList.add('show'),700);if(ckAcc)ckAcc.onclick=()=>{localStorage.setItem('cv_cookie_consent','accepted');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};if(ckDec)ckDec.onclick=()=>{localStorage.setItem('cv_cookie_consent','essential');ckb.classList.remove('show');setTimeout(()=>ckb.classList.add('hide'),400);};}
-let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+getLogo()+'" alt="" aria-hidden="true">';
+let first=true,busy=false,tt;const cur=$('#cur');cur.innerHTML='<img src="'+getLogo()+'" alt="" width="810" height="445" loading="lazy" aria-hidden="true">';
 function scr(el){const t=el.textContent,G='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+<>/',n=t.length;let f=0;const id=setInterval(()=>{f++;el.textContent=t.split('').map((c,i)=>c===' '||i<f*n/18?c:G[Math.random()*G.length|0]).join('');if(f>=18){clearInterval(id);el.textContent=t}},38)}
 function nav(){if(first||RM){first=false;render();return}if(busy)return;busy=true;cur.className='cin';setTimeout(()=>{render();cur.className='cout';setTimeout(()=>{cur.className='';busy=false},540)},520)}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);if(e.target.tagName==='H2'&&!e.target.children.length)scr(e.target)}}),{threshold:.12});
