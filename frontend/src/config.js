@@ -29,8 +29,9 @@ const D={
     "github": "",
     "cover": "/assets/projects/gloss-atelier-hero.png",
     "gallery": [
-      "/assets/projects/gloss-atelier-full.png",
-      "/assets/projects/gloss-atelier-mobile.png"
+      "/assets/projects/gloss-atelier-services.png",
+      "/assets/projects/gloss-atelier-story.png",
+      "/assets/projects/gloss-atelier-booking.png"
     ],
     "published": true,
     "featured": true
