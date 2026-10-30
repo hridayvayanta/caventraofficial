@@ -37,7 +37,6 @@ home:()=>{
           <a href="#services" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Capabilities ↓</a>
           <a href="#about" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">About Studio ↓</a>
           <a href="#process" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Our Process ↓</a>
-          <a href="#comparison" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Comparison ↓</a>
           <a href="#standards" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Standards ↓</a>
           <a href="#work" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Selected Work ↓</a>
           <a href="#faq" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">FAQ ↓</a>
@@ -101,7 +100,6 @@ home:()=>{
       </div>
     </section>`
   + deliveryProcessSection()
-  + comparisonTableSection()
   + trustStandardsSection()
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p class="work-cta-row" style="margin-top:36px;font-size:15px;color:var(--mut)">Explore our full showcase of production web applications and design engineering projects or schedule a discovery call with our founders today. <a class="btn solid" href="/work/" style="margin-left:8px">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
   + homepageTestimonialsSection()

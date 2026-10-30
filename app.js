@@ -768,65 +768,6 @@ function homepageTestimonialsSection() {
   `;
 }
 
-function comparisonTableSection() {
-  return `
-    <section>
-      <div class="wrap">
-        <div class="section-header-compact">
-          <span class="section-kicker">Technical Evaluation</span>
-          <h2 class="section-title" id="comparison">Architectural Comparison: Custom Engineering vs Templates</h2>
-          <p class="section-subtitle">Compare the key technical, financial, and operational differences between hand-crafted software engineering, fragile WordPress page-builders, and closed DIY proprietary platform builders.</p>
-        </div>
-        <div style="overflow-x:auto;margin-top:28px">
-          <table class="data-comparison-table" style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
-            <caption class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0">Custom Web Development vs WordPress vs DIY Builders Comparison</caption>
-            <thead>
-              <tr style="border-bottom:2px solid var(--bdr);background:var(--s1)">
-                <th style="padding:14px 16px;font-weight:700">Engineering Metric</th>
-                <th style="padding:14px 16px;font-weight:700;color:var(--tx)">Caventra Custom Engineering</th>
-                <th style="padding:14px 16px;font-weight:600;color:var(--mut)">WordPress &amp; Elementor</th>
-                <th style="padding:14px 16px;font-weight:600;color:var(--mut)">DIY Builders (Wix / Squarespace)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--bdr)">
-                <td style="padding:12px 16px;font-weight:600">Page Load Time</td>
-                <td style="padding:12px 16px;color:var(--tx)">Sub-second (&lt; 0.8s)</td>
-                <td style="padding:12px 16px;color:var(--mut)">3.5s to 7.0s (plugin bloat)</td>
-                <td style="padding:12px 16px;color:var(--mut)">2.5s to 5.0s (script overhead)</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--bdr)">
-                <td style="padding:12px 16px;font-weight:600">Source Code Ownership</td>
-                <td style="padding:12px 16px;color:var(--tx)">100% Client-Owned Git Repo</td>
-                <td style="padding:12px 16px;color:var(--mut)">Theme &amp; plugin vendor lock-in</td>
-                <td style="padding:12px 16px;color:var(--mut)">Proprietary platform locked</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--bdr)">
-                <td style="padding:12px 16px;font-weight:600">Core Web Vitals</td>
-                <td style="padding:12px 16px;color:var(--tx)">95 to 100 Green Score</td>
-                <td style="padding:12px 16px;color:var(--mut)">Fails LCP &amp; CLS frequently</td>
-                <td style="padding:12px 16px;color:var(--mut)">Limited control / average</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--bdr)">
-                <td style="padding:12px 16px;font-weight:600">Security Architecture</td>
-                <td style="padding:12px 16px;color:var(--tx)">Zero third-party attack surface</td>
-                <td style="padding:12px 16px;color:var(--mut)">Frequent CVE plugin vulnerabilities</td>
-                <td style="padding:12px 16px;color:var(--mut)">Closed black box</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--bdr)">
-                <td style="padding:12px 16px;font-weight:600">Recurring Software Fees</td>
-                <td style="padding:12px 16px;color:var(--tx)">$0 recurring plugin licenses</td>
-                <td style="padding:12px 16px;color:var(--mut)">Expensive annual plugin fees</td>
-                <td style="padding:12px 16px;color:var(--mut)">Mandatory monthly platform rent</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
 const V={
 home:()=>{
   const heroHighlights = `
@@ -867,7 +808,6 @@ home:()=>{
           <a href="#services" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Capabilities ↓</a>
           <a href="#about" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">About Studio ↓</a>
           <a href="#process" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Our Process ↓</a>
-          <a href="#comparison" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Comparison ↓</a>
           <a href="#standards" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Standards ↓</a>
           <a href="#work" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">Selected Work ↓</a>
           <a href="#faq" class="pill-link" style="font-size:13px;padding:6px 14px;border:1px solid var(--bdr);border-radius:100px;color:var(--tx);text-decoration:none">FAQ ↓</a>
@@ -931,7 +871,6 @@ home:()=>{
       </div>
     </section>`
   + deliveryProcessSection()
-  + comparisonTableSection()
   + trustStandardsSection()
   + wrapS("Selected Work &amp; Case Studies", workGrid(pub().filter(p=>p.featured)) + `<p class="work-cta-row" style="margin-top:36px;font-size:15px;color:var(--mut)">Explore our full showcase of production web applications and design engineering projects or schedule a discovery call with our founders today. <a class="btn solid" href="/work/" style="margin-left:8px">Explore All Selected Work ↗</a> <a class="btn" href="/contact/">Discuss a Project ↗</a></p>`, '', 'work')
   + homepageTestimonialsSection()
