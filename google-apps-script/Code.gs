@@ -345,30 +345,91 @@ function initialSetup() {
 }
 
 /**
- * Optional email dispatch to CAVENTRA inbox
+ * Email dispatch to official CAVENTRA inbox (caventraofficial@gmail.com)
  */
 function sendNotificationEmail(id, date, name, email, phone, company, type, budget, timeline, message) {
-  var subject = 'New Project Enquiry [' + id + '] — ' + name;
-  var body = 'New Project Enquiry received on CAVENTRA:\n\n' +
+  var subject = '⚡ New Project Inquiry [' + id + '] — ' + name + ' (' + type + ')';
+
+  var textBody = 'New Project Inquiry Received on CAVENTRA:\n\n' +
     'Enquiry ID: ' + id + '\n' +
     'Date: ' + date + '\n\n' +
-    'Client: ' + name + '\n' +
-    'Email: ' + email + '\n' +
-    'Phone/WhatsApp: ' + (phone || 'Not provided') + '\n' +
-    'Company: ' + (company || 'Not provided') + '\n\n' +
+    'Client Name: ' + name + '\n' +
+    'Client Email: ' + email + '\n' +
+    'Phone / WhatsApp: ' + (phone || 'Not provided') + '\n' +
+    'Company: ' + (company || 'Not provided') + '\n' +
     'Service Requested: ' + type + '\n' +
     'Budget: ' + (budget || 'Not specified') + '\n' +
     'Timeline: ' + (timeline || 'Not specified') + '\n\n' +
     'Project Brief:\n' + message + '\n\n' +
-    '---\n' +
-    'CAVENTRA Automated Inquiries Notification';
+    'Reply directly to this email to contact the client.\n\n' +
+    'CAVENTRA Automated Notification';
 
-  MailApp.sendEmail({
-    to: NOTIFY_EMAIL,
-    replyTo: email,
-    subject: subject,
-    body: body
-  });
+  var cleanPhoneDigits = String(phone || '').replace(/\D/g, '');
+  var whatsappUrl = cleanPhoneDigits ? 'https://wa.me/' + cleanPhoneDigits : '';
+
+  var htmlBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;max-width:600px;margin:0 auto;padding:32px 28px;background:#0d1117;color:#f0f6fc;border-radius:12px;border:1px solid #30363d;">' +
+    '<div style="text-align:center;margin-bottom:24px;border-bottom:1px solid #21262d;padding-bottom:16px;">' +
+    '<h1 style="color:#c9b8a0;margin:0;font-size:24px;letter-spacing:2px;font-weight:700;">CAVENTRA</h1>' +
+    '<p style="color:#8b949e;font-size:12px;margin:6px 0 0;letter-spacing:1px;text-transform:uppercase;">New Project Inquiry &bull; Reference ' + id + '</p>' +
+    '</div>' +
+    '<table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;width:35%;">Client Name</td><td style="padding:10px 12px;color:#f0f6fc;font-weight:600;border-bottom:1px solid #21262d;">' + name + '</td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Client Email</td><td style="padding:10px 12px;color:#58a6ff;border-bottom:1px solid #21262d;"><a href="mailto:' + email + '" style="color:#58a6ff;text-decoration:none;">' + email + '</a></td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Phone / WhatsApp</td><td style="padding:10px 12px;color:#f0f6fc;border-bottom:1px solid #21262d;">' + (whatsappUrl ? '<a href="' + whatsappUrl + '" style="color:#3fb950;text-decoration:none;">' + phone + ' ↗</a>' : (phone || 'Not provided')) + '</td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Company</td><td style="padding:10px 12px;color:#f0f6fc;border-bottom:1px solid #21262d;">' + (company || 'Not provided') + '</td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Service Requested</td><td style="padding:10px 12px;color:#c9b8a0;font-weight:600;border-bottom:1px solid #21262d;">' + type + '</td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Budget</td><td style="padding:10px 12px;color:#3fb950;font-weight:600;border-bottom:1px solid #21262d;">' + (budget || 'Not specified') + '</td></tr>' +
+    '<tr><td style="padding:10px 12px;color:#8b949e;border-bottom:1px solid #21262d;">Timeline</td><td style="padding:10px 12px;color:#f0f6fc;border-bottom:1px solid #21262d;">' + (timeline || 'Not specified') + '</td></tr>' +
+    '</table>' +
+    '<div style="margin:20px 0;padding:16px;background:#161b22;border-radius:8px;border:1px solid #30363d;">' +
+    '<h4 style="margin:0 0 8px;color:#8b949e;font-size:12px;text-transform:uppercase;">Project Brief:</h4>' +
+    '<p style="margin:0;color:#f0f6fc;font-size:14px;line-height:1.6;white-space:pre-wrap;">' + message + '</p>' +
+    '</div>' +
+    '<div style="text-align:center;margin-top:24px;">' +
+    '<a href="mailto:' + email + '" style="display:inline-block;padding:10px 20px;background:#c9b8a0;color:#0d1117;font-weight:600;font-size:14px;border-radius:6px;text-decoration:none;margin-right:10px;">Reply to ' + name + ' ↗</a>' +
+    (whatsappUrl ? '<a href="' + whatsappUrl + '" style="display:inline-block;padding:10px 20px;background:#238636;color:#ffffff;font-weight:600;font-size:14px;border-radius:6px;text-decoration:none;">WhatsApp Client ↗</a>' : '') +
+    '</div>' +
+    '<hr style="border:none;border-top:1px solid #21262d;margin:28px 0 16px;"/>' +
+    '<p style="color:#6e7681;font-size:11px;margin:0;text-align:center;">CAVENTRA Automated Notification &bull; Submission Time: ' + date + '</p>' +
+    '</div>';
+
+  // Attempt GmailApp first, fall back to MailApp
+  try {
+    GmailApp.sendEmail(NOTIFY_EMAIL, subject, textBody, {
+      name: 'CAVENTRA Leads',
+      replyTo: email,
+      htmlBody: htmlBody
+    });
+  } catch (gErr) {
+    Logger.log('GmailApp failed: ' + gErr.toString() + ' — Trying MailApp fallback...');
+    MailApp.sendEmail({
+      to: NOTIFY_EMAIL,
+      name: 'CAVENTRA Leads',
+      replyTo: email,
+      subject: subject,
+      body: textBody,
+      htmlBody: htmlBody
+    });
+  }
+}
+
+/**
+ * Diagnostic test function: Run this inside the Apps Script editor to trigger authorization and test email delivery
+ */
+function testSendNotificationEmail() {
+  sendNotificationEmail(
+    'TEST-DIAGNOSTIC',
+    Utilities.formatDate(new Date(), 'Asia/Kolkata', 'yyyy-MM-dd HH:mm:ss') + ' IST',
+    'Caventra Diagnostic Test',
+    'caventraofficial@gmail.com',
+    '8866790989',
+    'Caventra Technologies',
+    'Custom Web Engineering',
+    '₹75,000',
+    '3 weeks',
+    'This is an automated diagnostic test to confirm that inquiry notifications are landing directly into caventraofficial@gmail.com.'
+  );
+  Logger.log('Diagnostic test email dispatched to: ' + NOTIFY_EMAIL);
 }
 
 /**
