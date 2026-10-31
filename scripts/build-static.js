@@ -487,6 +487,9 @@ routes.push({
   }
 });
 
+// Blog Articles Collection
+const blogArticles = sandbox.getB ? sandbox.getB() : [];
+
 // Blog / Insights Hub
 routes.push({
   slug: 'blog',
@@ -495,7 +498,7 @@ routes.push({
   description: 'Actionable articles on website pricing in India, hosting and maintenance plans, security hardening, Core Web Vitals, and bespoke web engineering.',
   activeNav: 'blog',
   changefreq: 'weekly',
-  priority: '0.85',
+  priority: '0.9',
   render: () => sandbox.V.blog(),
   jsonLd: {
     '@context': 'https://schema.org',
@@ -506,13 +509,29 @@ routes.push({
           { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${BASE_URL}/` },
           { '@type': 'ListItem', 'position': 2, 'name': 'Insights & Blog', 'item': `${BASE_URL}/blog/` }
         ]
+      },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${BASE_URL}/blog/#collection`,
+        'name': 'Caventra Knowledge & Engineering Insights',
+        'url': `${BASE_URL}/blog/`,
+        'description': 'Actionable articles on website pricing in India, hosting and maintenance plans, security hardening, Core Web Vitals, and bespoke web engineering.',
+        'mainEntity': {
+          '@type': 'ItemList',
+          'numberOfItems': blogArticles.length,
+          'itemListElement': blogArticles.map((b, i) => ({
+            '@type': 'ListItem',
+            'position': i + 1,
+            'name': b.title,
+            'url': `${BASE_URL}/blog/${b.slug}/`,
+            'description': b.summary
+          }))
+        }
       }
     ]
   }
 });
 
-// 34 Curated Blog Articles
-const blogArticles = sandbox.getB ? sandbox.getB() : [];
 for (const b of blogArticles) {
   const articleGraph = [
     {
@@ -783,6 +802,45 @@ ${sitemapEntries}
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml);
 fs.writeFileSync(path.join(ROOT, 'public', 'sitemap.xml'), sitemapXml);
 console.log(`✓ Saved sitemap.xml with ${sitemapRoutes.length} canonical URLs (legal routes excluded).`);
+
+// 6. Generate canonical RSS 2.0 feed (feed.xml) for Google News, Feed Crawlers & Rapid Syndication
+console.log('\nGenerating canonical feed.xml (RSS 2.0)...');
+const escapeXml = (unsafe) => String(unsafe || '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&apos;');
+
+const feedItems = blogArticles.map(b => {
+  const url = `${BASE_URL}/blog/${b.slug}/`;
+  return `    <item>
+      <title>${escapeXml(b.title)}</title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <description>${escapeXml(b.summary)}</description>
+      <category>${escapeXml(b.category || 'Software Engineering')}</category>
+      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
+    </item>`;
+}).join('\n');
+
+const feedXml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Caventra Engineering Insights</title>
+    <link>${BASE_URL}/blog/</link>
+    <description>Technical insights, software architecture deep-dives, SMB cost guides, and engineering standards from the Caventra digital engineering team.</description>
+    <language>en-us</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />
+${feedItems}
+  </channel>
+</rss>
+`;
+
+fs.writeFileSync(path.join(ROOT, 'feed.xml'), feedXml);
+fs.writeFileSync(path.join(ROOT, 'public', 'feed.xml'), feedXml);
+console.log(`✓ Saved feed.xml with ${blogArticles.length} syndicated articles.`);
 
 console.log('\n====================================================');
 console.log(`  Static Build Completed: ${generatedCount} pages generated.`);

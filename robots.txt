@@ -48,3 +48,4 @@ Disallow: /api/
 Disallow: /admin/
 
 Sitemap: https://caventraofficial.in/sitemap.xml
+Sitemap: https://caventraofficial.in/feed.xml
