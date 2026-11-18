@@ -304,7 +304,7 @@
     let isVisible = true;
     let isPageVisible = document.visibilityState !== 'hidden';
 
-    let currentTheme = html.getAttribute('data-theme') || 'dark';
+    let currentTheme = html.getAttribute('data-theme') || 'light';
 
     function resize() {
       const cssWidth = Math.max(1, window.innerWidth);

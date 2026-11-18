@@ -223,7 +223,7 @@ function renderContactSuccess(container, f, result) {
 }
 
 const $=s=>document.querySelector(s),app=$('#app');
-const getTheme=()=>document.documentElement.getAttribute('data-theme')||'dark';
+const getTheme=()=>document.documentElement.getAttribute('data-theme')||'light';
 const getLogo=()=>(getTheme()==='light'?'/assets/logo-light.webp':'/assets/logo.webp');
 const getNavLogo=()=>(getTheme()==='light'?'/assets/logo-nav-light.webp':'/assets/logo-nav.webp');
 const ORIG=getLogo();$('#sp').src=getLogo();$('#fl').src=getLogo();

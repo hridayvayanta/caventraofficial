@@ -11,13 +11,13 @@
   const html = document.documentElement;
 
   // 1. Initial theme resolution (executes immediately to avoid FOUC)
-  // Dark mode is PRIMARY; Light mode is SECONDARY
+  // Light mode is PRIMARY (default); Dark mode is SECONDARY
   function getPreferredTheme() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === 'light' || saved === 'dark') return saved;
     } catch (e) {}
-    return 'dark';
+    return 'light';
   }
 
   const initialTheme = getPreferredTheme();
