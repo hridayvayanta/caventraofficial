@@ -5,7 +5,7 @@
     <link>https://caventraofficial.in/blog/</link>
     <description>Technical insights, software architecture deep-dives, SMB cost guides, and engineering standards from the Caventra digital engineering team.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Nov 2026 16:41:25 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 16:13:25 GMT</lastBuildDate>
     <atom:link href="https://caventraofficial.in/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Building Custom AI Web Applications in 2026: Architecture, Tech Stack, APIs &amp; Cost Breakdown</title>
@@ -605,6 +605,14 @@
       <guid isPermaLink="true">https://caventraofficial.in/blog/api-integration-web-application-architecture-guide/</guid>
       <description>An authoritative engineering blueprint for CEOs, CTOs, and product leaders on architecting resilient API integrations. Learn how to connect web frontends to legacy ERPs, CRMs, payment gateways, and AI models using idempotent webhooks, asynchronous queues, token-bucket rate limiting, and mTLS security—with complete 2026 cost and timeline benchmarks.</description>
       <category>Web Engineering &amp; Architecture</category>
+      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Website Maintenance Retainers &amp; SLA Management: The 2026 Executive Guide to Uptime, Security Patching, Code Health &amp; TCO</title>
+      <link>https://caventraofficial.in/blog/website-maintenance-retainers-sla-guide/</link>
+      <guid isPermaLink="true">https://caventraofficial.in/blog/website-maintenance-retainers-sla-guide/</guid>
+      <description>An authoritative engineering blueprint for CEOs, CTOs, and operations leaders on structuring website maintenance retainers and Service Level Agreements (SLAs). Learn how proactive code maintenance, 24/7 uptime monitoring, automated disaster recovery, zero-day security patching, and database optimization prevent revenue loss, sustain Core Web Vitals, and eliminate compounding technical debt—with transparent 2026 pricing benchmarks and contract checklists.</description>
+      <category>Hosting &amp; Management</category>
       <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
     </item>
   </channel>

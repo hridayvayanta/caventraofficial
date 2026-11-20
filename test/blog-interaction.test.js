@@ -155,19 +155,19 @@ vm.runInContext(fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8'), sandbox);
 vm.runInContext('this.V = V; this.getB = getB; Object.defineProperty(this, "blogShowAll", { get: () => blogShowAll, set: v => blogShowAll = v, configurable: true }); Object.defineProperty(this, "blogFilter", { get: () => blogFilter, set: v => blogFilter = v, configurable: true }); Object.defineProperty(this, "blogPage", { get: () => blogPage, set: v => blogPage = v, configurable: true }); Object.defineProperty(this, "workFilter", { get: () => workFilter, set: v => workFilter = v, configurable: true }); Object.defineProperty(this, "blogQuery", { get: () => blogQuery, set: v => blogQuery = v, configurable: true });', sandbox);
 
 // 2. BLOG LISTING INITIAL STATE
-test('Initial Blog State: 75 articles loaded, initial visible count is 24, hasMore is true', () => {
+test('Initial Blog State: 76 articles loaded, initial visible count is 24, hasMore is true', () => {
   const blogs = sandbox.getB();
-  assert.strictEqual(blogs.length, blogs.length, 'Expected 75 articles in window.BLOGS');
+  assert.strictEqual(blogs.length, blogs.length, 'Expected 76 articles in window.BLOGS');
   
   const initialHtml = sandbox.V.blog();
-  assert.ok(initialHtml.includes('Showing 24 of 75 articles'), 'Must show initial 24 of 75');
+  assert.ok(initialHtml.includes('Showing 24 of 76 articles'), 'Must show initial 24 of 76');
   assert.ok(initialHtml.includes('id="b-showall"'), 'Must render bottom Show All button');
   assert.ok(initialHtml.includes('id="b-showall-top"'), 'Must render top Show All button');
   assert.ok(initialHtml.includes('id="b-more"'), 'Must render Load More button');
 });
 
 // 3. SHOW ALL BUTTON CLICK SIMULATION
-test('Clicking #b-showall sets blogShowAll=true and renders all 75 articles', () => {
+test('Clicking #b-showall sets blogShowAll=true and renders all 76 articles', () => {
   const clickHandlers = eventListeners['click'] || [];
   assert.ok(clickHandlers.length > 0, 'Must register click handler');
 
@@ -181,12 +181,12 @@ test('Clicking #b-showall sets blogShowAll=true and renders all 75 articles', ()
 
   assert.strictEqual(sandbox.blogShowAll, true, 'blogShowAll must be set to true');
   const allHtml = sandbox.V.blog();
-  assert.ok(allHtml.includes('Showing 75 of 75 articles'), 'Must show all 75 of 75 articles');
+  assert.ok(allHtml.includes('Showing 76 of 76 articles'), 'Must show all 76 of 76 articles');
   assert.ok(!allHtml.includes('id="b-more"'), 'Load More button must disappear');
   assert.ok(!allHtml.includes('id="b-showall-top"'), 'Top Show All button must disappear');
   // Check count of articles rendered
   const cardCount = (allHtml.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 75, 'Must render exactly 75 b-card elements');
+  assert.strictEqual(cardCount, 76, 'Must render exactly 76 b-card elements');
 });
 
 // 4. CATEGORY FILTER CLICK
@@ -226,29 +226,29 @@ test('Clicking #b-more increments blogPage and loads remaining articles', () => 
 
   assert.strictEqual(sandbox.blogPage, 2);
   const page2Html = sandbox.V.blog();
-  assert.ok(page2Html.includes('Showing 48 of 75 articles'));
+  assert.ok(page2Html.includes('Showing 48 of 76 articles'));
   const cardCount = (page2Html.match(/class="b-card"/g) || []).length;
   assert.strictEqual(cardCount, 48);
 
-  // Click #b-more once more to reach page 3 (72 of 75)
+  // Click #b-more once more to reach page 3 (72 of 76)
   for (const handler of clickHandlers) {
     handler(fakeEvent);
   }
   assert.strictEqual(sandbox.blogPage, 3);
   const page3Html = sandbox.V.blog();
-  assert.ok(page3Html.includes('Showing 72 of 75 articles'));
+  assert.ok(page3Html.includes('Showing 72 of 76 articles'));
   const cardCount3 = (page3Html.match(/class="b-card"/g) || []).length;
   assert.strictEqual(cardCount3, 72);
 
-  // Click #b-more once more to reach page 4 (all 75)
+  // Click #b-more once more to reach page 4 (all 76)
   for (const handler of clickHandlers) {
     handler(fakeEvent);
   }
   assert.strictEqual(sandbox.blogPage, 4);
   const page4Html = sandbox.V.blog();
-  assert.ok(page4Html.includes('Showing 75 of 75 articles'));
+  assert.ok(page4Html.includes('Showing 76 of 76 articles'));
   const cardCount4 = (page4Html.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount4, 75);
+  assert.strictEqual(cardCount4, 76);
 });
 
 // 6. WORK CATEGORY FILTER
@@ -265,7 +265,7 @@ test('Clicking [data-wcat] updates workFilter and does not error', () => {
 });
 
 // 7. TOP SHOW ALL BUTTON CLICK
-test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 75 articles', () => {
+test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 76 articles', () => {
   sandbox.blogFilter = 'All';
   sandbox.blogPage = 1;
   sandbox.blogShowAll = false;
@@ -280,9 +280,9 @@ test('Clicking top #b-showall-top button sets blogShowAll=true and renders all 7
 
   assert.strictEqual(sandbox.blogShowAll, true);
   const allHtml = sandbox.V.blog();
-  assert.ok(allHtml.includes('Showing 75 of 75 articles'));
+  assert.ok(allHtml.includes('Showing 76 of 76 articles'));
   const cardCount = (allHtml.match(/class="b-card"/g) || []).length;
-  assert.strictEqual(cardCount, 75);
+  assert.strictEqual(cardCount, 76);
 });
 
 // 8. SEARCH INPUT EVENT
